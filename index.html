@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="manifest" href="manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="theme-color" content="#6a8be0">
+    <meta name="msapplication-TileColor" content="#6a8be0">
+    <meta name="msapplication-TileImage" content="https://traffic-day.web.app/icons/android/android-launchericon-144-144.png">
+    <meta name="author" content="Trafic Day"/>
+    <meta name="title" content="Trafic Day">
+    <meta name="keywords" content="accident, embouteillage, travaux d'aménagement, inondation, barrage, côte d'ivoire"/>
+    <meta name="description" content="Traquer toutes les perturbations du trafic routier en Côte d'ivoire #CIV225 en temps réel. Accident, embouteillage, Travaux d'aménagement, inondation, barrage.">
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Trafic Day" />
+    <meta property="og:description" content="Service gratuit pour retrouver document perdu. Que vous ayez perdu votre Attestation, votre CNI, votre Passeport et votre Assurance." />
+    <meta property="og:url" content="https://traffic-day.web.app/" />
+    <meta property="og:site_name" content="Trafic Day" />
+    <meta property="og:image" content="https://traffic-day.web.app/icons/android/android-launchericon-512-512.png" />
+    <meta property="og:image:secure_url" content="https://traffic-day.web.app/" />
+    <meta property="og:image:width" content="567" />
+    <meta property="og:image:height" content="567" />
+    <link rel="canonical" href="https://traffic-day.web.app/"/>
+    <link rel="shortcut icon" href="" type="image/x-icon" />
+    <link rel="icon" href="https://traffic-day.web.app/icons/android/android-launchericon-512-512.png" type="image/png" />
+    <title> Trafic Day </title>
+    <link rel="apple-touch-icon" sizes="48x48" href="icons/android/android-launchericon-48-48.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="icons/android/android-launchericon-72-72.png">
+    <link rel="apple-touch-icon" sizes="6x96" href="icons/android/android-launchericon-96-96.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="icons/android/android-launchericon-144-144.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="icons/android/android-launchericon-192-192.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="icons/android/android-launchericon-512-512.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="icons/android/android-launchericon-96-96.png">
+    <link rel="icon" type="image/png" sizes="144x144" href="icons/android/android-launchericon-144-144.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/android/android-launchericon-192-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icons/android/android-launchericon-512-512.png">
+    <meta name="robots" content="noarchive">
+    <title> Trafic Day </title>
+    <link rel="manifest" href="manifest.json"/>
+    <!-- favicon -->
+    <link rel="shortcut icon" href="trafficday.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Roboto:300,400,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/4.0.0/firebaseui.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <!-- icofont -->
+    <link rel="stylesheet" href="assets/css/fontawesome.5.7.2.css">
+    <!-- flaticon -->
+    <link rel="stylesheet" href="assets/css/flaticon.css">
+    <!-- animate.css -->
+    <link rel="stylesheet" href="assets/css/animate.css">
+    <!-- Owl Carousel -->
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <!-- magnific popup -->
+    <link rel="stylesheet" href="assets/css/magnific-popup.css">
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- responsive -->
+    <link rel="stylesheet" href="assets/css/responsive.css">
+
+
+
+</head>
+
+<body class="auth-false">
+    <!-- navbar area start 
+    <nav class="navbar navbar-area navbar-expand-lg nav-absolute white nav-style-01 header-style-09">
+        <div class="container nav-container">
+            <div class="responsive-mobile-menu">
+                <div class="logo-wrapper">
+
+                </div>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#appside_main_menu" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            
+            <div class="collapse navbar-collapse" id="appside_main_menu">
+                <ul class="navbar-nav">
+                    <li class="current-menu-item">
+                        <a href="index.html">Accueil</a>
+                    </li>
+                    <li><a href="#about">Catégorie</a></li>
+                    <li><a href="#guestbook">Forum</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+
+    </nav>-->
+
+    <!-- navbar area end -->
+
+    <!-- header area start  -->
+    <header class="header-area manu-sion-6 style-10" id="home">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-lg-6">
+                    <div class="header-inner">
+                        <h1 class="title wow fadeInDown">Plate-forme de sécurité routière</h1>
+                        <p>Etre informé en temps réel de la situation sur la circulation routière partout en Côte d'Ivoire.</p>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </header>
+    <!-- header area end  -->
+
+    <div class="sponsor-area gray-bg padding-60">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="brand-carousel">
+                        <div class="single-brand-item">
+                            <img src="assets/img/brand-logos/01.png" alt="brand logo">
+                        </div>
+                        <div class="single-brand-item">
+                            <img src="assets/img/brand-logos/02.png" alt="brand logo">
+                        </div>
+                        <div class="single-brand-item">
+                            <img src="assets/img/brand-logos/03.png" alt="brand logo">
+                        </div>
+                        <div class="single-brand-item">
+                            <img src="assets/img/brand-logos/04.png" alt="brand logo">
+                        </div>
+                        <div class="single-brand-item">
+                            <img src="assets/img/brand-logos/05.png" alt="brand logo">
+                        </div>
+                        <div class="single-brand-item">
+                            <img src="assets/img/brand-logos/06.png" alt="brand logo">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="container">
+        <header class="clearfix">
+
+            <div id="permission_div" class="userAuth unauthenticated pull-right">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#registerModal">Inscription</button>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#loginModal">Connexion</button>
+
+
+
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="requestPermission()">Activer les notifications</button>
+
+                <!-- div to display messages received by this app. -->
+                <div id="messages"></div>
+            </div>
+            <div class="userAuth authenticated pull-right">
+
+                <button type="button" class="btn btn-success" id="logout">Déconnexion</button>
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="requestPermission()">Activer les notifications</button>
+            </div>
+        </header>
+        <hr/>
+
+    </div>
+
+    <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="Register" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="registerForm" method="POST">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="registerModalLabel">Inscription</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Nom:</label>
+                            <input type="text" class="form-control" id="registerFirstName">
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Prénoms:</label>
+                            <input type="text" class="form-control" id="registerLastName">
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Email:</label>
+                            <input type="text" class="form-control" id="registerEmail">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="control-label">Mot de passe:</label>
+                            <input type="password" class="form-control" id="registerPassword">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="control-label">Confirmez mot de passe:</label>
+                            <input type="password" class="form-control" id="registerConfirmPassword">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                        <button type="submit" class="btn btn-primary" id="doRegister">Enregistrer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="loginForm" method="POST">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="loginModalLabel">Connexion</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="recipient-name" class="control-label">Email:</label>
+                                <input type="text" class="form-control" id="loginEmail">
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="control-label">Mot de passe:</label>
+                                <input type="password" class="form-control" id="loginPassword">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                            <button type="submit" class="btn btn-primary" id="doLogin">Connexion</button>
+                        </div>
+                </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="Message" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="messageModalLabel">Message</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="pre-auth">
+                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                            <span class="">
+              <button type="submit" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#registerModal">Register</button>
+              <button type="submit" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#loginModal">Login</button>
+            </span>
+                        </div>
+                        <div class="post-auth"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- discover area start  -->
+    <section class="discover-area padding-top-110 padding-bottom-80" id="about">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="section-title">
+                        <h2 class="title">Cliquez sur une catégorie pour voir la situation en temps réel avec les marqueurs.</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="single-discover-item">
+                        <div class="icon">
+                            <i class="fa fa-car-crash"></i>
+                        </div>
+                        <div class="content">
+                            <h4 class="title">Accident</h4>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="single-discover-item">
+                        <div class="icon">
+                            <i class="fa fa-traffic-light"></i>
+                        </div>
+                        <div class="content">
+                            <h4 class="title">Embouteillage</h4>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="single-discover-item">
+                        <div class="icon">
+                            <i class="fa fa-water"></i>
+                        </div>
+                        <div class="content">
+                            <h4 class="title">Inondation</h4>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="single-discover-item">
+                        <div class="icon">
+                            <i class="fa fa-hard-hat"></i>
+                        </div>
+                        <div class="content">
+                            <h4 class="title">Travaux</h4>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
+    <!--Map and marker start-->
+    <div id="map"></div>
+    <script>
+        let pos;
+        let map;
+        let bounds;
+        let infoWindow;
+        let currentInfoWindow;
+        let service;
+        let infoPane;
+
+        function initMap() {
+            // Initialize variables
+            bounds = new google.maps.LatLngBounds();
+            infoWindow = new google.maps.InfoWindow;
+            currentInfoWindow = infoWindow;
+            /* TODO: Step 4A3: Add a generic sidebar */
+            /*infoPane = document.getElementById('panel');*/
+
+            // Try HTML5 geolocation
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    map = new google.maps.Map(document.getElementById('map'), {
+                        center: pos,
+                        zoom: 15
+                    });
+                    bounds.extend(pos);
+
+                    infoWindow.setPosition(pos);
+                    infoWindow.setContent('Location found.');
+                    infoWindow.open(map);
+                    map.setCenter(pos);
+
+                    // Call Places Nearby Search on user's location
+                    getNearbyPlaces(pos);
+                }, () => {
+                    // Browser supports geolocation, but user has denied permission
+                    handleLocationError(true, infoWindow);
+                });
+            } else {
+                // Browser doesn't support geolocation
+                handleLocationError(false, infoWindow);
+            }
+        }
+
+        // Handle a geolocation error
+        function handleLocationError(browserHasGeolocation, infoWindow) {
+            // Set default location to Abidjan, Côte d'Ivoire
+            pos = {
+                lat: 5.3344191,
+                lng: -4.0579537
+            };
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: pos,
+                zoom: 15
+            });
+
+            // Display an InfoWindow at the map center
+            infoWindow.setPosition(pos);
+            infoWindow.setContent(browserHasGeolocation ?
+                'Geolocation permissions denied. Using default location.' :
+                'Error: Your browser doesn\'t support geolocation.');
+            infoWindow.open(map);
+            currentInfoWindow = infoWindow;
+
+            // Call Places Nearby Search on the default location
+            getNearbyPlaces(pos);
+        }
+
+        // Perform a Places Nearby Search Request
+        function getNearbyPlaces(position) {
+            let request = {
+                location: position,
+                rankBy: google.maps.places.RankBy.DISTANCE,
+                keyword: 'barrage'
+            };
+
+            service = new google.maps.places.PlacesService(map);
+            service.nearbySearch(request, nearbyCallback);
+        }
+
+        // Handle the results (up to 20) of the Nearby Search
+        function nearbyCallback(results, status) {
+            if (status == google.maps.places.PlacesServiceStatus.OK) {
+                createMarkers(results);
+            }
+        }
+
+        // Set markers at the location of each place result
+        function createMarkers(places) {
+            places.forEach(place => {
+                let marker = new google.maps.Marker({
+                    position: place.geometry.location,
+                    map: map,
+                    title: place.name
+                });
+
+                /* TODO: Step 4B: Add click listeners to the markers */
+                // Add click listener to each marker
+                google.maps.event.addListener(marker, 'click', () => {
+                    let request = {
+                        placeId: place.place_id,
+                        fields: ['name', 'formatted_address', 'geometry', 'rating',
+                            'website', 'photos'
+                        ]
+                    };
+
+                    /* Only fetch the details of a place when the user clicks on a marker.
+                     * If we fetch the details for all place results as soon as we get
+                     * the search response, we will hit API rate limits. */
+                    service.getDetails(request, (placeResult, status) => {
+                        showDetails(placeResult, marker, status)
+                    });
+                });
+
+                // Adjust the map bounds to include the location of this marker
+                bounds.extend(place.geometry.location);
+            });
+            /* Once all the markers have been placed, adjust the bounds of the map to
+             * show all the markers within the visible area. */
+            map.fitBounds(bounds);
+        }
+
+        /* TODO: Step 4C: Show place details in an info window */
+        // Builds an InfoWindow to display details above the marker
+        function showDetails(placeResult, marker, status) {
+            if (status == google.maps.places.PlacesServiceStatus.OK) {
+                let placeInfowindow = new google.maps.InfoWindow();
+                let rating = "None";
+                if (placeResult.rating) rating = placeResult.rating;
+                placeInfowindow.setContent('<div><strong>' + placeResult.name +
+                    '</strong><br>' + 'Rating: ' + rating + '</div>');
+                placeInfowindow.open(marker.map, marker);
+                currentInfoWindow.close();
+                currentInfoWindow = placeInfowindow;
+                showPanel(placeResult);
+            } else {
+                console.log('showDetails failed: ' + status);
+            }
+        }
+
+        /* TODO: Step 4D: Load place details in a sidebar */
+        // Displays place details in a sidebar
+        function showPanel(placeResult) {
+            // If infoPane is already open, close it
+            if (infoPane.classList.contains("open")) {
+                infoPane.classList.remove("open");
+            }
+
+            // Clear the previous details
+            while (infoPane.lastChild) {
+                infoPane.removeChild(infoPane.lastChild);
+            }
+
+            /* TODO: Step 4E: Display a Place Photo with the Place Details */
+            // Add the primary photo, if there is one
+            if (placeResult.photos) {
+                let firstPhoto = placeResult.photos[0];
+                let photo = document.createElement('img');
+                photo.classList.add('hero');
+                photo.src = firstPhoto.getUrl();
+                infoPane.appendChild(photo);
+            }
+
+            // Add place details with text formatting
+            let name = document.createElement('h1');
+            name.classList.add('place');
+            name.textContent = placeResult.name;
+            infoPane.appendChild(name);
+            if (placeResult.rating) {
+                let rating = document.createElement('p');
+                rating.classList.add('details');
+                rating.textContent = `Rating: ${placeResult.rating} \u272e`;
+                infoPane.appendChild(rating);
+            }
+            let address = document.createElement('p');
+            address.classList.add('details');
+            address.textContent = placeResult.formatted_address;
+            infoPane.appendChild(address);
+            if (placeResult.website) {
+                let websitePara = document.createElement('p');
+                let websiteLink = document.createElement('a');
+                let websiteUrl = document.createTextNode(placeResult.website);
+                websiteLink.appendChild(websiteUrl);
+                websiteLink.title = placeResult.website;
+                websiteLink.href = placeResult.website;
+                websitePara.appendChild(websiteLink);
+                infoPane.appendChild(websitePara);
+            }
+
+            // Open the infoPane
+            //infoPane.classList.add("open");
+        }
+    </script>
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAo6sSAOZoH89I87SR1fMHihWVosv-mTfs&libraries=places&callback=initMap">
+    </script>
+
+    <!-- discover area start  -->
+
+    <div id="app"></div>
+    <main class="authenticated">
+        <center>
+            <section id="guestbook-container">
+                <h2>Que se passe t'il?</h2>
+
+                <form id="leave-message">
+                    <label>Laissez un message: </label>
+                    <input type="text" id="message">
+                    <button type="submit">
+                <i class="material-icons">send</i>
+                <span>Envoyez</span>
+              </button>
+                </form>
+
+                <section id="guestbook"></section>
+
+            </section>
+        </center>
+        <div id="contacts"></div>
+    </main>
+    </div>
+
+
+    <!-- contact form area start  -->
+    <div class="contact-form-area-02 contact-bg padding-bottom-120 padding-top-120">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="contact-area-wrapper" id="contact">
+                        <!-- contact area wrapper -->
+                        <span class="subtitle">Contactez-nous</span>
+
+                        <form action="index.html" id="contact_form_submit" class="contact-form sec-margin">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="uname" placeholder="Votre Nom">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="email" placeholder="Votre Email">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group textarea">
+                                        <textarea name="message" id="message" class="form-control" cols="30" rows="10" placeholder="Message"></textarea>
+                                    </div>
+                                    <button class="submit-btn-02" type="submit">Envoyez</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- //. contact area wrapper -->
+                </div>
+                <div class="col-lg-6">
+                    <div class="img-wrapper">
+                        <img src="assets/img/000.png" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- contact form area end -->
+
+
+
+    <!-- footer area start -->
+    <footer class="footer-area style-02 bg-blue">
+        <div class="footer-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget about_widget">
+                            <a href="index.html" class="footer-logo"><img src="assets/img/001.png" alt=""></a>
+                            <p> </p>
+                            <ul class="social-icon">
+
+                                <li><a href="https://twitter.com/TraficDay"><i class="fab fa-twitter"></i></a></li>
+
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget nav_menus_widget">
+                            <h4 class="widget-title">Liens utiles</h4>
+                            <ul>
+                                <li><a href="index.html"><i class="fas fa-chevron-right"></i> Accueil</a></li>
+                                <li><a href="#about"><i class="fas fa-chevron-right"></i> Catégorie</a></li>
+                                <li><a href="#guestbook"><i class="fas fa-chevron-right"></i> Forum</a></li>
+
+                                <li><a href="#contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-widget nav_menus_widget">
+                            <h4 class="widget-title">Besoin d'aide?</h4>
+                            <ul>
+                                <li><a href="#"><i class="fas fa-chevron-right"></i> Forum</a></li>
+                                <li><a href="#"><i class="fas fa-chevron-right"></i> Confidentialité</a></li>
+                                <li><a href="#"><i class="fas fa-chevron-right"></i> Politique</a></li>
+                                <li><a href="#"><i class="fas fa-chevron-right"></i> Support</a></li>
+                                <li><a href="#"><i class="fas fa-chevron-right"></i> Term</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="copyright-area">
+            <!-- copyright area -->
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="copyright-inner">
+                            <!-- copyright inner wrapper -->
+                            <div class="left-content-area">
+                                <!-- left content area -->
+                                &copy; Copyrights 2020 All rights reserved.
+                            </div>
+                            <!-- //. left content aera -->
+                            <div class="right-content-area">
+                                <!-- right content area -->
+                                Designed by <strong>The Day</strong>
+                            </div>
+                            <!-- //. right content area -->
+                        </div>
+                        <!-- //.copyright inner wrapper -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- //. copyright area -->
+    </footer>
+    <!-- footer area end -->
+
+    <!-- preloader area start -->
+    <div class="preloader-wrapper" id="preloader">
+        <div class="preloader">
+            <div class="sk-circle">
+                <div class="sk-circle1 sk-child"></div>
+                <div class="sk-circle2 sk-child"></div>
+                <div class="sk-circle3 sk-child"></div>
+                <div class="sk-circle4 sk-child"></div>
+                <div class="sk-circle5 sk-child"></div>
+                <div class="sk-circle6 sk-child"></div>
+                <div class="sk-circle7 sk-child"></div>
+                <div class="sk-circle8 sk-child"></div>
+                <div class="sk-circle9 sk-child"></div>
+                <div class="sk-circle10 sk-child"></div>
+                <div class="sk-circle11 sk-child"></div>
+                <div class="sk-circle12 sk-child"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- preloader area end -->
+
+    <!-- back to top area start -->
+    <div class="back-to-top">
+        <i class="fas fa-angle-up"></i>
+    </div>
+    <!-- back to top area end -->
+
+    <!-- jquery -->
+    <script src="assets/js/jquery.js"></script>
+    <!-- popper -->
+    <script src="assets/js/popper.min.js"></script>
+    <!-- bootstrap -->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <!-- owl carousel -->
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <!-- magnific popup -->
+    <script src="assets/js/jquery.magnific-popup.js"></script>
+    <!-- contact js-->
+    <script src="assets/js/contact.js"></script>
+    <!-- wow js-->
+    <script src="assets/js/wow.min.js"></script>
+    <!-- way points js-->
+    <script src="assets/js/waypoints.min.js"></script>
+    <!-- counterup js-->
+    <script src="assets/js/jquery.counterup.min.js"></script>
+    <!-- main -->
+    <script src="assets/js/main.js"></script>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-app.js"></script>
+
+
+    <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-messaging.js"></script>
+
+    <script type="module" src="./js/script.js"></script>
+    <script src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDZlmVA3iWRvFMAEHvv-8UfSU6qB7ymVZY",
+            authDomain: "traffic-day.firebaseapp.com",
+            databaseURL: "https://traffic-day.firebaseio.com",
+            projectId: "traffic-day",
+            storageBucket: "traffic-day.appspot.com",
+            messagingSenderId: "926780628216",
+            appId: "1:926780628216:web:1c1896bd89f40f75462f0d",
+            measurementId: "G-M935ZZJFT9"
+        };
+          // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+            console.log(firebase);
+    </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/firebase-messaging-sw.js')
+          .then(registration => {
+            console.log(`Service Worker registered! Scope: ${registration.scope}`);
+          })
+          .catch(err => {
+            console.log(`Service Worker registration failed: ${err}`);
+          });
+      });
+    }
+  </script>
+    <script>
+        // [START get_messaging_object]
+        // Retrieve Firebase Messaging object.
+        const messaging = firebase.messaging();
+        // [END get_messaging_object]
+        // [START set_public_vapid_key]
+        // Add the public key generated from the console here.
+        messaging.usePublicVapidKey('BHtXSoyYnFdHweuKE4VPD7zzDpZVb78CRp75T-ErVUyEl6KO6AwejeGzQvV8SzWJkPiK6WazlrLF-P7HK2wg2ms');
+        // [END set_public_vapid_key]
+        messaging.requestPermission().then(function() {
+        console.log('Notification');
+        return messaging.getToken();  
+        }).then(function(token) {
+        console.log(token);
+        }).catch(function(err) {
+        console.log('Error Occured.');
+        });
+
+        // Get Instance ID token. Initially this makes a network call, once retrieved
+        // subsequent calls to getToken will return from cache.
+        messaging.getToken().then((currentToken) => {
+        if (currentToken) {
+            sendTokenToServer(currentToken);
+            updateUIForPushEnabled(currentToken);
+        } else {
+            // Show permission request.
+            console.log('No Instance ID token available. Request permission to generate one.');
+            // Show permission UI.
+            updateUIForPushPermissionRequired();
+            setTokenSentToServer(false);
+        }
+        }).catch((err) => {
+        console.log('An error occurred while retrieving token. ', err);
+        //showToken('Error retrieving Instance ID token. ', err);
+        setTokenSentToServer(false);
+        });
+
+        // Callback fired if Instance ID token is updated.
+        messaging.onTokenRefresh(() => {
+        messaging.getToken().then((refreshedToken) => {
+            console.log('Token refreshed.');
+            // Indicate that the new Instance ID token has not yet been sent to the
+            // app server.
+            setTokenSentToServer(false);
+            // Send Instance ID token to app server.
+            sendTokenToServer(refreshedToken);
+            // ...
+        }).catch((err) => {
+            console.log('Unable to retrieve refreshed token ', err);
+            showToken('Unable to retrieve refreshed token ', err);
+        });
+        });
+
+            messaging.onMessage((payload) => {
+            console.log('Message received. ', payload);
+            // [START_EXCLUDE]
+            // Update the UI to include the received message.
+            appendMessage(payload);
+            // [END_EXCLUDE]
+        });
+        // [END receive_message]
+
+
+        function requestPermission() {
+            console.log('Requesting permission...');
+            // [START request_permission]
+            Notification.requestPermission().then((permission) => {
+                if (permission === 'granted') {
+                    console.log('Notification permission granted.');
+                    // TODO(developer): Retrieve an Instance ID token for use with FCM.
+                    // [START_EXCLUDE]
+                    // In many cases once an app has been granted notification permission,
+                    // it should update its UI reflecting this.
+                    resetUI();
+                    // [END_EXCLUDE]
+                } else {
+                    console.log('Unable to get permission to notify.');
+                }
+            });
+            // [END request_permission]
+        }
+
+            // Add a message to the messages element.
+            function appendMessage(payload) {
+            const messagesElement = document.querySelector('#messages');
+            const dataHeaderELement = document.createElement('h5');
+            const dataElement = document.createElement('pre');
+            dataElement.style = 'overflow-x:hidden;';
+            dataHeaderELement.textContent = 'Received message:';
+            dataElement.textContent = JSON.stringify(payload, null, 2);
+            messagesElement.appendChild(dataHeaderELement);
+            messagesElement.appendChild(dataElement);
+        }
+
+        messaging.onMessage(function(payload) {
+        console.log('onMessage: ',payload);
+        });
+
+        function updateUIForPushEnabled(currentToken) {
+            showHideDiv(tokenDivId, true);
+            showHideDiv(permissionDivId, false);
+            showToken(currentToken);
+        }
+
+        function updateUIForPushPermissionRequired() {
+            showHideDiv(tokenDivId, false);
+            showHideDiv(permissionDivId, true);
+        }
+
+        resetUI();
+    </script>
+    <script>'use strict';
+        
+        /* eslint-disable max-len */
+        
+        const applicationServerPublicKey = 'AAAA18huHPg:APA91bHMWHF5kfIzTun6pdxef4m_18RYmTsdLD7PLKdijHGKyTPpwqYTVJtffW9K6kb_XaQaQU3mwROrHPbgRhDY95jI495mtpVptHIyl4qa9prKvghLFQJ3bj3xRb5bx9KrZIQj4i5y';
+        
+        /* eslint-enable max-len */
+        
+        function urlB64ToUint8Array(base64String) {
+            const padding = '='.repeat((4 - base64String.length % 4) % 4);
+            const base64 = (base64String + padding)
+                .replace(/\-/g, '+')
+                .replace(/_/g, '/');
+        
+            const rawData = window.atob(base64);
+            const outputArray = new Uint8Array(rawData.length);
+        
+            for (let i = 0; i < rawData.length; ++i) {
+                outputArray[i] = rawData.charCodeAt(i);
+            }
+            return outputArray;
+        }
+        
+        self.addEventListener('push', function(event) {
+            console.log('[Service Worker] Push Received.');
+            console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
+        
+            const title = 'Push Codelab';
+            const options = {
+                body: 'Yay it works.',
+                icon: 'images/icon.png',
+                badge: 'images/badge.png'
+            };
+        
+            event.waitUntil(self.registration.showNotification(title, options));
+        });
+        
+        self.addEventListener('notificationclick', function(event) {
+            console.log('[Service Worker] Notification click Received.');
+        
+            event.notification.close();
+        
+            event.waitUntil(
+                clients.openWindow('https://developers.google.com/web/')
+            );
+        });
+        
+        self.addEventListener('pushsubscriptionchange', function(event) {
+            console.log('[Service Worker]: \'pushsubscriptionchange\' event fired.');
+            const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
+            event.waitUntil(
+                self.registration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: applicationServerKey
+                })
+                .then(function(newSubscription) {
+                    // TODO: Send to application server
+                    console.log('[Service Worker] New subscription: ', newSubscription);
+                })
+            );
+        });
+    </script>
+
+    <!-- <script type="module" src="./js/index.js"></script>-->
+
+</body>
+
+</html>
