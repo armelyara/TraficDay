@@ -9,9 +9,9 @@
     <meta name="theme-color" content="#6a8be0">
     <meta name="msapplication-TileColor" content="#6a8be0">
     <meta name="msapplication-TileImage" content="https://traffic-day.web.app/icons/android/android-launchericon-144-144.png">
-    <meta name="author" content="Trafic Day"/>
+    <meta name="author" content="Trafic Day" />
     <meta name="title" content="Trafic Day">
-    <meta name="keywords" content="accident, embouteillage, travaux d'aménagement, inondation, barrage, côte d'ivoire"/>
+    <meta name="keywords" content="accident, embouteillage, travaux d'aménagement, inondation, barrage, côte d'ivoire" />
     <meta name="description" content="Traquer toutes les perturbations du trafic routier en Côte d'ivoire #CIV225 en temps réel. Accident, embouteillage, Travaux d'aménagement, inondation, barrage.">
     <meta property="og:locale" content="fr_FR" />
     <meta property="og:type" content="website" />
@@ -23,7 +23,7 @@
     <meta property="og:image:secure_url" content="https://traffic-day.web.app/" />
     <meta property="og:image:width" content="567" />
     <meta property="og:image:height" content="567" />
-    <link rel="canonical" href="https://traffic-day.web.app/"/>
+    <link rel="canonical" href="https://traffic-day.web.app/" />
     <link rel="shortcut icon" href="" type="image/x-icon" />
     <link rel="icon" href="https://traffic-day.web.app/icons/android/android-launchericon-512-512.png" type="image/png" />
     <title> Trafic Day </title>
@@ -39,7 +39,7 @@
     <link rel="icon" type="image/png" sizes="512x512" href="icons/android/android-launchericon-512-512.png">
     <meta name="robots" content="noarchive">
     <title> Trafic Day </title>
-    <link rel="manifest" href="manifest.json"/>
+    <link rel="manifest" href="manifest.json" />
     <!-- favicon -->
     <link rel="shortcut icon" href="trafficday.png" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Roboto:300,400,700&display=swap" rel="stylesheet">
@@ -100,6 +100,7 @@
 
     <!-- navbar area end -->
 
+
     <!-- header area start  -->
     <header class="header-area manu-sion-6 style-10" id="home">
         <div class="container">
@@ -149,121 +150,50 @@
     </div>
 
 
+    <main>
 
-
-    <div class="container">
-        <header class="clearfix">
-
-            <div id="permission_div" class="userAuth unauthenticated pull-right">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#registerModal">Inscription</button>
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#loginModal">Connexion</button>
+        <center>
+            <section id="guestbook-container">
 
 
 
-                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="requestPermission()">Activer les notifications</button>
 
-                <!-- div to display messages received by this app. -->
-                <div id="messages"></div>
-            </div>
-            <div class="userAuth authenticated pull-right">
+                <h2>Que se passe t'il?</h2>
 
-                <button type="button" class="btn btn-success" id="logout">Déconnexion</button>
-                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" onclick="requestPermission()">Activer les notifications</button>
-            </div>
-        </header>
-        <hr/>
-
-    </div>
-
-    <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="Register" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form id="registerForm" method="POST">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="registerModalLabel">Inscription</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="recipient-name" class="control-label">Nom:</label>
-                            <input type="text" class="form-control" id="registerFirstName">
-                        </div>
-                        <div class="form-group">
-                            <label for="recipient-name" class="control-label">Prénoms:</label>
-                            <input type="text" class="form-control" id="registerLastName">
-                        </div>
-                        <div class="form-group">
-                            <label for="recipient-name" class="control-label">Email:</label>
-                            <input type="text" class="form-control" id="registerEmail">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="control-label">Mot de passe:</label>
-                            <input type="password" class="form-control" id="registerPassword">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="control-label">Confirmez mot de passe:</label>
-                            <input type="password" class="form-control" id="registerConfirmPassword">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-                        <button type="submit" class="btn btn-primary" id="doRegister">Enregistrer</button>
-                    </div>
+                <form id="leave-message">
+                    <label for="firstName">Nom</label><br>
+                    <input type="text" name="firstName" id="firstName">
+                    </br>
+                    </br>
+                    <label for="phoneNum">Numéro</label><br>
+                    <input type="tel" name="phoneNum" id="phoneNum" placeholder="123-45-678">
+                    </br>
+                    </br>
+                    <label for="catId">Type d'alerte</label><br>
+                    <input type="text" name="catId" id="catId" placeholder="Innondation, Barrage routier, Embouteillage ou Accident">
+                    </br>
+                    </br>
+                    <label for="message">Laissez un message: </label>
+                    <input type="text" name="message" id="message">
+                    <button type="submit" id="addBtn">
+                        <i class="material-icons">send</i>
+                        <span>Envoyez</span>
+                      </button>
                 </form>
-            </div>
-        </div>
-    </div>
 
-    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form id="loginForm" method="POST">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="loginModalLabel">Connexion</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="recipient-name" class="control-label">Email:</label>
-                                <input type="text" class="form-control" id="loginEmail">
-                            </div>
-                            <div class="form-group">
-                                <label for="message-text" class="control-label">Mot de passe:</label>
-                                <input type="password" class="form-control" id="loginPassword">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-                            <button type="submit" class="btn btn-primary" id="doLogin">Connexion</button>
-                        </div>
-                </form>
-                </div>
-            </div>
-        </div>
 
-        <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="Message" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="messageModalLabel">Message</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    </div>
-                    <div class="modal-footer">
-                        <div class="pre-auth">
-                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                            <span class="">
-              <button type="submit" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#registerModal">Register</button>
-              <button type="submit" class="btn btn-success" data-dismiss="modal" data-toggle="modal" data-target="#loginModal">Login</button>
-            </span>
-                        </div>
-                        <div class="post-auth"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-    </div>
+                <section id="guestbook"></section>
+
+            </section>
+        </center>
+
+
+    </main>
+
+
+
+
 
     <!-- discover area start  -->
     <section class="discover-area padding-top-110 padding-bottom-80" id="about">
@@ -361,10 +291,10 @@
                     });
                     bounds.extend(pos);
 
-                    infoWindow.setPosition(pos);
-                    infoWindow.setContent('Location found.');
-                    infoWindow.open(map);
-                    map.setCenter(pos);
+                    //infoWindow.setPosition(pos);
+                    //infoWindow.setContent('Location found.');
+                    //infoWindow.open(map);
+                    //map.setCenter(pos);
 
                     // Call Places Nearby Search on user's location
                     getNearbyPlaces(pos);
@@ -533,28 +463,10 @@
 
     <!-- discover area start  -->
 
-    <div id="app"></div>
-    <main class="authenticated">
-        <center>
-            <section id="guestbook-container">
-                <h2>Que se passe t'il?</h2>
 
-                <form id="leave-message">
-                    <label>Laissez un message: </label>
-                    <input type="text" id="message">
-                    <button type="submit">
-                <i class="material-icons">send</i>
-                <span>Envoyez</span>
-              </button>
-                </form>
 
-                <section id="guestbook"></section>
 
-            </section>
-        </center>
-        <div id="contacts"></div>
-    </main>
-    </div>
+
 
 
     <!-- contact form area start  -->
@@ -724,6 +636,7 @@
 
 
 
+
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
@@ -738,7 +651,7 @@
     <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-messaging.js"></script>
 
-    <script type="module" src="./js/script.js"></script>
+
     <script src="https://code.getmdl.io/1.2.1/material.min.js"></script>
     <script>
         const firebaseConfig = {
@@ -751,23 +664,23 @@
             appId: "1:926780628216:web:1c1896bd89f40f75462f0d",
             measurementId: "G-M935ZZJFT9"
         };
-          // Initialize Firebase
-            firebase.initializeApp(firebaseConfig);
-            console.log(firebase);
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        console.log(firebase);
     </script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/firebase-messaging-sw.js')
-          .then(registration => {
-            console.log(`Service Worker registered! Scope: ${registration.scope}`);
-          })
-          .catch(err => {
-            console.log(`Service Worker registration failed: ${err}`);
-          });
-      });
-    }
-  </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/firebase-messaging-sw.js')
+                    .then(registration => {
+                        console.log(`Service Worker registered! Scope: ${registration.scope}`);
+                    })
+                    .catch(err => {
+                        console.log(`Service Worker registration failed: ${err}`);
+                    });
+            });
+        }
+    </script>
     <script>
         // [START get_messaging_object]
         // Retrieve Firebase Messaging object.
@@ -778,50 +691,50 @@
         messaging.usePublicVapidKey('BHtXSoyYnFdHweuKE4VPD7zzDpZVb78CRp75T-ErVUyEl6KO6AwejeGzQvV8SzWJkPiK6WazlrLF-P7HK2wg2ms');
         // [END set_public_vapid_key]
         messaging.requestPermission().then(function() {
-        console.log('Notification');
-        return messaging.getToken();  
+            console.log('Notification');
+            return messaging.getToken();
         }).then(function(token) {
-        console.log(token);
+            console.log(token);
         }).catch(function(err) {
-        console.log('Error Occured.');
+            console.log('Error Occured.');
         });
 
         // Get Instance ID token. Initially this makes a network call, once retrieved
         // subsequent calls to getToken will return from cache.
         messaging.getToken().then((currentToken) => {
-        if (currentToken) {
-            sendTokenToServer(currentToken);
-            updateUIForPushEnabled(currentToken);
-        } else {
-            // Show permission request.
-            console.log('No Instance ID token available. Request permission to generate one.');
-            // Show permission UI.
-            updateUIForPushPermissionRequired();
-            setTokenSentToServer(false);
-        }
+            if (currentToken) {
+                sendTokenToServer(currentToken);
+                updateUIForPushEnabled(currentToken);
+            } else {
+                // Show permission request.
+                console.log('No Instance ID token available. Request permission to generate one.');
+                // Show permission UI.
+                updateUIForPushPermissionRequired();
+                setTokenSentToServer(false);
+            }
         }).catch((err) => {
-        console.log('An error occurred while retrieving token. ', err);
-        //showToken('Error retrieving Instance ID token. ', err);
-        setTokenSentToServer(false);
+            console.log('An error occurred while retrieving token. ', err);
+            //showToken('Error retrieving Instance ID token. ', err);
+            setTokenSentToServer(false);
         });
 
         // Callback fired if Instance ID token is updated.
         messaging.onTokenRefresh(() => {
-        messaging.getToken().then((refreshedToken) => {
-            console.log('Token refreshed.');
-            // Indicate that the new Instance ID token has not yet been sent to the
-            // app server.
-            setTokenSentToServer(false);
-            // Send Instance ID token to app server.
-            sendTokenToServer(refreshedToken);
-            // ...
-        }).catch((err) => {
-            console.log('Unable to retrieve refreshed token ', err);
-            showToken('Unable to retrieve refreshed token ', err);
-        });
+            messaging.getToken().then((refreshedToken) => {
+                console.log('Token refreshed.');
+                // Indicate that the new Instance ID token has not yet been sent to the
+                // app server.
+                setTokenSentToServer(false);
+                // Send Instance ID token to app server.
+                sendTokenToServer(refreshedToken);
+                // ...
+            }).catch((err) => {
+                console.log('Unable to retrieve refreshed token ', err);
+                showToken('Unable to retrieve refreshed token ', err);
+            });
         });
 
-            messaging.onMessage((payload) => {
+        messaging.onMessage((payload) => {
             console.log('Message received. ', payload);
             // [START_EXCLUDE]
             // Update the UI to include the received message.
@@ -850,8 +763,8 @@
             // [END request_permission]
         }
 
-            // Add a message to the messages element.
-            function appendMessage(payload) {
+        // Add a message to the messages element.
+        function appendMessage(payload) {
             const messagesElement = document.querySelector('#messages');
             const dataHeaderELement = document.createElement('h5');
             const dataElement = document.createElement('pre');
@@ -863,7 +776,7 @@
         }
 
         messaging.onMessage(function(payload) {
-        console.log('onMessage: ',payload);
+            console.log('onMessage: ', payload);
         });
 
         function updateUIForPushEnabled(currentToken) {
@@ -879,53 +792,54 @@
 
         resetUI();
     </script>
-    <script>'use strict';
-        
+    <script>
+        'use strict';
+
         /* eslint-disable max-len */
-        
+
         const applicationServerPublicKey = 'AAAA18huHPg:APA91bHMWHF5kfIzTun6pdxef4m_18RYmTsdLD7PLKdijHGKyTPpwqYTVJtffW9K6kb_XaQaQU3mwROrHPbgRhDY95jI495mtpVptHIyl4qa9prKvghLFQJ3bj3xRb5bx9KrZIQj4i5y';
-        
+
         /* eslint-enable max-len */
-        
+
         function urlB64ToUint8Array(base64String) {
             const padding = '='.repeat((4 - base64String.length % 4) % 4);
             const base64 = (base64String + padding)
                 .replace(/\-/g, '+')
                 .replace(/_/g, '/');
-        
+
             const rawData = window.atob(base64);
             const outputArray = new Uint8Array(rawData.length);
-        
+
             for (let i = 0; i < rawData.length; ++i) {
                 outputArray[i] = rawData.charCodeAt(i);
             }
             return outputArray;
         }
-        
+
         self.addEventListener('push', function(event) {
             console.log('[Service Worker] Push Received.');
             console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
-        
+
             const title = 'Push Codelab';
             const options = {
                 body: 'Yay it works.',
                 icon: 'images/icon.png',
                 badge: 'images/badge.png'
             };
-        
+
             event.waitUntil(self.registration.showNotification(title, options));
         });
-        
+
         self.addEventListener('notificationclick', function(event) {
             console.log('[Service Worker] Notification click Received.');
-        
+
             event.notification.close();
-        
+
             event.waitUntil(
                 clients.openWindow('https://developers.google.com/web/')
             );
         });
-        
+
         self.addEventListener('pushsubscriptionchange', function(event) {
             console.log('[Service Worker]: \'pushsubscriptionchange\' event fired.');
             const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
@@ -941,8 +855,33 @@
             );
         });
     </script>
+    <script>
+        const catId = document.getElementById('catId');
+        const firstName = document.getElementById('firstName');
+        const phoneNum = document.getElementById('phoneNum');
+        const message = document.getElementById('message');
+        const addBtn = document.getElementById('addBtn');
 
-    <!-- <script type="module" src="./js/index.js"></script>-->
+        const database = firebase.database();
+        const catRef = database.ref('/alerte');
+
+        addBtn.addEventListener('click', e => {
+            e.preventDefault();
+            const autoId = catRef.push().key
+            catRef.child(autoId).set({
+                first_name: firstName.value,
+                phoneNum: phoneNum.value,
+                catId: catId.value,
+                message: message.value
+
+            });
+
+            alert("Message bien reçu")
+            document.getElementById("leave-message").reset();
+        });
+    </script>
+
+
 
 </body>
 
