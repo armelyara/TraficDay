@@ -73,6 +73,16 @@
 </head>
 
 <body class="auth-false">
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="/__/firebase/7.14.5/firebase-app.js"></script>
+<script src="/__/firebase/7.14.5/firebase-analytics.js"></script>
+<script src="/__/firebase/7.14.5/firebase-messaging.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+
+<!-- Initialize Firebase -->
+<script src="/__/firebase/init.js"></script>
     <!-- navbar area start 
     <nav class="navbar navbar-area navbar-expand-lg nav-absolute white nav-style-01 header-style-09">
         <div class="container nav-container">
@@ -150,47 +160,36 @@
     </div>
 
 
-    <main>
-
-        <center>
+    <div class="container">
+        <div class="text-center">
             <section id="guestbook-container">
-
-
-
-
                 <h2>Que se passe t'il?</h2>
-
-                <form id="leave-message">
-                    <label for="firstName">Nom</label><br>
-                    <input type="text" name="firstName" id="firstName">
+                <form id="leavemessage">
+                    <label for="firstName">Nom*</label><br>
+                    <input type="text" name="firstName" id="firstName" required/>
                     </br>
                     </br>
                     <label for="phoneNum">Numéro</label><br>
                     <input type="tel" name="phoneNum" id="phoneNum" placeholder="123-45-678">
                     </br>
                     </br>
-                    <label for="catId">Type d'alerte</label><br>
-                    <input type="text" name="catId" id="catId" placeholder="Innondation, Barrage routier, Embouteillage ou Accident">
+                    <label for="catId">Type d'alerte*</label><br>
+                    <input type="text" name="catId" id="catId" placeholder="Innondation, Barrage routier, Embouteillage ou Accident" required/>
                     </br>
                     </br>
-                    <label for="message">Laissez un message: </label>
-                    <input type="text" name="message" id="message">
+                    <label for="message">Laissez un message: * </label>
+                    <input type="text" name="message" id="message" required/>
                     <button type="submit" id="addBtn">
                         <i class="material-icons">send</i>
                         <span>Envoyez</span>
                       </button>
+
+
                 </form>
-
-
-
                 <section id="guestbook"></section>
-
             </section>
-        </center>
-
-
-    </main>
-
+        </div>
+    </div>
 
 
 
@@ -212,7 +211,12 @@
                             <i class="fa fa-car-crash"></i>
                         </div>
                         <div class="content">
-                            <h4 class="title">Accident</h4>
+                            <h4 class="title"><a onclick="myFunction()">Accident</a></h4>
+                            <script>
+                                function myFunction() {
+                                    alert("Bientôt disponible");
+                                }
+                            </script>
 
                         </div>
                     </div>
@@ -223,7 +227,12 @@
                             <i class="fa fa-traffic-light"></i>
                         </div>
                         <div class="content">
-                            <h4 class="title">Embouteillage</h4>
+                            <h4 class="title"><a onclick="myEmbou()">Embouteillage</a></h4>
+                            <script>
+                                function myEmbou() {
+                                    alert("Bientôt disponible");
+                                }
+                            </script>
 
                         </div>
                     </div>
@@ -234,7 +243,12 @@
                             <i class="fa fa-water"></i>
                         </div>
                         <div class="content">
-                            <h4 class="title">Inondation</h4>
+                            <h4 class="title"><a onclick="myinno()">Inondation</a></h4>
+                            <script>
+                                function myinno() {
+                                    alert("Bientôt disponible");
+                                }
+                            </script>
 
                         </div>
                     </div>
@@ -245,7 +259,12 @@
                             <i class="fa fa-hard-hat"></i>
                         </div>
                         <div class="content">
-                            <h4 class="title">Travaux</h4>
+                            <h4 class="title"><a onclick="mytravaux()">Travaux</a></h4>
+                            <script>
+                                function mytravaux() {
+                                    alert("Bientôt disponible");
+                                }
+                            </script>
 
                         </div>
                     </div>
@@ -460,58 +479,7 @@
 
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAo6sSAOZoH89I87SR1fMHihWVosv-mTfs&libraries=places&callback=initMap">
     </script>
-
     <!-- discover area start  -->
-
-
-
-
-
-
-
-    <!-- contact form area start  -->
-    <div class="contact-form-area-02 contact-bg padding-bottom-120 padding-top-120">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="contact-area-wrapper" id="contact">
-                        <!-- contact area wrapper -->
-                        <span class="subtitle">Contactez-nous</span>
-
-                        <form action="index.html" id="contact_form_submit" class="contact-form sec-margin">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" id="uname" placeholder="Votre Nom">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" id="email" placeholder="Votre Email">
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group textarea">
-                                        <textarea name="message" id="message" class="form-control" cols="30" rows="10" placeholder="Message"></textarea>
-                                    </div>
-                                    <button class="submit-btn-02" type="submit">Envoyez</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <!-- //. contact area wrapper -->
-                </div>
-                <div class="col-lg-6">
-                    <div class="img-wrapper">
-                        <img src="assets/img/000.png" alt="">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- contact form area end -->
-
-
 
     <!-- footer area start -->
     <footer class="footer-area style-02 bg-blue">
@@ -536,9 +504,9 @@
                             <ul>
                                 <li><a href="index.html"><i class="fas fa-chevron-right"></i> Accueil</a></li>
                                 <li><a href="#about"><i class="fas fa-chevron-right"></i> Catégorie</a></li>
-                                <li><a href="#guestbook"><i class="fas fa-chevron-right"></i> Forum</a></li>
+                                <li><a href="#guestbook"><i class="fas fa-chevron-right"></i>Message</a></li>
 
-                                <li><a href="#contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
+
                             </ul>
                         </div>
                     </div>
@@ -550,7 +518,7 @@
                                 <li><a href="#"><i class="fas fa-chevron-right"></i> Confidentialité</a></li>
                                 <li><a href="#"><i class="fas fa-chevron-right"></i> Politique</a></li>
                                 <li><a href="#"><i class="fas fa-chevron-right"></i> Support</a></li>
-                                <li><a href="#"><i class="fas fa-chevron-right"></i> Term</a></li>
+                                <li><a href="#"><i class="fas fa-chevron-right"></i> Termes</a></li>
                             </ul>
                         </div>
                     </div>
@@ -699,6 +667,13 @@
             console.log('Error Occured.');
         });
 
+        function isTokenSentToServer() {
+          return window.localStorage.getItem('sentToServer') === '1';
+        }
+
+        function setTokenSentToServer(sent) {
+          window.localStorage.setItem('sentToServer', sent ? '1' : '0');
+  }
         // Get Instance ID token. Initially this makes a network call, once retrieved
         // subsequent calls to getToken will return from cache.
         messaging.getToken().then((currentToken) => {
@@ -763,6 +738,28 @@
             // [END request_permission]
         }
 
+        function deleteToken() {
+        // Delete Instance ID token.
+        // [START delete_token]
+        messaging.getToken().then((currentToken) => {
+          messaging.deleteToken(currentToken).then(() => {
+            console.log('Token deleted.');
+            setTokenSentToServer(false);
+            // [START_EXCLUDE]
+            // Once token is deleted update UI.
+            resetUI();
+            // [END_EXCLUDE]
+          }).catch((err) => {
+            console.log('Unable to delete token. ', err);
+          });
+          // [END delete_token]
+        }).catch((err) => {
+          console.log('Error retrieving Instance ID token. ', err);
+          showToken('Error retrieving Instance ID token. ', err);
+        });
+
+      }
+
         // Add a message to the messages element.
         function appendMessage(payload) {
             const messagesElement = document.querySelector('#messages');
@@ -790,9 +787,8 @@
             showHideDiv(permissionDivId, true);
         }
 
-        resetUI();
     </script>
-    <script>
+    <!--<script>
         'use strict';
 
         /* eslint-disable max-len */
@@ -854,7 +850,7 @@
                 })
             );
         });
-    </script>
+    </script>-->
     <script>
         const catId = document.getElementById('catId');
         const firstName = document.getElementById('firstName');
@@ -874,10 +870,15 @@
                 catId: catId.value,
                 message: message.value
 
+
+
             });
 
+
+
             alert("Message bien reçu")
-            document.getElementById("leave-message").reset();
+            document.getElementById("leavemessage").reset();
+
         });
     </script>
 
