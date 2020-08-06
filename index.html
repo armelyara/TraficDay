@@ -12,11 +12,11 @@
     <meta name="author" content="Trafic Day" />
     <meta name="title" content="Trafic Day">
     <meta name="keywords" content="accident, embouteillage, travaux d'aménagement, inondation, barrage, côte d'ivoire" />
-    <meta name="description" content="Traquer toutes les perturbations du trafic routier en Côte d'ivoire #CIV225 en temps réel. Accident, embouteillage, Travaux d'aménagement, inondation, barrage.">
+    <meta name="description" content="Service gratuit d'envoie et de reception par notification, de messages d'alerte sur les pertubations du trafic routier.">
     <meta property="og:locale" content="fr_FR" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Trafic Day" />
-    <meta property="og:description" content="Service gratuit pour retrouver document perdu. Que vous ayez perdu votre Attestation, votre CNI, votre Passeport et votre Assurance." />
+    <meta property="og:description" content="Service gratuit d'envoie et de reception par notification, de messages d'alerte sur les pertubations du trafic routier." />
     <meta property="og:url" content="https://traffic-day.web.app/" />
     <meta property="og:site_name" content="Trafic Day" />
     <meta property="og:image" content="https://traffic-day.web.app/icons/android/android-launchericon-512-512.png" />
@@ -67,48 +67,32 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <!-- responsive -->
     <link rel="stylesheet" href="assets/css/responsive.css">
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+         * element that contains the map. */
+        
+        #map {
+            height: 100%;
+        }
+        /* Optional: Makes the sample page fill the window. */
+    </style>
+
 
 
 
 </head>
 
 <body class="auth-false">
-<!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="/__/firebase/7.14.5/firebase-app.js"></script>
-<script src="/__/firebase/7.14.5/firebase-analytics.js"></script>
-<script src="/__/firebase/7.14.5/firebase-messaging.js"></script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="/__/firebase/7.14.5/firebase-app.js"></script>
+    <script src="/__/firebase/7.14.5/firebase-analytics.js"></script>
+    <script src="/__/firebase/7.14.5/firebase-messaging.js"></script>
 
-<!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
 
-<!-- Initialize Firebase -->
-<script src="/__/firebase/init.js"></script>
-    <!-- navbar area start 
-    <nav class="navbar navbar-area navbar-expand-lg nav-absolute white nav-style-01 header-style-09">
-        <div class="container nav-container">
-            <div class="responsive-mobile-menu">
-                <div class="logo-wrapper">
 
-                </div>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#appside_main_menu" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
-            
-            <div class="collapse navbar-collapse" id="appside_main_menu">
-                <ul class="navbar-nav">
-                    <li class="current-menu-item">
-                        <a href="index.html">Accueil</a>
-                    </li>
-                    <li><a href="#about">Catégorie</a></li>
-                    <li><a href="#guestbook">Forum</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </div>
+    <!-- Initialize Firebase -->
+    <script src="/__/firebase/init.js"></script>
 
-    </nav>-->
-
-    <!-- navbar area end -->
 
 
     <!-- header area start  -->
@@ -130,43 +114,16 @@
     </header>
     <!-- header area end  -->
 
-    <div class="sponsor-area gray-bg padding-60">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="brand-carousel">
-                        <div class="single-brand-item">
-                            <img src="assets/img/brand-logos/01.png" alt="brand logo">
-                        </div>
-                        <div class="single-brand-item">
-                            <img src="assets/img/brand-logos/02.png" alt="brand logo">
-                        </div>
-                        <div class="single-brand-item">
-                            <img src="assets/img/brand-logos/03.png" alt="brand logo">
-                        </div>
-                        <div class="single-brand-item">
-                            <img src="assets/img/brand-logos/04.png" alt="brand logo">
-                        </div>
-                        <div class="single-brand-item">
-                            <img src="assets/img/brand-logos/05.png" alt="brand logo">
-                        </div>
-                        <div class="single-brand-item">
-                            <img src="assets/img/brand-logos/06.png" alt="brand logo">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
 
     <div class="container">
         <div class="text-center">
             <section id="guestbook-container">
                 <h2>Que se passe t'il?</h2>
-                <form id="leavemessage">
+                <form id="form1" name="form1" method="post" action="">
                     <label for="firstName">Nom*</label><br>
-                    <input type="text" name="firstName" id="firstName" required/>
+                    <input type="text" name="firstName" id="firstName" />
                     </br>
                     </br>
                     <label for="phoneNum">Numéro</label><br>
@@ -174,11 +131,24 @@
                     </br>
                     </br>
                     <label for="catId">Type d'alerte*</label><br>
-                    <input type="text" name="catId" id="catId" placeholder="Innondation, Barrage routier, Embouteillage ou Accident" required/>
+                    <select name="catId" id="catId">
+                        <optgroup>
+                          <option value="Inondation">Inondation</option>
+                          <option value="Accident">Accident</option>
+                          <option value="Barrage routier">Barrage routier</option>
+                          <option value="Embouteillage">Embouteillage</option>
+                          <option value="Travaux">Travaux d'aménagement</option>
+                        </optgroup>
+                        
+                      </select>
+
+
                     </br>
                     </br>
                     <label for="message">Laissez un message: * </label>
-                    <input type="text" name="message" id="message" required/>
+                    <input type="text" name="message" id="message" />
+                    </br>
+
                     <button type="submit" id="addBtn">
                         <i class="material-icons">send</i>
                         <span>Envoyez</span>
@@ -200,7 +170,7 @@
             <div class="row justify-content-center">
                 <div class="col-lg-8">
                     <div class="section-title">
-                        <h2 class="title">Cliquez sur une catégorie pour voir la situation en temps réel avec les marqueurs.</h2>
+                        <h2 class="title">Cliquez sur une catégorie pour voir la situation en temps réel.</h2>
                     </div>
                 </div>
             </div>
@@ -211,10 +181,11 @@
                             <i class="fa fa-car-crash"></i>
                         </div>
                         <div class="content">
-                            <h4 class="title"><a onclick="myFunction()">Accident</a></h4>
+                            <button onclick="accident()">Accident</button>
                             <script>
-                                function myFunction() {
-                                    alert("Bientôt disponible");
+                                function accident() {
+
+                                    alert("Pas de données disponible pour l'instant");
                                 }
                             </script>
 
@@ -227,10 +198,11 @@
                             <i class="fa fa-traffic-light"></i>
                         </div>
                         <div class="content">
-                            <h4 class="title"><a onclick="myEmbou()">Embouteillage</a></h4>
+                            <button onclick="embou()">Embouteillage</button>
                             <script>
-                                function myEmbou() {
-                                    alert("Bientôt disponible");
+                                function embou() {
+
+                                    document.getElementById('map');
                                 }
                             </script>
 
@@ -243,10 +215,12 @@
                             <i class="fa fa-water"></i>
                         </div>
                         <div class="content">
-                            <h4 class="title"><a onclick="myinno()">Inondation</a></h4>
+
+                            <button onclick="inondation()">Inondation</button>
                             <script>
-                                function myinno() {
-                                    alert("Bientôt disponible");
+                                function inondation() {
+                                    var x = location.href = "circlemap.html";
+
                                 }
                             </script>
 
@@ -259,13 +233,13 @@
                             <i class="fa fa-hard-hat"></i>
                         </div>
                         <div class="content">
-                            <h4 class="title"><a onclick="mytravaux()">Travaux</a></h4>
+                            <button onclick="travaux()">Travaux</button>
                             <script>
-                                function mytravaux() {
-                                    alert("Bientôt disponible");
+                                function travaux() {
+                                    alert("Pas de données disponible pour l'instant");
+
                                 }
                             </script>
-
                         </div>
                     </div>
                 </div>
@@ -278,206 +252,67 @@
 
 
 
+
+
+
+
     <!--Map and marker start-->
+    <div id="map1"></div>
+
     <div id="map"></div>
+
     <script>
-        let pos;
         let map;
-        let bounds;
-        let infoWindow;
-        let currentInfoWindow;
-        let service;
-        let infoPane;
 
         function initMap() {
-            // Initialize variables
-            bounds = new google.maps.LatLngBounds();
-            infoWindow = new google.maps.InfoWindow;
-            currentInfoWindow = infoWindow;
-            /* TODO: Step 4A3: Add a generic sidebar */
-            /*infoPane = document.getElementById('panel');*/
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: {
+                    lat: 5.3487761,
+                    lng: -4.1197572
+                },
+                zoom: 12
+            });
+            const trafficLayer = new google.maps.TrafficLayer();
+            trafficLayer.setMap(map);
 
-            // Try HTML5 geolocation
+            infoWindow = new google.maps.InfoWindow();
+
+            // Try HTML5 geolocation.
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(position => {
-                    pos = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    };
-                    map = new google.maps.Map(document.getElementById('map'), {
-                        center: pos,
-                        zoom: 15
-                    });
-                    bounds.extend(pos);
-
-                    //infoWindow.setPosition(pos);
-                    //infoWindow.setContent('Location found.');
-                    //infoWindow.open(map);
-                    //map.setCenter(pos);
-
-                    // Call Places Nearby Search on user's location
-                    getNearbyPlaces(pos);
-                }, () => {
-                    // Browser supports geolocation, but user has denied permission
-                    handleLocationError(true, infoWindow);
-                });
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        const pos = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        //infoWindow.setPosition(pos);
+                        //infoWindow.setContent("Location found.");
+                        //infoWindow.open(map);
+                        map.setCenter(pos);
+                    },
+                    () => {
+                        handleLocationError(true, infoWindow, map.getCenter());
+                    }
+                );
             } else {
-                // Browser doesn't support geolocation
-                handleLocationError(false, infoWindow);
+                // Browser doesn't support Geolocation
+                handleLocationError(false, infoWindow, map.getCenter());
             }
         }
 
-        // Handle a geolocation error
-        function handleLocationError(browserHasGeolocation, infoWindow) {
-            // Set default location to Abidjan, Côte d'Ivoire
-            pos = {
-                lat: 5.3344191,
-                lng: -4.0579537
-            };
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: pos,
-                zoom: 15
-            });
-
-            // Display an InfoWindow at the map center
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
             infoWindow.setPosition(pos);
-            infoWindow.setContent(browserHasGeolocation ?
-                'Geolocation permissions denied. Using default location.' :
-                'Error: Your browser doesn\'t support geolocation.');
+            infoWindow.setContent(
+                browserHasGeolocation ?
+                "Error: The Geolocation service failed." :
+                "Error: Your browser doesn't support geolocation."
+            );
             infoWindow.open(map);
-            currentInfoWindow = infoWindow;
-
-            // Call Places Nearby Search on the default location
-            getNearbyPlaces(pos);
-        }
-
-        // Perform a Places Nearby Search Request
-        function getNearbyPlaces(position) {
-            let request = {
-                location: position,
-                rankBy: google.maps.places.RankBy.DISTANCE,
-                keyword: 'barrage'
-            };
-
-            service = new google.maps.places.PlacesService(map);
-            service.nearbySearch(request, nearbyCallback);
-        }
-
-        // Handle the results (up to 20) of the Nearby Search
-        function nearbyCallback(results, status) {
-            if (status == google.maps.places.PlacesServiceStatus.OK) {
-                createMarkers(results);
-            }
-        }
-
-        // Set markers at the location of each place result
-        function createMarkers(places) {
-            places.forEach(place => {
-                let marker = new google.maps.Marker({
-                    position: place.geometry.location,
-                    map: map,
-                    title: place.name
-                });
-
-                /* TODO: Step 4B: Add click listeners to the markers */
-                // Add click listener to each marker
-                google.maps.event.addListener(marker, 'click', () => {
-                    let request = {
-                        placeId: place.place_id,
-                        fields: ['name', 'formatted_address', 'geometry', 'rating',
-                            'website', 'photos'
-                        ]
-                    };
-
-                    /* Only fetch the details of a place when the user clicks on a marker.
-                     * If we fetch the details for all place results as soon as we get
-                     * the search response, we will hit API rate limits. */
-                    service.getDetails(request, (placeResult, status) => {
-                        showDetails(placeResult, marker, status)
-                    });
-                });
-
-                // Adjust the map bounds to include the location of this marker
-                bounds.extend(place.geometry.location);
-            });
-            /* Once all the markers have been placed, adjust the bounds of the map to
-             * show all the markers within the visible area. */
-            map.fitBounds(bounds);
-        }
-
-        /* TODO: Step 4C: Show place details in an info window */
-        // Builds an InfoWindow to display details above the marker
-        function showDetails(placeResult, marker, status) {
-            if (status == google.maps.places.PlacesServiceStatus.OK) {
-                let placeInfowindow = new google.maps.InfoWindow();
-                let rating = "None";
-                if (placeResult.rating) rating = placeResult.rating;
-                placeInfowindow.setContent('<div><strong>' + placeResult.name +
-                    '</strong><br>' + 'Rating: ' + rating + '</div>');
-                placeInfowindow.open(marker.map, marker);
-                currentInfoWindow.close();
-                currentInfoWindow = placeInfowindow;
-                showPanel(placeResult);
-            } else {
-                console.log('showDetails failed: ' + status);
-            }
-        }
-
-        /* TODO: Step 4D: Load place details in a sidebar */
-        // Displays place details in a sidebar
-        function showPanel(placeResult) {
-            // If infoPane is already open, close it
-            if (infoPane.classList.contains("open")) {
-                infoPane.classList.remove("open");
-            }
-
-            // Clear the previous details
-            while (infoPane.lastChild) {
-                infoPane.removeChild(infoPane.lastChild);
-            }
-
-            /* TODO: Step 4E: Display a Place Photo with the Place Details */
-            // Add the primary photo, if there is one
-            if (placeResult.photos) {
-                let firstPhoto = placeResult.photos[0];
-                let photo = document.createElement('img');
-                photo.classList.add('hero');
-                photo.src = firstPhoto.getUrl();
-                infoPane.appendChild(photo);
-            }
-
-            // Add place details with text formatting
-            let name = document.createElement('h1');
-            name.classList.add('place');
-            name.textContent = placeResult.name;
-            infoPane.appendChild(name);
-            if (placeResult.rating) {
-                let rating = document.createElement('p');
-                rating.classList.add('details');
-                rating.textContent = `Rating: ${placeResult.rating} \u272e`;
-                infoPane.appendChild(rating);
-            }
-            let address = document.createElement('p');
-            address.classList.add('details');
-            address.textContent = placeResult.formatted_address;
-            infoPane.appendChild(address);
-            if (placeResult.website) {
-                let websitePara = document.createElement('p');
-                let websiteLink = document.createElement('a');
-                let websiteUrl = document.createTextNode(placeResult.website);
-                websiteLink.appendChild(websiteUrl);
-                websiteLink.title = placeResult.website;
-                websiteLink.href = placeResult.website;
-                websitePara.appendChild(websiteLink);
-                infoPane.appendChild(websitePara);
-            }
-
-            // Open the infoPane
-            //infoPane.classList.add("open");
         }
     </script>
 
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key="API KEY"&libraries=places&callback=initMap">
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAo6sSAOZoH89I87SR1fMHihWVosv-mTfs&callback=initMap">
     </script>
     <!-- discover area start  -->
 
@@ -488,8 +323,8 @@
                 <div class="row">
                     <div class="col-lg-3 col-md-6">
                         <div class="footer-widget about_widget">
-                            <a href="index.html" class="footer-logo"><img src="assets/img/001.png" alt=""></a>
-                            <p> </p>
+
+
                             <ul class="social-icon">
 
                                 <li><a href="https://twitter.com/TraficDay"><i class="fab fa-twitter"></i></a></li>
@@ -668,12 +503,12 @@
         });
 
         function isTokenSentToServer() {
-          return window.localStorage.getItem('sentToServer') === '1';
+            return window.localStorage.getItem('sentToServer') === '1';
         }
 
         function setTokenSentToServer(sent) {
-          window.localStorage.setItem('sentToServer', sent ? '1' : '0');
-  }
+            window.localStorage.setItem('sentToServer', sent ? '1' : '0');
+        }
         // Get Instance ID token. Initially this makes a network call, once retrieved
         // subsequent calls to getToken will return from cache.
         messaging.getToken().then((currentToken) => {
@@ -739,26 +574,26 @@
         }
 
         function deleteToken() {
-        // Delete Instance ID token.
-        // [START delete_token]
-        messaging.getToken().then((currentToken) => {
-          messaging.deleteToken(currentToken).then(() => {
-            console.log('Token deleted.');
-            setTokenSentToServer(false);
-            // [START_EXCLUDE]
-            // Once token is deleted update UI.
-            resetUI();
-            // [END_EXCLUDE]
-          }).catch((err) => {
-            console.log('Unable to delete token. ', err);
-          });
-          // [END delete_token]
-        }).catch((err) => {
-          console.log('Error retrieving Instance ID token. ', err);
-          showToken('Error retrieving Instance ID token. ', err);
-        });
+            // Delete Instance ID token.
+            // [START delete_token]
+            messaging.getToken().then((currentToken) => {
+                messaging.deleteToken(currentToken).then(() => {
+                    console.log('Token deleted.');
+                    setTokenSentToServer(false);
+                    // [START_EXCLUDE]
+                    // Once token is deleted update UI.
+                    resetUI();
+                    // [END_EXCLUDE]
+                }).catch((err) => {
+                    console.log('Unable to delete token. ', err);
+                });
+                // [END delete_token]
+            }).catch((err) => {
+                console.log('Error retrieving Instance ID token. ', err);
+                showToken('Error retrieving Instance ID token. ', err);
+            });
 
-      }
+        }
 
         // Add a message to the messages element.
         function appendMessage(payload) {
@@ -786,71 +621,8 @@
             showHideDiv(tokenDivId, false);
             showHideDiv(permissionDivId, true);
         }
-
     </script>
-    <!--<script>
-        'use strict';
 
-        /* eslint-disable max-len */
-
-        const applicationServerPublicKey = 'AAAA18huHPg:APA91bHMWHF5kfIzTun6pdxef4m_18RYmTsdLD7PLKdijHGKyTPpwqYTVJtffW9K6kb_XaQaQU3mwROrHPbgRhDY95jI495mtpVptHIyl4qa9prKvghLFQJ3bj3xRb5bx9KrZIQj4i5y';
-
-        /* eslint-enable max-len */
-
-        function urlB64ToUint8Array(base64String) {
-            const padding = '='.repeat((4 - base64String.length % 4) % 4);
-            const base64 = (base64String + padding)
-                .replace(/\-/g, '+')
-                .replace(/_/g, '/');
-
-            const rawData = window.atob(base64);
-            const outputArray = new Uint8Array(rawData.length);
-
-            for (let i = 0; i < rawData.length; ++i) {
-                outputArray[i] = rawData.charCodeAt(i);
-            }
-            return outputArray;
-        }
-
-        self.addEventListener('push', function(event) {
-            console.log('[Service Worker] Push Received.');
-            console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
-
-            const title = 'Push Codelab';
-            const options = {
-                body: 'Yay it works.',
-                icon: 'images/icon.png',
-                badge: 'images/badge.png'
-            };
-
-            event.waitUntil(self.registration.showNotification(title, options));
-        });
-
-        self.addEventListener('notificationclick', function(event) {
-            console.log('[Service Worker] Notification click Received.');
-
-            event.notification.close();
-
-            event.waitUntil(
-                clients.openWindow('https://developers.google.com/web/')
-            );
-        });
-
-        self.addEventListener('pushsubscriptionchange', function(event) {
-            console.log('[Service Worker]: \'pushsubscriptionchange\' event fired.');
-            const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
-            event.waitUntil(
-                self.registration.pushManager.subscribe({
-                    userVisibleOnly: true,
-                    applicationServerKey: applicationServerKey
-                })
-                .then(function(newSubscription) {
-                    // TODO: Send to application server
-                    console.log('[Service Worker] New subscription: ', newSubscription);
-                })
-            );
-        });
-    </script>-->
     <script>
         const catId = document.getElementById('catId');
         const firstName = document.getElementById('firstName');

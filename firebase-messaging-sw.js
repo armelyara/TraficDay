@@ -395,8 +395,11 @@ if (workbox) {
 console.log(`Boo! Workbox didn't load 😬`);
 }
 
-importScripts('/__/firebase/7.14.5/firebase-app.js');
-importScripts('/__/firebase/7.14.5/firebase-messaging.js');
+// Import and configure the Firebase SDK
+// These scripts are made available when the app is served or deployed on Firebase Hosting
+// If you do not serve/host your project using Firebase Hosting see https://firebase.google.com/docs/web/setup
+importScripts('/__/firebase/7.14.3/firebase-app.js');
+importScripts('/__/firebase/7.14.3/firebase-messaging.js');
 importScripts('/__/firebase/init.js');
 
 const messaging = firebase.messaging();
@@ -404,12 +407,14 @@ const messaging = firebase.messaging();
 /**
  * Here is is the code snippet to initialize Firebase Messaging in the Service
  * Worker when your app is not hosted on Firebase Hosting.
+
  // [START initialize_firebase_in_sw]
  // Give the service worker access to Firebase Messaging.
  // Note that you can only use Firebase Messaging here, other Firebase libraries
  // are not available in the service worker.
- importScripts('https://www.gstatic.com/firebasejs/7.14.2/firebase-app.js');
- importScripts('https://www.gstatic.com/firebasejs/7.14.2/firebase-messaging.js');
+ importScripts('https://www.gstatic.com/firebasejs/7.14.3/firebase-app.js');
+ importScripts('https://www.gstatic.com/firebasejs/7.14.3/firebase-messaging.js');
+
  // Initialize the Firebase app in the service worker by passing in
  // your app's Firebase config object.
  // https://firebase.google.com/docs/web/setup#config-object
@@ -423,6 +428,7 @@ const messaging = firebase.messaging();
    appId: 'app-id',
    measurementId: 'G-measurement-id',
  });
+
  // Retrieve an instance of Firebase Messaging so that it can handle background
  // messages.
  const messaging = firebase.messaging();
@@ -435,15 +441,15 @@ const messaging = firebase.messaging();
 // implement this optional method.
 // [START background_handler]
 messaging.setBackgroundMessageHandler(function(payload) {
-  console.log('[firebase-messaging-sw.js] Received background message ', payload);
-  // Customize notification here
-  const notificationTitle = 'Background Message Title';
-  const notificationOptions = {
-    body: 'Background Message body.',
-    icon: '/firebase-logo.png'
-  };
+    console.log('[firebase-messaging-sw.js] Received background message ', payload);
+    // Customize notification here
+    const notificationTitle = 'Background Message Title';
+    const notificationOptions = {
+        body: 'Background Message body.',
+        icon: '/firebase-logo.png'
+    };
 
-  return self.registration.showNotification(notificationTitle,
-    notificationOptions);
+    return self.registration.showNotification(notificationTitle,
+        notificationOptions);
 });
 // [END background_handler]
