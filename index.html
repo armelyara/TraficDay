@@ -458,14 +458,14 @@
     <script src="https://code.getmdl.io/1.2.1/material.min.js"></script>
     <script>
         const firebaseConfig = {
-            apiKey: "AIzaSyDZlmVA3iWRvFMAEHvv-8UfSU6qB7ymVZY",
-            authDomain: "traffic-day.firebaseapp.com",
-            databaseURL: "https://traffic-day.firebaseio.com",
-            projectId: "traffic-day",
-            storageBucket: "traffic-day.appspot.com",
-            messagingSenderId: "926780628216",
-            appId: "1:926780628216:web:1c1896bd89f40f75462f0d",
-            measurementId: "G-M935ZZJFT9"
+            apiKey: "",
+            authDomain: "",
+            databaseURL: "",
+            projectId: "",
+            storageBucket: "",
+            messagingSenderId: "",
+            appId: "",
+            measurementId: ""
         };
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
@@ -491,7 +491,7 @@
         // [END get_messaging_object]
         // [START set_public_vapid_key]
         // Add the public key generated from the console here.
-        messaging.usePublicVapidKey('BHtXSoyYnFdHweuKE4VPD7zzDpZVb78CRp75T-ErVUyEl6KO6AwejeGzQvV8SzWJkPiK6WazlrLF-P7HK2wg2ms');
+        messaging.usePublicVapidKey('');
         // [END set_public_vapid_key]
         messaging.requestPermission().then(function() {
             console.log('Notification');
