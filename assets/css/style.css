@@ -1465,14 +1465,6 @@ ul {
     # Nav bar 
 ----------------------------------------------*/
 
-.navbar.navbar-area.white .navbar-toggler-icon {
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 0.50)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
-}
-
-.navbar.navbar-area .navbar-toggler-icon {
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(0, 0, 0, 0.50)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
-}
-
 .mobile-logo {
     display: none;
 }
@@ -1926,6 +1918,8 @@ ul {
 
 .header-area.manu-sion-6 {
     background-color: #fff;
+    width: auto;
+    height: auto;
     background-image: url(../img/bg/manu-sion.jpg);
     background-position: center;
     background-size: cover;
@@ -6168,9 +6162,8 @@ p {
     margin-bottom: 0px;
 }
 
-#guestbook>p {
-    font-weight: lighter;
-    font-size: 14px;
+.formulaire {
+    margin-top: 27px;
 }
 
 input {
