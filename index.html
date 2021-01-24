@@ -45,7 +45,7 @@
     <link rel="shortcut icon" href="img/favicon/app_images/favicon.ico" type="image/x-icon">
     <link rel="icon" href="img/favicon/app_images/favicon.ico" type="x-icon" />
     <link type="text/css" rel="stylesheet" media="screen" rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Roboto:300,400,700&display=swap">
-    <link type="text/css" rel="stylesheet" media="screen" rel="preload" href="https://fonts.googleapis.com/icon?family=Material+Icons&display=swap" >
+    <link type="text/css" rel="stylesheet" media="screen" rel="preload" href="https://fonts.googleapis.com/icon?family=Material+Icons&display=swap">
     <link type="text/css" rel="stylesheet" media="screen" rel="preload" href="https://cdn.firebase.com/libs/firebaseui/4.0.0/firebaseui.css">
 
     <!-- bootstrap -->
@@ -116,6 +116,8 @@
                               <option value="Barrage routier">Barrage routier</option>
                               <option value="Embouteillage">Embouteillage</option>
                               <option value="Travaux">Travaux d'aménagement</option>
+                              <option value="Travaux">Mauvaise conduite</option>
+                              <option value="Travaux">Voiture volée</option>
                             </optgroup>
                         </select>
                     </div>
@@ -134,6 +136,13 @@
                     <input type="file" id="photo" accept="image/*;capture=camera" />
                     <label for="photo"><button onclick="uploadImage()">Valider l'Image</button></label>
                 </div>
+
+                <!--<div class="contenu">
+                    <h2 class="text-center">Identification des plaques</h2>
+                    <button id="bouton" onclick="fAddText()">Cliquez pour vérifier une Plaque</button>
+                    <div id="Cible"></div>
+                    <div id="Plaque"></div>
+                </div>-->
             </div>
             <div class="col"></div>
         </div>
@@ -215,6 +224,24 @@
                         </div>
                     </div>
                 </div>
+
+                <!--<div class="col-lg-3 col-md-6">
+                    <div class="single-discover-item">
+                        <div class="icon">
+                            <i class="fa fa-chevron-right"></i>
+                        </div>
+                        <div class="content">
+                            <button onclick="travaux()">Itinéraire</button>
+                            <script>
+                                function travaux() {
+                                    window.location = 'routage_branly-monsigny.html';
+                                    //alert("Pas de données disponible pour l'instant");
+
+                                }
+                            </script>
+                        </div>
+                    </div>
+                </div>-->
             </div>
         </div>
     </section>
@@ -356,22 +383,22 @@
     <!-- back to top area end -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-        var lazyBackgrounds = [].slice.call(document.querySelectorAll(".manu-sion-6"));
+            var lazyBackgrounds = [].slice.call(document.querySelectorAll(".manu-sion-6"));
 
-        if ("IntersectionObserver" in window) {
-            let lazyBackgroundObserver = new IntersectionObserver(function(entries, observer) {
-            entries.forEach(function(entry) {
-                if (entry.isIntersecting) {
-                entry.target.classList.add("visible");
-                lazyBackgroundObserver.unobserve(entry.target);
-                }
-            });
-            });
+            if ("IntersectionObserver" in window) {
+                let lazyBackgroundObserver = new IntersectionObserver(function(entries, observer) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add("visible");
+                            lazyBackgroundObserver.unobserve(entry.target);
+                        }
+                    });
+                });
 
-            lazyBackgrounds.forEach(function(lazyBackground) {
-            lazyBackgroundObserver.observe(lazyBackground);
-            });
-        }
+                lazyBackgrounds.forEach(function(lazyBackground) {
+                    lazyBackgroundObserver.observe(lazyBackground);
+                });
+            }
         });
     </script>
 
@@ -392,14 +419,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 
     <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-app.js"></script>
 
 
-    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-analytics.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
-    <script defer src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-messaging.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-database.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/8.2.4/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-messaging.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-storage.js"></script>
 
     <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
 
@@ -619,8 +646,24 @@
             alert("Image Uploaded")
         }
     </script>
+    <script>
+        function affiche() {
+            if (document.getElementById('bouton').innerHTML == 'Montrer') {
+                document.getElementById('bouton').innerHTML = 'Cacher';
+                document.getElementById('cache').style.display = 'block';
+            } else {
+                document.getElementById('bouton').style.display = 'Montrer';
+                document.getElementById('cache').style.display = 'none';
+            }
+        };
+    </script>
 
-
+    <script>
+        function fAddText() {
+            document.getElementById('Cible').innerHTML = '<input type="text" />';
+            document.getElementById('Plaque').innerHTML = '<button onclick="uploadPLaque()">Vérifier</button>';
+        }
+    </script>
 
 </body>
 
