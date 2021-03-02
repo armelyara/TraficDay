@@ -1,208 +1,744 @@
-$(document).ready(function() {
-    // Your web app's Firebase configuration
-    var firebaseConfig = {
-        apiKey: "AIzaSyDZlmVA3iWRvFMAEHvv-8UfSU6qB7ymVZY",
-        authDomain: "traffic-day.firebaseapp.com",
-        databaseURL: "https://traffic-day.firebaseio.com",
-        projectId: "traffic-day",
-        storageBucket: "traffic-day.appspot.com",
-        messagingSenderId: "926780628216",
-        appId: "1:926780628216:web:1c1896bd89f40f75462f0d",
-        measurementId: "G-M935ZZJFT9"
-    };
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    firebase.analytics();
-
-    // Document elements
-    const guestbookContainer = document.getElementById('guestbook-container');
-    const form = document.getElementById('leave-message');
-    const input = document.getElementById('message');
-    const guestbook = document.getElementById('guestbook');
-
-
-    //create firebase references
-    var Auth = firebase.auth();
-    var dbRef = firebase.database();
-    var contactsRef = dbRef.ref('contacts')
-    var usersRef = dbRef.ref('users')
-    var auth = null;
-    var guestbookListener = null;
+(function($) {
+	
+	"use strict";
+	
+	//Hide Loading Box (Preloader)
+	function handlePreloader() {
+		if($('.preloader').length){
+			$('.preloader').delay(200).fadeOut(500);
+		}
+	}
+	
+	//Update Header Style and Scroll to Top
+	function headerStyle() {
+		if($('.main-header').length){
+			var windowpos = $(window).scrollTop();
+			var siteHeader = $('.main-header');
+			var scrollLink = $('.scroll-top');
+			if (windowpos >= 110) {
+				siteHeader.addClass('fixed-header');
+				scrollLink.addClass('open');
+			} else {
+				siteHeader.removeClass('fixed-header');
+				scrollLink.removeClass('open');
+			}
+		}
+	}
+	
+	headerStyle();
 
 
-    //Register
-    $('#registerForm').on('submit', function(e) {
-        e.preventDefault();
-        $('#registerModal').modal('hide');
-        $('#messageModalLabel').html(spanText('<i class="fa fa-cog fa-spin"></i>', ['center', 'info']));
-        $('#messageModal').modal('show');
-        var data = {
-            email: $('#registerEmail').val(), //get the email from Form
-            firstName: $('#registerFirstName').val(), // get firstName
-            lastName: $('#registerLastName').val(), // get lastName
-        };
-        var passwords = {
-            password: $('#registerPassword').val(), //get the pass from Form
-            cPassword: $('#registerConfirmPassword').val(), //get the confirmPass from Form
-        }
-        if (data.email != '' && passwords.password != '' && passwords.cPassword != '') {
-            if (passwords.password == passwords.cPassword) {
-                //create the user
+	//Submenu Dropdown Toggle
+	if($('.main-header li.dropdown ul').length){
+		$('.main-header .navigation li.dropdown').append('<div class="dropdown-btn"><span class="fa fa-angle-right"></span></div>');
+		
+	}
 
-                firebase.auth()
-                    .createUserWithEmailAndPassword(data.email, passwords.password)
-                    .then(function(user) {
-                        return user.updateProfile({
-                            displayName: data.firstName + ' ' + data.lastName
-                        })
-                    })
-                    .then(function(user) {
-                        //now user is needed to be logged in to save data
-                        auth = user;
-                        //now saving the profile data
-                        usersRef.child(user.uid).set(data)
-                            .then(function() {
-                                console.log("User Information Saved:", user.uid);
-                            })
-                        $('#messageModalLabel').html(spanText('Success!', ['center', 'success']))
+	//Mobile Nav Hide Show
+	if($('.mobile-menu').length){
+		
+		$('.mobile-menu .menu-box').mCustomScrollbar();
+		
+		var mobileMenuContent = $('.main-header .menu-area .main-menu').html();
+		$('.mobile-menu .menu-box .menu-outer').append(mobileMenuContent);
+		$('.sticky-header .main-menu').append(mobileMenuContent);
+		
+		//Dropdown Button
+		$('.mobile-menu li.dropdown .dropdown-btn').on('click', function() {
+			$(this).toggleClass('open');
+			$(this).prev('ul').slideToggle(500);
+		});
+		//Menu Toggle Btn
+		$('.mobile-nav-toggler').on('click', function() {
+			$('body').addClass('mobile-menu-visible');
+		});
 
-                        $('#messageModal').modal('hide');
-                    })
-                    .catch(function(error) {
-                        console.log("Error creating user:", error);
-                        $('#messageModalLabel').html(spanText('ERROR: ' + error.code, ['danger']))
-                    });
-            } else {
-                //password and confirm password didn't match
-                $('#messageModalLabel').html(spanText("ERROR: Passwords didn't match", ['danger']))
-            }
-        }
-    });
+		//Menu Toggle Btn
+		$('.mobile-menu .menu-backdrop,.mobile-menu .close-btn').on('click', function() {
+			$('body').removeClass('mobile-menu-visible');
+		});
+	}
 
-    //Login
-    $('#loginForm').on('submit', function(e) {
-        e.preventDefault();
-        $('#loginModal').modal('hide');
-        $('#messageModalLabel').html(spanText('<i class="fa fa-cog fa-spin"></i>', ['center', 'info']));
-        $('#messageModal').modal('show');
 
-        if ($('#loginEmail').val() != '' && $('#loginPassword').val() != '') {
-            //login the user
-            var data = {
-                email: $('#loginEmail').val(),
-                password: $('#loginPassword').val()
-            };
-            firebase.auth().signInWithEmailAndPassword(data.email, data.password)
-                .then(function(authData) {
-                    auth = authData;
-                    $('#messageModalLabel').html(spanText('Success!', ['center', 'success']))
-                    $('#messageModal').modal('hide');
-                })
-                .catch(function(error) {
-                    console.log("Login Failed!", error);
-                    $('#messageModalLabel').html(spanText('ERROR: ' + error.code, ['danger']))
-                });
-        }
-    });
+	// Scroll to a Specific Div
+	if($('.scroll-to-target').length){
+		$(".scroll-to-target").on('click', function() {
+			var target = $(this).attr('data-target');
+		   // animate
+		   $('html, body').animate({
+			   scrollTop: $(target).offset().top
+			 }, 1000);
+	
+		});
+	}
 
-    $('#logout').on('click', function(e) {
-        e.preventDefault();
-        firebase.auth().signOut()
-    });
+	// Elements Animation
+	if($('.wow').length){
+		var wow = new WOW({
+		mobile:       false
+		});
+		wow.init();
+	}
 
-    //save contact
-    $('#contactForm').on('submit', function(event) {
-        event.preventDefault();
-        if (auth != null) {
-            if ($('#name').val() != '' || $('#email').val() != '') {
-                contactsRef.child(auth.uid)
-                    .push({
-                        name: $('#name').val(),
-                        email: $('#email').val(),
-                        location: {
-                            city: $('#city').val(),
-                            state: $('#state').val(),
-                            zip: $('#zip').val()
-                        }
-                    })
-                document.contactForm.reset();
-            } else {
-                alert('Please fill at-lease name or email!');
-            }
-        } else {
-            //inform user to login
-        }
-    });
+	//Contact Form Validation
+	if($('#contact-form').length){
+		$('#contact-form').validate({
+			rules: {
+				username: {
+					required: true
+				},
+				email: {
+					required: true,
+					email: true
+				},
+				phone: {
+					required: true
+				},
+				subject: {
+					required: true
+				},
+				message: {
+					required: true
+				}
+			}
+		});
+	}
 
-    firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-            auth = user;
-            $('body').removeClass('auth-false').addClass('auth-true');
-            usersRef.child(user.uid).once('value').then(function(data) {
-                var info = data.val();
-                if (user.photoUrl) {
-                    $('.user-info img').show();
-                    $('.user-info img').attr('src', user.photoUrl);
-                    $('.user-info .user-name').hide();
-                } else if (user.displayName) {
-                    $('.user-info img').hide();
-                    $('.user-info').append('<span class="user-name">' + user.displayName + '</span>');
-                } else if (info.firstName) {
-                    $('.user-info img').hide();
-                    $('.user-info').append('<span class="user-name">' + info.firstName + '</span>');
-                }
-            });
-            contactsRef.child(user.uid).on('child_added', onChildAdd);
-        } else {
-            // No user is signed in.
-            $('body').removeClass('auth-true').addClass('auth-false');
-            auth && contactsRef.child(auth.uid).off('child_added', onChildAdd);
-            $('#contacts').html('');
-            auth = null;
-        }
-    });
-});
+	//Fact Counter + Text Count
+	if($('.count-box').length){
+		$('.count-box').appear(function(){
+	
+			var $t = $(this),
+				n = $t.find(".count-text").attr("data-stop"),
+				r = parseInt($t.find(".count-text").attr("data-speed"), 10);
+				
+			if (!$t.hasClass("counted")) {
+				$t.addClass("counted");
+				$({
+					countNum: $t.find(".count-text").text()
+				}).animate({
+					countNum: n
+				}, {
+					duration: r,
+					easing: "linear",
+					step: function() {
+						$t.find(".count-text").text(Math.floor(this.countNum));
+					},
+					complete: function() {
+						$t.find(".count-text").text(this.countNum);
+					}
+				});
+			}
+			
+		},{accY: 0});
+	}
 
-function onChildAdd(snap) {
-    $('#contacts').append(contactHtmlFromObject(snap.key, snap.val()));
-}
 
-//prepare contact object's HTML
-function contactHtmlFromObject(key, contact) {
-    return '<div class="card contact" style="width: 18rem;" id="' + key + '">' +
-        '<div class="card-body">' +
-        '<h5 class="card-title">' + contact.name + '</h5>' +
-        '<h6 class="card-subtitle mb-2 text-muted">' + contact.email + '</h6>' +
-        '<p class="card-text" title="' + contact.location.zip + '">' +
-        contact.location.city + ', ' +
-        contact.location.state +
-        '</p>'
-        // + '<a href="#" class="card-link">Card link</a>'
-        // + '<a href="#" class="card-link">Another link</a>'
-        +
-        '</div>' +
-        '</div>';
-}
+	//LightBox / Fancybox
+	if($('.lightbox-image').length) {
+		$('.lightbox-image').fancybox({
+			openEffect  : 'fade',
+			closeEffect : 'fade',
+			helpers : {
+				media : {}
+			}
+		});
+	}
 
-//Listen to the form submission
-form.addEventListener("submit", (e) => {
-    // Prevent the default form redirect
 
-    e.preventDefault();
-    // Write a new message to the database collection "guestbook"
-    firebase.firestore().collection("guestbook").add({
-            text: input.value,
-            timestamp: Date.now(),
-            name: firebase.auth().currentUser.displayName,
-            userId: firebase.auth().currentUser.uid
-        })
-        // clear message input field
-    input.value = "";
-    // Return false to avoid redirect
-    return false;
-});
+	//Tabs Box
+	if($('.tabs-box').length){
+		$('.tabs-box .tab-buttons .tab-btn').on('click', function(e) {
+			e.preventDefault();
+			var target = $($(this).attr('data-tab'));
+			
+			if ($(target).is(':visible')){
+				return false;
+			}else{
+				target.parents('.tabs-box').find('.tab-buttons').find('.tab-btn').removeClass('active-btn');
+				$(this).addClass('active-btn');
+				target.parents('.tabs-box').find('.tabs-content').find('.tab').fadeOut(0);
+				target.parents('.tabs-box').find('.tabs-content').find('.tab').removeClass('active-tab');
+				$(target).fadeIn(300);
+				$(target).addClass('active-tab');
+			}
+		});
+	}
 
-function spanText(textStr, textClasses) {
-    var classNames = textClasses.map(c => 'text-' + c).join(' ');
-    return '<span class="' + classNames + '">' + textStr + '</span>';
-}
+
+
+	//Accordion Box
+	if($('.accordion-box').length){
+		$(".accordion-box").on('click', '.acc-btn', function() {
+			
+			var outerBox = $(this).parents('.accordion-box');
+			var target = $(this).parents('.accordion');
+			
+			if($(this).hasClass('active')!==true){
+				$(outerBox).find('.accordion .acc-btn').removeClass('active');
+			}
+			
+			if ($(this).next('.acc-content').is(':visible')){
+				return false;
+			}else{
+				$(this).addClass('active');
+				$(outerBox).children('.accordion').removeClass('active-block');
+				$(outerBox).find('.accordion').children('.acc-content').slideUp(300);
+				target.addClass('active-block');
+				$(this).next('.acc-content').slideDown(300);	
+			}
+		});	
+	}
+
+
+    //11.progressBarConfig
+	function progressBarConfig () {
+	  	var progressBar = $('.progress');
+	  		if(progressBar.length) {
+	    		progressBar.each(function () {
+	      		var Self = $(this);
+	      		Self.appear(function () {
+	        	var progressValue = Self.data('value');
+
+	        	Self.find('.progress-bar').animate({
+	          	width:progressValue+'%'           
+	        	}, 100);
+
+	        	Self.find('span.value').countTo({
+	          		from: 0,
+	            	to: progressValue,
+	            	speed: 100
+	        		});
+	     	 	});
+	   		})
+	  	}
+	}
+
+
+	//Sortable Masonary with Filters
+	function enableMasonry() {
+		if($('.sortable-masonry').length){
+	
+			var winDow = $(window);
+			// Needed variables
+			var $container=$('.sortable-masonry .items-container');
+			var $filter=$('.filter-btns');
+	
+			$container.isotope({
+				filter:'*',
+				 masonry: {
+					columnWidth : '.masonry-item.small-column'
+				 },
+				animationOptions:{
+					duration:500,
+					easing:'linear'
+				}
+			});
+			
+	
+			// Isotope Filter 
+			$filter.find('li').on('click', function(){
+				var selector = $(this).attr('data-filter');
+	
+				try {
+					$container.isotope({ 
+						filter	: selector,
+						animationOptions: {
+							duration: 500,
+							easing	: 'linear',
+							queue	: false
+						}
+					});
+				} catch(err) {
+	
+				}
+				return false;
+			});
+	
+	
+			winDow.on('resize', function(){
+				var selector = $filter.find('li.active').attr('data-filter');
+
+				$container.isotope({ 
+					filter	: selector,
+					animationOptions: {
+						duration: 500,
+						easing	: 'linear',
+						queue	: false
+					}
+				});
+			});
+	
+	
+			var filterItemA	= $('.filter-btns li');
+	
+			filterItemA.on('click', function(){
+				var $this = $(this);
+				if ( !$this.hasClass('active')) {
+					filterItemA.removeClass('active');
+					$this.addClass('active');
+				}
+			});
+		}
+	}
+	
+	enableMasonry();
+
+
+	// Select menu 
+	function selectDropdown() {
+	    if ($(".selectmenu").length) {
+	        $(".selectmenu").selectmenu();
+
+	        var changeSelectMenu = function(event, item) {
+	            $(this).trigger('change', item);
+	        };
+	        $(".selectmenu").selectmenu({ change: changeSelectMenu });
+	    };
+	}
+
+
+	// Testimonial Carousel
+	if ($('.testimonial-carousel').length) {
+		$('.testimonial-carousel').owlCarousel({
+			animateOut: 'fadeOut',
+    		animateIn: 'fadeIn',
+			items:1,
+			loop:true,
+			margin:0,
+			nav:true,
+			smartSpeed: 300,
+			autoplay: 3000,
+			navText: [ '<span class="fas fa-long-arrow-alt-left"></span>', '<span class="fas fa-long-arrow-alt-right"></span>' ]
+		});  		
+	}
+
+
+	// testimonial-carousel
+	if ($('.testimonial-carousel-2').length) {
+		$('.testimonial-carousel-2').owlCarousel({
+			loop:true,
+			margin:30,
+			nav:false,
+			smartSpeed: 3000,
+			autoplay: true,
+			navText: [ '<span class="flaticon-left"></span>', '<span class="flaticon-right"></span>' ],
+			responsive:{
+				0:{
+					items:1
+				},
+				480:{
+					items:1
+				},
+				600:{
+					items:1
+				},
+				800:{
+					items:1
+				},			
+				1200:{
+					items:1
+				}
+
+			}
+		});    		
+	}
+
+
+	// testimonial-carousel
+	if ($('.testimonial-carousel-3').length) {
+		$('.testimonial-carousel-3').owlCarousel({
+			loop:true,
+			margin:30,
+			nav:false,
+			smartSpeed: 3000,
+			autoplay: true,
+			navText: [ '<span class="fas fa-long-arrow-alt-left"></span>', '<span class="fas fa-long-arrow-alt-right"></span>' ],
+			responsive:{
+				0:{
+					items:1
+				},
+				480:{
+					items:1
+				},
+				600:{
+					items:1
+				},
+				800:{
+					items:1
+				},			
+				1200:{
+					items:1
+				}
+
+			}
+		});    		
+	}
+
+
+	// Four Item Carousel
+	if ($('.four-item-carousel').length) {
+		$('.four-item-carousel').owlCarousel({
+			loop:true,
+			margin:30,
+			nav:true,
+			autoHeight: true,
+			smartSpeed: 500,
+			autoplay: 5000,
+			navText: [ '<span class="fas fa-angle-left"></span>', '<span class="fas fa-angle-right"></span>' ],
+			responsive:{
+				0:{
+					items:1
+				},
+				600:{
+					items:2
+				},
+				800:{
+					items:3
+				},
+				1024:{
+					items:3
+				},
+				1200:{
+					items:4
+				}
+			}
+		});    		
+	}
+
+
+	// Four Item Carousel
+	if ($('.four-item-carousel-2').length) {
+		$('.four-item-carousel-2').owlCarousel({
+			loop:true,
+			margin:60,
+			nav:true,
+			autoHeight: true,
+			smartSpeed: 500,
+			autoplay: 5000,
+			navText: [ '<span class="fas fa-angle-left"></span>', '<span class="fas fa-angle-right"></span>' ],
+			responsive:{
+				0:{
+					items:1
+				},
+				600:{
+					items:2
+				},
+				800:{
+					items:3
+				},
+				1024:{
+					items:3
+				},
+				1200:{
+					items:4
+				}
+			}
+		});    		
+	}
+
+
+	//single-item-carousel
+	if ($('.single-item-carousel').length) {
+		$('.single-item-carousel').owlCarousel({
+			loop:true,
+			margin:0,
+			nav:true,
+			animateOut: 'fadeOut',
+    		animateIn: 'fadeIn',
+    		active: true,
+			smartSpeed: 1000,
+			autoplay: 6000,
+			navText: [ '<span class="flaticon-left-arrow"></span>', '<span class="flaticon-right-arrow"></span>' ],
+			dots: true,
+			responsive:{
+				0:{
+					items:1
+				},
+				600:{
+					items:1
+				},
+				1024:{
+					items:1
+				}
+			}
+		});     		
+	}
+
+
+	// clients-carousel
+	if ($('.clients-carousel').length) {
+		$('.clients-carousel').owlCarousel({
+			loop:true,
+			margin:30,
+			nav:false,
+			smartSpeed: 3000,
+			autoplay: true,
+			navText: [ '<span class="fa fa-angle-left"></span>', '<span class="fa fa-angle-right"></span>' ],
+			responsive:{
+				0:{
+					items:1
+				},
+				480:{
+					items:2
+				},
+				600:{
+					items:3
+				},
+				800:{
+					items:4
+				},			
+				1200:{
+					items:4
+				}
+
+			}
+		});    		
+	}
+
+
+	// clients-carousel
+	if ($('.clients-carousel-2').length) {
+		$('.clients-carousel-2').owlCarousel({
+			loop:true,
+			margin:30,
+			nav:false,
+			smartSpeed: 3000,
+			autoplay: true,
+			navText: [ '<span class="fa fa-angle-left"></span>', '<span class="fa fa-angle-right"></span>' ],
+			responsive:{
+				0:{
+					items:1
+				},
+				480:{
+					items:2
+				},
+				600:{
+					items:3
+				},
+				800:{
+					items:4
+				},			
+				1200:{
+					items:5
+				}
+
+			}
+		});    		
+	}
+
+
+	//three-column-carousel
+	    if ($('.three-column-carousel').length) {
+			$('.three-column-carousel').owlCarousel({
+			loop:true,
+			margin:30,
+			nav:false,
+			smartSpeed: 3000,
+			autoplay: true,
+			navText: [ '<span class="fas fa-arrow-left"></span>', '<span class="fas fa-arrow-right"></span>' ],
+			responsive:{
+				0:{
+					items:1
+				},
+				480:{
+					items:1
+				},
+				600:{
+					items:2
+				},
+				800:{
+					items:2
+				},
+				1024:{
+					items:3
+				}
+			}
+		});    		
+	}
+
+
+	//two-column-carousel
+	    if ($('.two-column-carousel').length) {
+			$('.two-column-carousel').owlCarousel({
+			loop:true,
+			margin:50,
+			nav:true,
+			smartSpeed: 3000,
+			autoplay: 4000,
+			navText: [ '<span class="fa fa-caret-left"></span>', '<span class="fa fa-caret-right"></span>' ],
+			responsive:{
+				0:{
+					items:1
+				},
+				480:{
+					items:1
+				},
+				600:{
+					items:1
+				},
+				800:{
+					items:2
+				},
+				1024:{
+					items:2
+				}
+			}
+		});    		
+	}
+
+
+	if($('.paroller').length){
+		$('.paroller').paroller({
+			  factor: 0.05,            // multiplier for scrolling speed and offset, +- values for direction control  
+			  factorLg: 0.05,          // multiplier for scrolling speed and offset if window width is less than 1200px, +- values for direction control  
+			  type: 'foreground',     // background, foreground  
+			  direction: 'horizontal' // vertical, horizontal  
+		});
+	}
+
+
+	// 6 pieChart RoundCircle
+	function expertizeRoundCircle () {
+		var rounderContainer = $('.piechart');
+		if (rounderContainer.length) {
+			rounderContainer.each(function () {
+				var Self = $(this);
+				var value = Self.data('value');
+				var size = Self.parent().width();
+				var color = Self.data('fg-color');
+
+				Self.find('span').each(function () {
+					var expertCount = $(this);
+					expertCount.appear(function () {
+						expertCount.countTo({
+							from: 1,
+							to: value*100,
+							speed: 3000
+						});
+					});
+
+				});
+				Self.appear(function () {					
+					Self.circleProgress({
+						value: value,
+						size: 270,
+						thickness: 30,
+						emptyFill: '#e1e1e1',
+						animation: {
+							duration: 3000
+						},
+						fill: {
+							color: color
+						}
+					});
+				});
+			});
+		};
+	}
+
+
+	if($('.timer').length){
+	   $(function(){
+		    $('[data-countdown]').each(function() {
+		   var $this = $(this), finalDate = $(this).data('countdown');
+		   $this.countdown(finalDate, function(event) {
+		     $this.html(event.strftime('%D days %H:%M:%S'));
+		   });
+		 });
+		});
+
+	   $('.cs-countdown').countdown('').on('update.countdown', function(event) {
+		  var $this = $(this).html(event.strftime('<div class="count-col"><span>%m</span><h3>Months</h3></div> <div class="count-col"><span>%D</span><h3>days</h3></div> <div class="count-col"><span>%H</span><h3>Hours</h3></div> <div class="count-col"><span>%M</span><h3>Minutes</h3></div> <div class="count-col"><span>%S</span><h3>Seconds</h3></div>'));
+		});
+	}
+
+
+	//31.donate popup
+	function donatepopup() {	
+		if($('#donate-popup').length){
+			
+			//Show Popup
+			$('.donate-box-btn').on('click', function() {
+				$('#donate-popup').addClass('popup-visible');
+			});
+			
+			//Hide Popup
+			$('.close-donate').click(function() {
+				$('#donate-popup').removeClass('popup-visible');
+			});
+		}
+	}
+
+
+	//BX-Slider
+	if($('.events-slide').length){
+		$('.events-slide').bxSlider({
+
+			auto:true,
+			mode:'vertical',
+			nextSelector: '#slider-next',
+			nextText: '',
+			navText: [ '<span class="fa fa-angle-left"></span>', '<span class="fa fa-angle-right"></span>' ],
+			maxSlides: 3,
+			minSlides: 3,
+			moveSlides: 1,
+			pause: 5000,
+			speed: 700,
+			pager: false
+		});
+	}
+
+
+	function onHoverthreeDmovement() {
+	    var tiltBlock = $('.js-tilt');
+	    if(tiltBlock.length) {
+	        $('.js-tilt').tilt({
+	            maxTilt: 20,
+	            perspective:700, 
+	            glare: true,
+	            maxGlare: 0
+	        })
+	    }
+	}
+
+
+	/*	=========================================================================
+	When document is Scrollig, do
+	========================================================================== */
+
+	jQuery(document).on('ready', function () {
+		(function ($) {
+			// add your functions
+			progressBarConfig ();
+			selectDropdown();
+			donatepopup();
+			onHoverthreeDmovement();
+		})(jQuery);
+	});
+
+
+
+	/* ==========================================================================
+   When document is Scrollig, do
+   ========================================================================== */
+	
+	$(window).on('scroll', function() {
+		headerStyle();
+	});
+
+	
+	
+	/* ==========================================================================
+   When document is loaded, do
+   ========================================================================== */
+	
+	$(window).on('load', function() {
+		handlePreloader();
+		enableMasonry();
+		expertizeRoundCircle ();
+	});
+
+	
+
+})(window.jQuery);
