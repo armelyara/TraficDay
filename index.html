@@ -81,6 +81,11 @@
     <script src="https://www.gstatic.com/firebasejs/8.2.8/firebase-analytics.js"></script>
 
     <script>
+        MsgElem = document.getElementById("msg")
+        TokenElem = document.getElementById("token")
+        NotisElem = document.getElementById("notis")
+        ErrElem = document.getElementById("err")
+
         // Your web app's Firebase configuration
         // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         var firebaseConfig = {
@@ -91,12 +96,55 @@
             storageBucket: "traffic-day.appspot.com",
             messagingSenderId: "926780628216",
             appId: "1:926780628216:web:1c1896bd89f40f75462f0d",
-            measurementId: "G-M935ZZJFT9"
+            measurementId: "G-M935ZZJFT9",
+            messagingSenderId: "926780628216",
         };
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         firebase.analytics();
+
+
+        const messaging = firebase.messaging();
+        messaging
+            .requestPermission()
+            .then(function() {
+                MsgElem.innerHTML = "Notification permission granted."
+                console.log("Notification permission granted.");
+
+                // get the token in the form of promise
+                return messaging.getToken()
+            })
+            .then(function(token) {
+                TokenElem.innerHTML = "token is : " + token
+            })
+            .catch(function(err) {
+                ErrElem.innerHTML = ErrElem.innerHTML + "; " + err
+                console.log("Unable to get permission to notify.", err);
+            });
+
+        let enableForegroundNotification = true;
+        messaging.onMessage(function(payload) {
+                    console.log("Message received. ", payload);
+                    NotisElem.innerHTML = NotisElem.innerHTML + JSON.stringify(payload);
+
+                    if (enableForegroundNotification) {
+                        const {
+                            title,
+                            ...options
+                        } = JSON.parse(payload.data.notification);
+                        navigator.serviceWorker.getRegistrations().then(registration => {
+                            registration[0].showNotification(title, options);
+                        });
+                    }
     </script>
+    <!--start push notification-->
+    <div id="token"></div>
+    <div id="msg"></div>
+    <div id="notis"></div>
+    <div id="err"></div>
+
+
+    <!--end push notification-->
     <!-- main header -->
     <header class="main-header home-1">
         <div class="outer-container">
@@ -594,7 +642,7 @@
                                                     signId: signId.value
                                                 });
                                                 alert("Message bien reçu");
-                                                 //document.getElementById("leavemessage").reset();
+                                                //document.getElementById("leavemessage").reset();
                                             });
                                         </script>
                                         <script>
@@ -873,126 +921,56 @@
         }
     </script>
     <script>
+        firebase.initializeApp({
+
+            apiKey: "AIzaSyDZlmVA3iWRvFMAEHvv-8UfSU6qB7ymVZY",
+            projectId: "traffic-day",
+            appId: "1:926780628216:web:1c1896bd89f40f75462f0d",
+        });
+
         // [START get_messaging_object]
         // Retrieve Firebase Messaging object.
-        const messaging = firebase.messaging();
-        // [END get_messaging_object]
-        // [START set_public_vapid_key]
-        // Add the public key generated from the console here.
+        const messaging = firebase.messaging()
+
+        messaging.setBackgroundMessageHandler(function(payload) {
+                console.log(
+                    "[firebase-messaging-sw.js] Receveid background message",
+                    payload,
+                );
+                //customize notification here
+                const notification = "Background Message Title";
+                const notification = {
+                    body: "Background Message body",
+                    icon: "/logo1.png",
+                };
+                return self.registration.showNotification(
+                    notificationTitle,
+                    notificationOptions,
+                );
+            })
+            // [END get_messaging_object]
+            // [START set_public_vapid_key]
+            // Add the public key generated from the console here.
         messaging.usePublicVapidKey('BHtXSoyYnFdHweuKE4VPD7zzDpZVb78CRp75T-ErVUyEl6KO6AwejeGzQvV8SzWJkPiK6WazlrLF-P7HK2wg2ms');
         // [END set_public_vapid_key]
         messaging.requestPermission().then(function() {
-            console.log('Notification');
-            return messaging.getToken();
-        }).then(function(token) {
-            console.log(token);
-        }).catch(function(err) {
-            console.log('Error Occured.');
-        });
+                MsgElem.innerHTML = "Notification permission granted"
+                console.log('Notification permission granted. ');
 
-        function isTokenSentToServer() {
-            return window.localStorage.getItem('sentToServer') === '1';
-        }
-
-        function setTokenSentToServer(sent) {
-            window.localStorage.setItem('sentToServer', sent ? '1' : '0');
-        }
-        // Get Instance ID token. Initially this makes a network call, once retrieved
-        // subsequent calls to getToken will return from cache.
-        messaging.getToken().then((currentToken) => {
-            if (currentToken) {
-                sendTokenToServer(currentToken);
-                updateUIForPushEnabled(currentToken);
-            } else {
-                // Show permission request.
-                console.log('No Instance ID token available. Request permission to generate one.');
-                // Show permission UI.
-                updateUIForPushPermissionRequired();
-                setTokenSentToServer(false);
-            }
-        }).catch((err) => {
-            console.log('An error occurred while retrieving token. ', err);
-            //showToken('Error retrieving Instance ID token. ', err);
-            setTokenSentToServer(false);
-        });
-
-        // Callback fired if Instance ID token is updated.
-        messaging.onTokenRefresh(() => {
-            messaging.getToken().then((refreshedToken) => {
-                console.log('Token refreshed.');
-                // Indicate that the new Instance ID token has not yet been sent to the
-                // app server.
-                setTokenSentToServer(false);
-                // Send Instance ID token to app server.
-                sendTokenToServer(refreshedToken);
-                // ...
-            }).catch((err) => {
-                console.log('Unable to retrieve refreshed token ', err);
-                showToken('Unable to retrieve refreshed token ', err);
+                //get the token in the form of promise
+                return messaging.getToken()
+            })
+            .then(function(token) {
+                //print the token on the HTML page
+                TokenElem.innerHTML = "token is : " + token
+            })
+            .catch(function(err) {
+                ErrElem.innerHTML = ErrElem.innerHTML + "; " + err
+                console.log("Unable to get permission to notify .", err);
             });
-        });
-
-        messaging.onMessage((payload) => {
-            console.log('Message received. ', payload);
-            // [START_EXCLUDE]
-            // Update the UI to include the received message.
-            appendMessage(payload);
-            // [END_EXCLUDE]
-        });
-        // [END receive_message]
-
-
-
-
-        function deleteToken() {
-            // Delete Instance ID token.
-            // [START delete_token]
-            messaging.getToken().then((currentToken) => {
-                messaging.deleteToken(currentToken).then(() => {
-                    console.log('Token deleted.');
-                    setTokenSentToServer(false);
-                    // [START_EXCLUDE]
-                    // Once token is deleted update UI.
-                    resetUI();
-                    // [END_EXCLUDE]
-                }).catch((err) => {
-                    console.log('Unable to delete token. ', err);
-                });
-                // [END delete_token]
-            }).catch((err) => {
-                console.log('Error retrieving Instance ID token. ', err);
-                showToken('Error retrieving Instance ID token. ', err);
-            });
-
-        }
-
-        // Add a message to the messages element.
-        function appendMessage(payload) {
-            const messagesElement = document.querySelector('#messages');
-            const dataHeaderELement = document.createElement('h5');
-            const dataElement = document.createElement('pre');
-            dataElement.style = 'overflow-x:hidden;';
-            dataHeaderELement.textContent = 'Received message:';
-            dataElement.textContent = JSON.stringify(payload, null, 2);
-            messagesElement.appendChild(dataHeaderELement);
-            messagesElement.appendChild(dataElement);
-        }
-
-        messaging.onMessage(function(payload) {
-            console.log('onMessage: ', payload);
-        });
-
-        function updateUIForPushEnabled(currentToken) {
-            showHideDiv(tokenDivId, true);
-            showHideDiv(permissionDivId, false);
-            showToken(currentToken);
-        }
-
-        function updateUIForPushPermissionRequired() {
-            showHideDiv(tokenDivId, false);
-            showHideDiv(permissionDivId, true);
-        }
     </script>
+
+
 
 
     <script>
