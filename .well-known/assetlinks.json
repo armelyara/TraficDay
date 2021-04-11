@@ -1,0 +1,10 @@
+[{
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+        "namespace": "android_app",
+        "package_name": "app.web.traffic_day.twa",
+        "sha256_cert_fingerprints": ["BD:05:60:92:B7:57:2F:0A:C8:AE:A3:70:29:08:B1:45:F7:CC:87:F2:36:80:57:A5:90:E4:D4:9D:69:BC:FC:44",
+            "99:98:25:85:FB:75:F1:F2:E2:8A:81:71:AF:E3:31:44:F3:CE:FE:A4:66:60:E8:E8:D4:D3:BB:B7:D0:5F:DA:44"
+        ]
+    }
+}]

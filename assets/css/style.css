@@ -1748,7 +1748,7 @@
  .feature-style-three {
      position: relative;
      background: #ffffff;
-     padding: 100px 0px 110px 0px;
+     padding: 100px 0px 20px 0px;
  }
  
  .feature-style-three .inner-box .content-box {
@@ -20118,7 +20118,7 @@
  }
  
  .feature-style-three.elements {
-     padding: 200px 0px 300px 0px;
+     padding: 200px 0px 50px 0px;
  }
  
  #map {
