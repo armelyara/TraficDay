@@ -1804,7 +1804,7 @@
  #iamge_block_02 .image-box {
      position: relative;
      display: block;
-     min-height: 638px;
+     min-height: 20px;
      z-index: 1;
  }
  
