@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<head>    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css"/>
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_669a37bf47934196840ae4ceaf34fb73 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+            </style>
+        
+</head>
+<body>    
+    
+            <div class="folium-map" id="map_669a37bf47934196840ae4ceaf34fb73" ></div>
+        
+</body>
+<script>    
+    
+            var map_669a37bf47934196840ae4ceaf34fb73 = L.map(
+                "map_669a37bf47934196840ae4ceaf34fb73",
+                {
+                    center: [5.3477376, -4.0042496],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 12,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_ff9c3d541c8041119790e5c301f6a09a = L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var marker_d8ea8079cef14c5bb8acebde519f19d0 = L.marker(
+                [5.3715649, -3.9727959000000004],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_7f201208392747ca893a63722c09202f = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_d8ea8079cef14c5bb8acebde519f19d0.setIcon(icon_7f201208392747ca893a63722c09202f);
+        
+    
+        var popup_4eb6b2d6e0c4425180a3c7c7cb314720 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_8db18cfe4d0d43c3abf41f91465a40f9 = $(`<div id="html_8db18cfe4d0d43c3abf41f91465a40f9" style="width: 100.0%; height: 100.0%;">Riviera Palmeraie   Ministre  </div>`)[0];
+            popup_4eb6b2d6e0c4425180a3c7c7cb314720.setContent(html_8db18cfe4d0d43c3abf41f91465a40f9);
+        
+
+        marker_d8ea8079cef14c5bb8acebde519f19d0.bindPopup(popup_4eb6b2d6e0c4425180a3c7c7cb314720)
+        ;
+
+        
+    
+    
+            var marker_dcf432df0ec54c668156bd6b1bef4e62 = L.marker(
+                [5.370739700000001, -3.9574026],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_4b1a7c178148491b9b0c756770f14d49 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_dcf432df0ec54c668156bd6b1bef4e62.setIcon(icon_4b1a7c178148491b9b0c756770f14d49);
+        
+    
+        var popup_4fee7dd6439b4809aa1a19a543fd3749 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_3a045bc038944396a783aa1691e35a15 = $(`<div id="html_3a045bc038944396a783aa1691e35a15" style="width: 100.0%; height: 100.0%;">Riviera Palmeraie  Marie Rose Guiraud</div>`)[0];
+            popup_4fee7dd6439b4809aa1a19a543fd3749.setContent(html_3a045bc038944396a783aa1691e35a15);
+        
+
+        marker_dcf432df0ec54c668156bd6b1bef4e62.bindPopup(popup_4fee7dd6439b4809aa1a19a543fd3749)
+        ;
+
+        
+    
+    
+            var marker_a4c9c86a93574141a908dd0218ce2544 = L.marker(
+                [5.3715649, -3.9727959000000004],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_6e267af69bd0498ebb9578671ec36d02 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_a4c9c86a93574141a908dd0218ce2544.setIcon(icon_6e267af69bd0498ebb9578671ec36d02);
+        
+    
+        var popup_aef27487058e4c8eb1cc45a887e5ee1b = L.popup({"maxWidth": "100%"});
+
+        
+            var html_5d9462147f3148449a7e81195face78d = $(`<div id="html_5d9462147f3148449a7e81195face78d" style="width: 100.0%; height: 100.0%;">Riviera Palmeraie  Université Islamique</div>`)[0];
+            popup_aef27487058e4c8eb1cc45a887e5ee1b.setContent(html_5d9462147f3148449a7e81195face78d);
+        
+
+        marker_a4c9c86a93574141a908dd0218ce2544.bindPopup(popup_aef27487058e4c8eb1cc45a887e5ee1b)
+        ;
+
+        
+    
+    
+            var marker_e0a7a72ad58141a6b320b3bc6ed37376 = L.marker(
+                [5.355294799999999, -3.9636328],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_b375e71d014f4cb3a3fd3b68d031a3f8 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_e0a7a72ad58141a6b320b3bc6ed37376.setIcon(icon_b375e71d014f4cb3a3fd3b68d031a3f8);
+        
+    
+        var popup_dd1a9d67bc6f433597f1e045953c30ac = L.popup({"maxWidth": "100%"});
+
+        
+            var html_2bf38a269136400ab7ed8751a773d5ed = $(`<div id="html_2bf38a269136400ab7ed8751a773d5ed" style="width: 100.0%; height: 100.0%;">Riviera3  Allabra</div>`)[0];
+            popup_dd1a9d67bc6f433597f1e045953c30ac.setContent(html_2bf38a269136400ab7ed8751a773d5ed);
+        
+
+        marker_e0a7a72ad58141a6b320b3bc6ed37376.bindPopup(popup_dd1a9d67bc6f433597f1e045953c30ac)
+        ;
+
+        
+    
+    
+            var marker_b7f7287e68884c7b8ab9777e0257a166 = L.marker(
+                [5.3541872999999995, -3.963639],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_792e252d4a5d4635ac1a407796837f72 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_b7f7287e68884c7b8ab9777e0257a166.setIcon(icon_792e252d4a5d4635ac1a407796837f72);
+        
+    
+        var popup_278f057ef89c486992aaee891eb8d9fa = L.popup({"maxWidth": "100%"});
+
+        
+            var html_f56c93f71d5742318bc826e1e4a7be88 = $(`<div id="html_f56c93f71d5742318bc826e1e4a7be88" style="width: 100.0%; height: 100.0%;">Riviera3  Réconciliation</div>`)[0];
+            popup_278f057ef89c486992aaee891eb8d9fa.setContent(html_f56c93f71d5742318bc826e1e4a7be88);
+        
+
+        marker_b7f7287e68884c7b8ab9777e0257a166.bindPopup(popup_278f057ef89c486992aaee891eb8d9fa)
+        ;
+
+        
+    
+    
+            var marker_03d25f104e0b4b5c8611df9ccf85ef1b = L.marker(
+                [5.3541872999999995, -3.963639],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_a549d124e2454b50a34bf2c0d2794b68 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_03d25f104e0b4b5c8611df9ccf85ef1b.setIcon(icon_a549d124e2454b50a34bf2c0d2794b68);
+        
+    
+        var popup_05c98c50a6df4e89a7de619e80c2592c = L.popup({"maxWidth": "100%"});
+
+        
+            var html_694aeec5bea74e5e95cfd3c7fa3feb6a = $(`<div id="html_694aeec5bea74e5e95cfd3c7fa3feb6a" style="width: 100.0%; height: 100.0%;">Riviera3  COPRACI</div>`)[0];
+            popup_05c98c50a6df4e89a7de619e80c2592c.setContent(html_694aeec5bea74e5e95cfd3c7fa3feb6a);
+        
+
+        marker_03d25f104e0b4b5c8611df9ccf85ef1b.bindPopup(popup_05c98c50a6df4e89a7de619e80c2592c)
+        ;
+
+        
+    
+    
+            var marker_f7d3eb2248ce4149aca5baf7548615b2 = L.marker(
+                [5.3451252, -3.9493803],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_83f89aa9b1dd409f939802b79e038c71 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_f7d3eb2248ce4149aca5baf7548615b2.setIcon(icon_83f89aa9b1dd409f939802b79e038c71);
+        
+    
+        var popup_033a0533630749358721cd014b75df83 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_0699ebfd61334b88a1e333971cd9b68b = $(`<div id="html_0699ebfd61334b88a1e333971cd9b68b" style="width: 100.0%; height: 100.0%;">Riviera4  Synacass-ci1</div>`)[0];
+            popup_033a0533630749358721cd014b75df83.setContent(html_0699ebfd61334b88a1e333971cd9b68b);
+        
+
+        marker_f7d3eb2248ce4149aca5baf7548615b2.bindPopup(popup_033a0533630749358721cd014b75df83)
+        ;
+
+        
+    
+    
+            var marker_d260107150124270aec91b8f5f73f84d = L.marker(
+                [5.336120200000001, -3.9488872],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_6548e2eecc994a75a68f69b3814adfc6 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_d260107150124270aec91b8f5f73f84d.setIcon(icon_6548e2eecc994a75a68f69b3814adfc6);
+        
+    
+        var popup_ccdc1ad36ecb4984b0b36c9f69583e25 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_1d0d22ce64f24ea091b70b830281861a = $(`<div id="html_1d0d22ce64f24ea091b70b830281861a" style="width: 100.0%; height: 100.0%;">Riviera Golf4  SCI Cité verdoyante</div>`)[0];
+            popup_ccdc1ad36ecb4984b0b36c9f69583e25.setContent(html_1d0d22ce64f24ea091b70b830281861a);
+        
+
+        marker_d260107150124270aec91b8f5f73f84d.bindPopup(popup_ccdc1ad36ecb4984b0b36c9f69583e25)
+        ;
+
+        
+    
+    
+            var marker_9622e17c7b7b496c8b61bb052c1f5287 = L.marker(
+                [5.3637705, -3.9619902999999996],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_06098153199a41f58d56f60ff372abed = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_9622e17c7b7b496c8b61bb052c1f5287.setIcon(icon_06098153199a41f58d56f60ff372abed);
+        
+    
+        var popup_ef14a36f61e54f04b1a6f7fed839761b = L.popup({"maxWidth": "100%"});
+
+        
+            var html_41157f6210524735a9c3531929a5b986 = $(`<div id="html_41157f6210524735a9c3531929a5b986" style="width: 100.0%; height: 100.0%;">Riviera3  SIDECI</div>`)[0];
+            popup_ef14a36f61e54f04b1a6f7fed839761b.setContent(html_41157f6210524735a9c3531929a5b986);
+        
+
+        marker_9622e17c7b7b496c8b61bb052c1f5287.bindPopup(popup_ef14a36f61e54f04b1a6f7fed839761b)
+        ;
+
+        
+    
+    
+            var marker_5e39fa3826114d0c98d2edef3005024f = L.marker(
+                [5.363743799999999, -3.9554242],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_4e6a8822b6b94d3a9e79902da6d339b6 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_5e39fa3826114d0c98d2edef3005024f.setIcon(icon_4e6a8822b6b94d3a9e79902da6d339b6);
+        
+    
+        var popup_6cdea8bb1da84dd2a853b771c067f8cb = L.popup({"maxWidth": "100%"});
+
+        
+            var html_419cbd5cb346415e84804faddb4dde68 = $(`<div id="html_419cbd5cb346415e84804faddb4dde68" style="width: 100.0%; height: 100.0%;">Riviera3  PK9</div>`)[0];
+            popup_6cdea8bb1da84dd2a853b771c067f8cb.setContent(html_419cbd5cb346415e84804faddb4dde68);
+        
+
+        marker_5e39fa3826114d0c98d2edef3005024f.bindPopup(popup_6cdea8bb1da84dd2a853b771c067f8cb)
+        ;
+
+        
+    
+    
+            var marker_7c8838647e3d4f7181ce9e366ba13854 = L.marker(
+                [5.3573428, -3.9681539],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_59541a7e9dd143319569896a35172147 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_7c8838647e3d4f7181ce9e366ba13854.setIcon(icon_59541a7e9dd143319569896a35172147);
+        
+    
+        var popup_e86676658eaa42588d5499109b068b6b = L.popup({"maxWidth": "100%"});
+
+        
+            var html_15601093107541da81c6af455ec6ed1f = $(`<div id="html_15601093107541da81c6af455ec6ed1f" style="width: 100.0%; height: 100.0%;">Riviera  Laurier 17 et SICOGI</div>`)[0];
+            popup_e86676658eaa42588d5499109b068b6b.setContent(html_15601093107541da81c6af455ec6ed1f);
+        
+
+        marker_7c8838647e3d4f7181ce9e366ba13854.bindPopup(popup_e86676658eaa42588d5499109b068b6b)
+        ;
+
+        
+    
+    
+            var marker_e902efeecd954471b6cbff86bddc4e76 = L.marker(
+                [5.354460400000001, -3.9932235],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_6e3becf101be48eba02306fe54d8a8d9 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_e902efeecd954471b6cbff86bddc4e76.setIcon(icon_6e3becf101be48eba02306fe54d8a8d9);
+        
+    
+        var popup_220d4e288cb1476385734612346a2b69 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_183184c8219a4d05a7ffb353978fbfbb = $(`<div id="html_183184c8219a4d05a7ffb353978fbfbb" style="width: 100.0%; height: 100.0%;">Riviera Attoban   Zinsou</div>`)[0];
+            popup_220d4e288cb1476385734612346a2b69.setContent(html_183184c8219a4d05a7ffb353978fbfbb);
+        
+
+        marker_e902efeecd954471b6cbff86bddc4e76.bindPopup(popup_220d4e288cb1476385734612346a2b69)
+        ;
+
+        
+    
+    
+            var marker_b1714e4e5ded4ffb95fb5708d0da0c99 = L.marker(
+                [5.4102483, -3.9949311],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_1321473e3311458383225c6e98550b52 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_b1714e4e5ded4ffb95fb5708d0da0c99.setIcon(icon_1321473e3311458383225c6e98550b52);
+        
+    
+        var popup_e78bb71c30d64a069698e9f7a23c9d43 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_baf13a94d89e40c1aa99edc74ac19511 = $(`<div id="html_baf13a94d89e40c1aa99edc74ac19511" style="width: 100.0%; height: 100.0%;">Angré Star9  B+</div>`)[0];
+            popup_e78bb71c30d64a069698e9f7a23c9d43.setContent(html_baf13a94d89e40c1aa99edc74ac19511);
+        
+
+        marker_b1714e4e5ded4ffb95fb5708d0da0c99.bindPopup(popup_e78bb71c30d64a069698e9f7a23c9d43)
+        ;
+
+        
+    
+    
+            var marker_764ee552c8fa444bb96665e4b499ea61 = L.marker(
+                [5.411601999999999, -3.9885078000000003],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_945a9ad48eec4921b444106e6a04b994 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_764ee552c8fa444bb96665e4b499ea61.setIcon(icon_945a9ad48eec4921b444106e6a04b994);
+        
+    
+        var popup_328deb9765b34870a1b7445f48fc75e6 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_6df3863c1f8b48a49d7b5c77ec14f06b = $(`<div id="html_6df3863c1f8b48a49d7b5c77ec14f06b" style="width: 100.0%; height: 100.0%;">Angré   SCI Fondasso</div>`)[0];
+            popup_328deb9765b34870a1b7445f48fc75e6.setContent(html_6df3863c1f8b48a49d7b5c77ec14f06b);
+        
+
+        marker_764ee552c8fa444bb96665e4b499ea61.bindPopup(popup_328deb9765b34870a1b7445f48fc75e6)
+        ;
+
+        
+    
+    
+            var marker_61b6be52acd74a07b1a26657dd8f84b6 = L.marker(
+                [5.381193700000001, -4.0069358],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_c963cd04ea5b4a27aeb11ad0b27b4d85 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_61b6be52acd74a07b1a26657dd8f84b6.setIcon(icon_c963cd04ea5b4a27aeb11ad0b27b4d85);
+        
+    
+        var popup_81e334e500ee4b7ba8e26e2cdd27fac1 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_b372abebcc9e45658d5691de06c1b3bc = $(`<div id="html_b372abebcc9e45658d5691de06c1b3bc" style="width: 100.0%; height: 100.0%;">II Plateaux  Carrefour Zoo</div>`)[0];
+            popup_81e334e500ee4b7ba8e26e2cdd27fac1.setContent(html_b372abebcc9e45658d5691de06c1b3bc);
+        
+
+        marker_61b6be52acd74a07b1a26657dd8f84b6.bindPopup(popup_81e334e500ee4b7ba8e26e2cdd27fac1)
+        ;
+
+        
+    
+    
+            var marker_dc4ae785d8f74004851d6a5afa0e8384 = L.marker(
+                [5.4012211, -3.9949604],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_6ae5a11ed8244903870e86e87dff9ec9 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_dc4ae785d8f74004851d6a5afa0e8384.setIcon(icon_6ae5a11ed8244903870e86e87dff9ec9);
+        
+    
+        var popup_8243c9a1c312446b8c960c4a8909b00c = L.popup({"maxWidth": "100%"});
+
+        
+            var html_708cf1e389f243b2bdd26d0e8a3c32d6 = $(`<div id="html_708cf1e389f243b2bdd26d0e8a3c32d6" style="width: 100.0%; height: 100.0%;">Angre cité Latrille   Manguier 1 et 2</div>`)[0];
+            popup_8243c9a1c312446b8c960c4a8909b00c.setContent(html_708cf1e389f243b2bdd26d0e8a3c32d6);
+        
+
+        marker_dc4ae785d8f74004851d6a5afa0e8384.bindPopup(popup_8243c9a1c312446b8c960c4a8909b00c)
+        ;
+
+        
+    
+    
+            var marker_45af142957284f1399a6e9334de613e7 = L.marker(
+                [5.3670864, -4.0013161],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_577df753a177459d8b04a63b5bf8ff73 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_45af142957284f1399a6e9334de613e7.setIcon(icon_577df753a177459d8b04a63b5bf8ff73);
+        
+    
+        var popup_a27d80a4dc3d4b42906c26e0cfe16209 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_1c387b58b96e4ea1bfb87da54e912a57 = $(`<div id="html_1c387b58b96e4ea1bfb87da54e912a57" style="width: 100.0%; height: 100.0%;">II plateaux   Bassin du Vallon</div>`)[0];
+            popup_a27d80a4dc3d4b42906c26e0cfe16209.setContent(html_1c387b58b96e4ea1bfb87da54e912a57);
+        
+
+        marker_45af142957284f1399a6e9334de613e7.bindPopup(popup_a27d80a4dc3d4b42906c26e0cfe16209)
+        ;
+
+        
+    
+    
+            var marker_8896448492c44ae4bea02e80a5196f60 = L.marker(
+                [5.3643095999999995, -3.9894705000000004],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_31e446e65c024efba9721474e8f7c47f = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_8896448492c44ae4bea02e80a5196f60.setIcon(icon_31e446e65c024efba9721474e8f7c47f);
+        
+    
+        var popup_291a4123d6dd4e25a970ce79ef6366f3 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_c917e2dd9c53448a8524e7448ce52991 = $(`<div id="html_c917e2dd9c53448a8524e7448ce52991" style="width: 100.0%; height: 100.0%;">Riviera Bonoumin   Les chevaux</div>`)[0];
+            popup_291a4123d6dd4e25a970ce79ef6366f3.setContent(html_c917e2dd9c53448a8524e7448ce52991);
+        
+
+        marker_8896448492c44ae4bea02e80a5196f60.bindPopup(popup_291a4123d6dd4e25a970ce79ef6366f3)
+        ;
+
+        
+    
+    
+            var marker_fdecfad04ca249c38db093f0e8926fed = L.marker(
+                [5.3643095999999995, -3.9894705000000004],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_6a603328284c48b09c29c1aba7d818ed = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_fdecfad04ca249c38db093f0e8926fed.setIcon(icon_6a603328284c48b09c29c1aba7d818ed);
+        
+    
+        var popup_589811c232974a27b2e56b4c83eedbd5 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_399ac23b527047069760eef2d7483294 = $(`<div id="html_399ac23b527047069760eef2d7483294" style="width: 100.0%; height: 100.0%;">Riviera Bonoumin  Digue de Bonoumin</div>`)[0];
+            popup_589811c232974a27b2e56b4c83eedbd5.setContent(html_399ac23b527047069760eef2d7483294);
+        
+
+        marker_fdecfad04ca249c38db093f0e8926fed.bindPopup(popup_589811c232974a27b2e56b4c83eedbd5)
+        ;
+
+        
+    
+    
+            var marker_031b587d40dd4831b8816a6c6e0edb64 = L.marker(
+                [5.3592722, -3.9651877],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_d3babe58eff74636bd2917baa663d5dd = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_031b587d40dd4831b8816a6c6e0edb64.setIcon(icon_d3babe58eff74636bd2917baa663d5dd);
+        
+    
+        var popup_522b455ea89c481d9621719a95f2a1ed = L.popup({"maxWidth": "100%"});
+
+        
+            var html_f57db8ccc8794d03a18118dc67f2dbf7 = $(`<div id="html_f57db8ccc8794d03a18118dc67f2dbf7" style="width: 100.0%; height: 100.0%;">Riviera Bonoumin Est   CHIC SHOP</div>`)[0];
+            popup_522b455ea89c481d9621719a95f2a1ed.setContent(html_f57db8ccc8794d03a18118dc67f2dbf7);
+        
+
+        marker_031b587d40dd4831b8816a6c6e0edb64.bindPopup(popup_522b455ea89c481d9621719a95f2a1ed)
+        ;
+
+        
+    
+    
+            var marker_54af2ec45bce4baeaca9c07bc4872f0a = L.marker(
+                [5.3643095999999995, -3.9894705000000004],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_7b035616e1fc4ab7b89598c82a35ccca = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_54af2ec45bce4baeaca9c07bc4872f0a.setIcon(icon_7b035616e1fc4ab7b89598c82a35ccca);
+        
+    
+        var popup_9de73d93b290411585acbfc86b7b3935 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_f695b27895764da49fe7f6664cc42c94 = $(`<div id="html_f695b27895764da49fe7f6664cc42c94" style="width: 100.0%; height: 100.0%;">Riviera Bonoumin  Bonoumin derrière COOPEC</div>`)[0];
+            popup_9de73d93b290411585acbfc86b7b3935.setContent(html_f695b27895764da49fe7f6664cc42c94);
+        
+
+        marker_54af2ec45bce4baeaca9c07bc4872f0a.bindPopup(popup_9de73d93b290411585acbfc86b7b3935)
+        ;
+
+        
+    
+    
+            var marker_46dd62f294f046ba95a27f7cf858644c = L.marker(
+                [5.327969, -3.9443902000000004],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_9471ffba14234cda98989d66ed4ccae5 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_46dd62f294f046ba95a27f7cf858644c.setIcon(icon_9471ffba14234cda98989d66ed4ccae5);
+        
+    
+        var popup_9a5229eb170648c9b61a108c012630b3 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_371ae82c6b5b424bbfdb1b591bcff3f4 = $(`<div id="html_371ae82c6b5b424bbfdb1b591bcff3f4" style="width: 100.0%; height: 100.0%;">Riviera 3   SCI CIAD PRIMO</div>`)[0];
+            popup_9a5229eb170648c9b61a108c012630b3.setContent(html_371ae82c6b5b424bbfdb1b591bcff3f4);
+        
+
+        marker_46dd62f294f046ba95a27f7cf858644c.bindPopup(popup_9a5229eb170648c9b61a108c012630b3)
+        ;
+
+        
+    
+    
+            var marker_597f4f7ce8ba4129b1c8891a515f0622 = L.marker(
+                [5.3636669999999995, -3.9503703000000003],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_efcb26f7604442d882b4c7ecd95ae4ec = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_597f4f7ce8ba4129b1c8891a515f0622.setIcon(icon_efcb26f7604442d882b4c7ecd95ae4ec);
+        
+    
+        var popup_492b4c50bc604d6f91958eb70a36becb = L.popup({"maxWidth": "100%"});
+
+        
+            var html_0ec4a9c0d8e54e9ebf76698595563aef = $(`<div id="html_0ec4a9c0d8e54e9ebf76698595563aef" style="width: 100.0%; height: 100.0%;">Riviera 3   Le Triangle</div>`)[0];
+            popup_492b4c50bc604d6f91958eb70a36becb.setContent(html_0ec4a9c0d8e54e9ebf76698595563aef);
+        
+
+        marker_597f4f7ce8ba4129b1c8891a515f0622.bindPopup(popup_492b4c50bc604d6f91958eb70a36becb)
+        ;
+
+        
+    
+    
+            var marker_e1b298fb089a463ba7074fcf19d2b3d8 = L.marker(
+                [5.3843053, -3.9559332],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_170b40b3c6db406c9451d4bc54903a5b = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_e1b298fb089a463ba7074fcf19d2b3d8.setIcon(icon_170b40b3c6db406c9451d4bc54903a5b);
+        
+    
+        var popup_cef3a40541804d0091ec0a882b4efe91 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_5da32bf19d7d4072a45c32a773676eae = $(`<div id="html_5da32bf19d7d4072a45c32a773676eae" style="width: 100.0%; height: 100.0%;">Riviera Palmeraie   Saint Viateur Promogim</div>`)[0];
+            popup_cef3a40541804d0091ec0a882b4efe91.setContent(html_5da32bf19d7d4072a45c32a773676eae);
+        
+
+        marker_e1b298fb089a463ba7074fcf19d2b3d8.bindPopup(popup_cef3a40541804d0091ec0a882b4efe91)
+        ;
+
+        
+    
+    
+            var marker_902463e8a39d4ffca8a746105a32962b = L.marker(
+                [5.3950157999999995, -4.007399700000001],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_e8bbf09d3f12409dbbd2f4c5aa61e368 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_902463e8a39d4ffca8a746105a32962b.setIcon(icon_e8bbf09d3f12409dbbd2f4c5aa61e368);
+        
+    
+        var popup_4335963040864911b4899c46630ba313 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_d0984fb1daa748aeb1276c2b1bee6e1c = $(`<div id="html_d0984fb1daa748aeb1276c2b1bee6e1c" style="width: 100.0%; height: 100.0%;">Plateau Dokui   Marché la Paix</div>`)[0];
+            popup_4335963040864911b4899c46630ba313.setContent(html_d0984fb1daa748aeb1276c2b1bee6e1c);
+        
+
+        marker_902463e8a39d4ffca8a746105a32962b.bindPopup(popup_4335963040864911b4899c46630ba313)
+        ;
+
+        
+    
+    
+            var marker_d3effbdab11e4bd29e6152ea5ea1c1eb = L.marker(
+                [5.4156746, -3.9789676],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_3c2cf7f5893f4bfe99276e4137f58ceb = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_d3effbdab11e4bd29e6152ea5ea1c1eb.setIcon(icon_3c2cf7f5893f4bfe99276e4137f58ceb);
+        
+    
+        var popup_82bb3da0860c4e2eb5e7f3fd427b0e48 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_78cf051c0db4460abbdd76dce1b46144 = $(`<div id="html_78cf051c0db4460abbdd76dce1b46144" style="width: 100.0%; height: 100.0%;">Angré château   Fin goudron</div>`)[0];
+            popup_82bb3da0860c4e2eb5e7f3fd427b0e48.setContent(html_78cf051c0db4460abbdd76dce1b46144);
+        
+
+        marker_d3effbdab11e4bd29e6152ea5ea1c1eb.bindPopup(popup_82bb3da0860c4e2eb5e7f3fd427b0e48)
+        ;
+
+        
+    
+    
+            var marker_7f1faf83c0874d8ba0e88fa3dbf5cf21 = L.marker(
+                [5.386478599999999, -3.9836428],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_4e963c85e56a4dc1b69339f68a57ce85 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_7f1faf83c0874d8ba0e88fa3dbf5cf21.setIcon(icon_4e963c85e56a4dc1b69339f68a57ce85);
+        
+    
+        var popup_8745af9920e3486087f35b23368c436b = L.popup({"maxWidth": "100%"});
+
+        
+            var html_57f01bd92ca54e948e7b40aa9d67140c = $(`<div id="html_57f01bd92ca54e948e7b40aa9d67140c" style="width: 100.0%; height: 100.0%;">Lotissement Djorogobite  Lotissement Djorogobite</div>`)[0];
+            popup_8745af9920e3486087f35b23368c436b.setContent(html_57f01bd92ca54e948e7b40aa9d67140c);
+        
+
+        marker_7f1faf83c0874d8ba0e88fa3dbf5cf21.bindPopup(popup_8745af9920e3486087f35b23368c436b)
+        ;
+
+        
+    
+    
+            var marker_af6927953a4146b1844bf80bf9a3ff56 = L.marker(
+                [5.3907202000000005, -3.953359],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_28960ff18d3e49f7b7d4ce3918a82166 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_af6927953a4146b1844bf80bf9a3ff56.setIcon(icon_28960ff18d3e49f7b7d4ce3918a82166);
+        
+    
+        var popup_9e020bbabbb7416ab9a771928c1c45dd = L.popup({"maxWidth": "100%"});
+
+        
+            var html_ceda9b1ecd334d91b7d416d26b84ad0d = $(`<div id="html_ceda9b1ecd334d91b7d416d26b84ad0d" style="width: 100.0%; height: 100.0%;">Lotissement de Bessikoi  Lotissement de Bessikoi</div>`)[0];
+            popup_9e020bbabbb7416ab9a771928c1c45dd.setContent(html_ceda9b1ecd334d91b7d416d26b84ad0d);
+        
+
+        marker_af6927953a4146b1844bf80bf9a3ff56.bindPopup(popup_9e020bbabbb7416ab9a771928c1c45dd)
+        ;
+
+        
+    
+    
+            var marker_ac022cc9b4f24804b16b80044618f9c0 = L.marker(
+                [5.3603052, -3.9929966],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_e1ff4ffacb1b4aecac5747524e7d5675 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_ac022cc9b4f24804b16b80044618f9c0.setIcon(icon_e1ff4ffacb1b4aecac5747524e7d5675);
+        
+    
+        var popup_71715a75e1f94c799dfacf5b4ccb01c4 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_fdafcc44a0b6469a871e0b4c013d0dcf = $(`<div id="html_fdafcc44a0b6469a871e0b4c013d0dcf" style="width: 100.0%; height: 100.0%;">II Plateaux rue Bertille   zone caniveaux collecteurs</div>`)[0];
+            popup_71715a75e1f94c799dfacf5b4ccb01c4.setContent(html_fdafcc44a0b6469a871e0b4c013d0dcf);
+        
+
+        marker_ac022cc9b4f24804b16b80044618f9c0.bindPopup(popup_71715a75e1f94c799dfacf5b4ccb01c4)
+        ;
+
+        
+    
+    
+            var marker_f7308e79886c407ba67b2094ae49b4c0 = L.marker(
+                [5.3614913, -4.0009001],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_f5fa7340d89047b79a2b1b3b653dcc94 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_f7308e79886c407ba67b2094ae49b4c0.setIcon(icon_f5fa7340d89047b79a2b1b3b653dcc94);
+        
+    
+        var popup_d493f3909ae7420fba478d5a59d91782 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_e3f9cf6c854144d2b5c1d2931dd61e90 = $(`<div id="html_e3f9cf6c854144d2b5c1d2931dd61e90" style="width: 100.0%; height: 100.0%;">II Plateaux les Oliviers   ONG SERVIR</div>`)[0];
+            popup_d493f3909ae7420fba478d5a59d91782.setContent(html_e3f9cf6c854144d2b5c1d2931dd61e90);
+        
+
+        marker_f7308e79886c407ba67b2094ae49b4c0.bindPopup(popup_d493f3909ae7420fba478d5a59d91782)
+        ;
+
+        
+    
+    
+            var marker_bbf1c02d84cb448d879efc4ef4d3cd26 = L.marker(
+                [5.3641533, -3.9924232],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_0c8746ecde42467d849e2cd4edfc4ee7 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_bbf1c02d84cb448d879efc4ef4d3cd26.setIcon(icon_0c8746ecde42467d849e2cd4edfc4ee7);
+        
+    
+        var popup_521cdfa5a01c47f68acd76bb85829e3b = L.popup({"maxWidth": "100%"});
+
+        
+            var html_cc7da67ba0194c6fbb73f194667c73bc = $(`<div id="html_cc7da67ba0194c6fbb73f194667c73bc" style="width: 100.0%; height: 100.0%;">II Plateaux Aghien   supermarché Cash Ivoire</div>`)[0];
+            popup_521cdfa5a01c47f68acd76bb85829e3b.setContent(html_cc7da67ba0194c6fbb73f194667c73bc);
+        
+
+        marker_bbf1c02d84cb448d879efc4ef4d3cd26.bindPopup(popup_521cdfa5a01c47f68acd76bb85829e3b)
+        ;
+
+        
+    
+    
+            var marker_bf811f681d1e4559b626b94032fca933 = L.marker(
+                [5.405983900000001, -3.9953274],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_5864fb5e7c0e4540b233073c3d165bad = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_bf811f681d1e4559b626b94032fca933.setIcon(icon_5864fb5e7c0e4540b233073c3d165bad);
+        
+    
+        var popup_87ea4366a5ff42f3b1cc3034e7c106f1 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_fca2051eebad44c38b449fe94840a400 = $(`<div id="html_fca2051eebad44c38b449fe94840a400" style="width: 100.0%; height: 100.0%;">Angré les OSCARS   Bas-fond qui relie Angre et le Plateau Dokui-Djomi</div>`)[0];
+            popup_87ea4366a5ff42f3b1cc3034e7c106f1.setContent(html_fca2051eebad44c38b449fe94840a400);
+        
+
+        marker_bf811f681d1e4559b626b94032fca933.bindPopup(popup_87ea4366a5ff42f3b1cc3034e7c106f1)
+        ;
+
+        
+    
+    
+            var marker_e7137a882d294eddaef28bcfc72e8102 = L.marker(
+                [5.3385654, -4.0086635],
+                {}
+            ).addTo(map_669a37bf47934196840ae4ceaf34fb73);
+        
+    
+            var icon_332df2621f9c44a98f8655c65946d8a3 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "orange", "prefix": "glyphicon"}
+            );
+            marker_e7137a882d294eddaef28bcfc72e8102.setIcon(icon_332df2621f9c44a98f8655c65946d8a3);
+        
+    
+        var popup_4a0d0163908f4d8e83136792095a30e2 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_24449aa56f4a45118c9997102b574e2b = $(`<div id="html_24449aa56f4a45118c9997102b574e2b" style="width: 100.0%; height: 100.0%;">Danga   Bas-Fonds</div>`)[0];
+            popup_4a0d0163908f4d8e83136792095a30e2.setContent(html_24449aa56f4a45118c9997102b574e2b);
+        
+
+        marker_e7137a882d294eddaef28bcfc72e8102.bindPopup(popup_4a0d0163908f4d8e83136792095a30e2)
+        ;
+
+        
+    
+</script>
+
+</html>

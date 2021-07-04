@@ -19,12 +19,30 @@
     ],
     "prefer_related_applications": true,
     "screenshots": [
-        {
-            "sizes": "512x512",
-            "src": "screenshots/screenshot.png",
-            "type": "image/png",
-            "purpose": "maskable"
-        }
+      {
+        "sizes": "352x728",
+        "src": "images/screenshots/screenshot_1.png",
+        "type": "image/jpeg",
+        "purpose": "any"
+      },
+      {
+        "sizes": "352x728",
+        "src": "images/screenshots/screenshot_2.png",
+        "type": "image/jpeg",
+        "purpose": "any"
+      },
+      {
+        "sizes": "352x728",
+        "src": "images/screenshots/screenshot_3.png",
+        "type": "image/jpeg",
+        "purpose": "any"
+      },
+      {
+        "sizes": "352x728",
+        "src": "images/screenshots/screenshot_4.png",
+        "type": "image/jpeg",
+        "purpose": "any"
+      }
     ],
     "categories": ["lifestyle", "security"],
     "icons": [
