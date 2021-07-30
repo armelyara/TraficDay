@@ -71,37 +71,22 @@
 <body class="boxed_wrapper">
 
     <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/8.2.8/firebase-app.js"></script>
-    <script async src="https://www.gstatic.com/firebasejs/8.2.8/firebase-database.js"></script>
-    <script async src="https://www.gstatic.com/firebasejs/8.2.8/firebase-messaging.js"></script>
-    <script async src="https://www.gstatic.com/firebasejs/8.2.8/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-messaging.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-storage.js"></script>
 
     <!-- TODO: Add SDKs for Firebase products that you want to use
      https://firebase.google.com/docs/web/setup#available-libraries -->
-    <script src="https://www.gstatic.com/firebasejs/8.2.8/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/init.js"></script>
+
 
     <script>
         MsgElem = document.getElementById("msg");
         TokenElem = document.getElementById("token");
         NotisElem = document.getElementById("notis");
         ErrElem = document.getElementById("err");
-
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-        var firebaseConfig = {
-            apiKey: "API KEY MAPS",
-            authDomain: "",
-            databaseURL: "",
-            projectId: "",
-            storageBucket: "",
-            messagingSenderId: "id",
-            appId: "API ID",
-            measurementId: "ID",
-            messagingSenderId: "id",
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        firebase.analytics();
 
 
         const messaging = firebase.messaging();
@@ -413,7 +398,7 @@
                                                                 <div class="col-lg-6 col-md-12 col-sm-12 column">
                                                                     <div class="form-group">
                                                                         <i><img src="images/icons/phone-solid.svg" loading="lazy" width="20x"></i>
-                                                                        <input type="text" name="phoneNum" id="phoneNum" placeholder="Numéro de téléphone" required>
+                                                                        <input type="tel" name="phoneNum" id="phoneNum" placeholder="Numéro de téléphone" required>
                                                                     </div>
                                                                 </div>
 
@@ -622,7 +607,7 @@
                                         <script>
                                             const plateNum = document.getElementById('plateNum');
                                             const numPhone = document.getElementById('numPhone');
-                                            const alerteSign = document.getElementById('alerteSign');
+                                            const alerte = document.getElementById('alerte');
                                             const signId = document.getElementById('signId');
 
                                             const sendBtn = document.getElementById('sendBtn');
@@ -639,7 +624,7 @@
                                                 signRef.child(signalementId).set({
                                                     plateNum: plateNum.value,
                                                     numPhone: numPhone.value,
-                                                    alerteSign: alerteSign.value,
+                                                    alerte: alerte.value,
                                                     signId: signId.value
                                                 });
                                                 alert("Message bien reçu");
@@ -689,7 +674,7 @@
         <h1>Zones inondables de Cocody</h1>
     </div>
     <br><br>
-    <iframe src="inondation.html" title="Zone à haut risque d'inondation" style="width: 359px;height:300px"></iframe>
+    <iframe src="inondation.html" title="Zone à haut risque d'inondation" class="inondation"></iframe>
     <!--map section end-->
 
     <!-- feature-style-two -->
