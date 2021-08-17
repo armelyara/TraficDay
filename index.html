@@ -70,65 +70,23 @@
 
 <body class="boxed_wrapper">
 
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-messaging.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-messaging.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-storage.js"></script>
 
-    <!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-analytics.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.8.1/init.js"></script>
+    <!-- The core Firebase JS SDK is always required and must be listed first-->
+    <!-- <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script> -->
 
-
-    <script>
-        MsgElem = document.getElementById("msg");
-        TokenElem = document.getElementById("token");
-        NotisElem = document.getElementById("notis");
-        ErrElem = document.getElementById("err");
+    <!-- TODO: Add SDKs for Firebase products that you want to use -->
+        <!-- <script src="https://firebase.google.com/docs/web/setup#available-libraries"></script>
+     <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/init.js"></script> -->
 
 
-        const messaging = firebase.messaging();
-        messaging
-            .requestPermission()
-            .then(function() {
-                MsgElem.innerHTML = "Notification permission granted."
-                console.log("Notification permission granted.");
-
-                // get the token in the form of promise
-                return messaging.getToken()
-            })
-            .then(function(token) {
-                TokenElem.innerHTML = "token is : " + token
-            })
-            .catch(function(err) {
-                ErrElem.innerHTML = ErrElem.innerHTML + "; " + err
-                console.log("Unable to get permission to notify.", err);
-            });
-
-        let enableForegroundNotification = true;
-        messaging.onMessage(function(payload) {
-            console.log("Message received. ", payload);
-            NotisElem.innerHTML = NotisElem.innerHTML + JSON.stringify(payload);
-
-            if (enableForegroundNotification) {
-                const {
-                    title,
-                    ...options
-                } = JSON.parse(payload.data.notification);
-                navigator.serviceWorker.getRegistrations().then(registration => {
-                    registration[0].showNotification(title, options);
-                });
-            }
-        });
-    </script>
     <!--start push notification-->
-    <div id="token"></div>
-    <div id="msg"></div>
     <div id="notis"></div>
-    <div id="err"></div>
-
 
     <!--end push notification-->
     <!-- main header -->
@@ -373,8 +331,8 @@
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">Trafic Day</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
                             <div class="modal-body">
                                 <!-- alerte-section -->
@@ -387,7 +345,7 @@
                                                         <img src="images/logosansfond.png" loading="lazy" alt="">
                                                     </div>
                                                     <div class="form-inner">
-                                                        <form method="post" action="" name="form1" id="form1" name="form1" class="default-form">
+                                                        <form method="post"  name="form1" id="form1" name="form1" class="default-form">
                                                             <div class="row">
                                                                 <div class="col-lg-6 col-md-12 col-sm-12 column">
                                                                     <div class="form-group">
@@ -420,7 +378,7 @@
                                                                           <option value="Barrage routier">Barrage routier</option>
                                                                           <option value="Embouteillage">Embouteillage</option>
                                                                           <option value="Travaux">Travaux d'aménagement</option>
-                                                                          
+
                                                                         </optgroup>
                                                                     </select>
                                                                     </div>
@@ -432,7 +390,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <script>
+                                                            <!-- <script>
                                                                 const firstName = document.getElementById('firstName');
                                                                 const phoneNum = document.getElementById('phoneNum');
                                                                 const lieuPerturb = document.getElementById('lieuPerturb');
@@ -448,18 +406,18 @@
 
                                                                 addBtn.addEventListener('click', e => {
                                                                     e.preventDefault();
-                                                                    const autoId = catRef.push().key
-                                                                    catRef.child(autoId).set({
-                                                                        first_name: firstName.value,
-                                                                        phoneNum: phoneNum.value,
-                                                                        lieuPerturb: lieuPerturb.value,
-                                                                        catId: catId.value,
-                                                                    });
+                                                                    // const autoId = catRef.push().key
+                                                                    // catRef.child(autoId).set({
+                                                                    //     first_name: firstName.value,
+                                                                    //     phoneNum: phoneNum.value,
+                                                                    //     lieuPerturb: lieuPerturb.value,
+                                                                    //     catId: catId.value,
+                                                                    // });
                                                                     alert("Message bien reçu");
                                                                     //document.getElementById("leavemessage").reset();
 
                                                                 });
-                                                            </script>
+                                                            </script> -->
                                                         </form>
                                                     </div>
                                                 </div>
@@ -525,7 +483,7 @@
                                                         <img src="images/logosansfond.png" loading="lazy" alt="">
                                                     </div>
                                                     <div class="form-inner">
-                                                        <form method="post" action="" id="contact" class="default-form">
+                                                        <form method="post" id="contact" class="default-form">
                                                             <div class="row">
                                                                 <div class="col-lg-6 col-md-12 col-sm-12 column">
                                                                     <div class="form-group">
@@ -544,7 +502,7 @@
                                                                     <div class="form-group">
 
                                                                         <label for="alerte">Zone de circulation*</label>
-                                                                        <select class="form-control" name="alerte" id="alerte">
+                                                                        <select class="form-control" name="alerte" id="alertesss">
                                                                         <optgroup>
                                                                             <option value="autonord">Autoroute du nord</option>
                                                                             <option value="autobassam">Autoroute de Bassam</option>
@@ -573,7 +531,7 @@
                                                                         <optgroup>
                                                                             <option value="Mauvaise conduite">Mauvaise conduite</option>
                                                                             <option value="Voiture volée">Voiture volée</option>
-                                                                          
+
                                                                         </optgroup>
                                                                     </select>
                                                                     </div>
@@ -604,7 +562,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <script>
+                                        <!-- <script>
                                             const plateNum = document.getElementById('plateNum');
                                             const numPhone = document.getElementById('numPhone');
                                             const alerte = document.getElementById('alerte');
@@ -630,26 +588,8 @@
                                                 alert("Message bien reçu");
                                                 //document.getElementById("leavemessage").reset();
                                             });
-                                        </script>
-                                        <script>
-                                            function uploadImage() {
-                                                const ref = firebase.storage().ref();
-                                                const file = document.querySelector("#photo").files[0];
-                                                const name = +new Date() + "-" + file.name;
-                                                const metadata = {
-                                                    contentType: file.type
-                                                };
-                                                const task = ref.child(name).put(file, metadata);
-                                                task
-                                                    .then(snapshot => snapshot.ref.getDownloadURL())
-                                                    .then(url => {
-                                                        console.log(url);
-                                                        document.querySelector("#image").src = url;
-                                                    })
-                                                    .catch(console.error);
-                                                alert("Image envoyé")
-                                            }
-                                        </script>
+                                        </script> -->
+                                        
                                     </div>
                                 </section>
                                 <!--signalement-section end -->
@@ -668,7 +608,7 @@
         </div>
     </section>
     <!-- rider-section end -->
-    
+
 <!--map section start-->
     <div class="content-box wow fadeInLeft" data-wow-delay="300ms" data-wow-duration="1500ms">
         <h1>Zones inondables de Cocody</h1>
@@ -914,57 +854,47 @@
         }
     </script>
     <script>
-        firebase.initializeApp({
-
-            apiKey: "AIzaSyDZlmVA3iWRvFMAEHvv-8UfSU6qB7ymVZY",
-            projectId: "traffic-day",
-            appId: "1:926780628216:web:1c1896bd89f40f75462f0d",
-        });
-
         // [START get_messaging_object]
         // Retrieve Firebase Messaging object.
-        const messaging = firebase.messaging()
+        const messaging = firebase.messaging();
 
-        messaging.setBackgroundMessageHandler(function(payload) {
-                console.log(
-                    "[firebase-messaging-sw.js] Receveid background message",
-                    payload,
-                );
-                //customize notification here
-                const notification = "Background Message Title";
-                const notification = {
-                    body: "Background Message body",
-                    icon: "/logo1.png",
-                };
-                return self.registration.showNotification(
-                    notificationTitle,
-                    notificationOptions,
-                );
-            })
-            // [END get_messaging_object]
             // [START set_public_vapid_key]
             // Add the public key generated from the console here.
         messaging.usePublicVapidKey('BHtXSoyYnFdHweuKE4VPD7zzDpZVb78CRp75T-ErVUyEl6KO6AwejeGzQvV8SzWJkPiK6WazlrLF-P7HK2wg2ms');
         // [END set_public_vapid_key]
-        messaging.requestPermission().then(function() {
-                MsgElem.innerHTML = "Notification permission granted"
-                console.log('Notification permission granted. ');
+        NotisElem = document.getElementById("notis");
 
-                //get the token in the form of promise
-                return messaging.getToken()
+        messaging
+            .requestPermission()
+            .then(function() {
+                console.log("Notification permission granted.");
+
+                // get the token in the form of promise
+                return messaging.getToken();
             })
             .then(function(token) {
-                //print the token on the HTML page
-                TokenElem.innerHTML = "token is : " + token
+                console.log(token);
             })
             .catch(function(err) {
-                ErrElem.innerHTML = ErrElem.innerHTML + "; " + err
-                console.log("Unable to get permission to notify .", err);
+                console.log("Unable to get permission to notify.", err);
             });
+
+        let enableForegroundNotification = true;
+        messaging.onMessage(function(payload) {
+            console.log("Message received. ", payload);
+            NotisElem.innerHTML = NotisElem.innerHTML + JSON.stringify(payload);
+
+            if (enableForegroundNotification) {
+                const {
+                    title,
+                    ...options
+                } = JSON.parse(payload.data.notification);
+                navigator.serviceWorker.getRegistrations().then(registration => {
+                    registration[0].showNotification(title, options);
+                });
+            }
+        });
     </script>
-
-
-
 
     <script>
         function affiche() {
@@ -985,7 +915,7 @@
         }
     </script>
 
-
+    <script src="javasript-pour-les-formulaires.js"></script>
     <!-- jequery plugins -->
 
     <script src="assets/js/jquery.js"></script>
@@ -1001,7 +931,6 @@
 
     <!-- main-js -->
     <script src="assets/js/script.js"></script>
-
 </body>
 <!-- End of .page_wrapper -->
 
