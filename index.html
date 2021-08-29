@@ -80,7 +80,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script> -->
 
     <!-- TODO: Add SDKs for Firebase products that you want to use -->
-        <!-- <script src="https://firebase.google.com/docs/web/setup#available-libraries"></script>
+    <!-- <script src="https://firebase.google.com/docs/web/setup#available-libraries"></script>
      <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-analytics.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.8.1/init.js"></script> -->
 
@@ -112,9 +112,8 @@
                                     <li class="current dropdown"><a rel="noreferrer" href="#">Accueil</a></li>
                                     <li><a rel="noreferrer" href="#attentivement">Conseils</a></li>
                                     <li><a rel="noreferrer" href="#alerte">Alerte</a></li>
-                                    <li><a rel="noreferrer" href="#mapnotif">Fonctionnalités</a></li>
-                                    <!--<li><a rel="noreferrer" href="#demoapp">Demo App</a></li>-->
-                                    <li><a rel="noreferrer" href="#appmobile">App mobile</a></li>
+                                    <li><a rel="noreferrer" href="#map">Map</a></li>
+                                    <li><a rel="noreferrer" href="#mapnotif">Notification push</a></li>
                                 </ul>
                             </div>
                         </nav>
@@ -155,7 +154,7 @@
                 <h1>Contact Info</h1>
                 <ul>
                     <li>Cocody, Riviera4, Abidjan, Côte d'Ivoire</li>
-                    <li><a rel="noreferrer" href="tel:+2250709750635">+225 0709750635</a></li>
+                    <li><a rel="noreferrer" href="tel:+2250759937956">+225 0759937956</a></li>
                     <li><a rel="noreferrer" href="mailto:armelyara@thedayinfo.com">armelyara@thedayinfo.com</a></li>
                 </ul>
             </div>
@@ -163,7 +162,6 @@
                 <ul class="clearfix">
                     <li><a rel="noreferrer" href="https://twitter.com/TraficDay"><span><img src="images/icons/twitter-brands.svg" loading="lazy" width="20px"></span></a></li>
                     <li><a rel="noreferrer" href="https://web.facebook.com/traficday"><span><img src="images/icons/facebook-brands.svg" loading="lazy" width="20px"></span></a></li>
-                    <li><a rel="noreferrer" href="#"><span><img src="images/icons/youtube-brands.svg" loading="lazy" width="20px"></span></a></li>
                 </ul>
             </div>
         </nav>
@@ -200,13 +198,6 @@
     <section class="feature-section" id="attentivement">
         <div class="container">
             <div class="row">
-                <div class="col-lg-5 col-md-12 col-sm-12 image-column">
-                    <div id="iamge_block_01">
-                        <div class="image-box float-bob-y">
-                            <figure class="image wow slideInLeft" data-wow-delay="00ms" data-wow-duration="1500ms"><img src="images/resource/avertissement.png" loading="lazy" alt=""></figure>
-                        </div>
-                    </div>
-                </div>
                 <div class="col-lg-7 col-md-12 col-sm-12 content-column">
                     <div id="content_block_01">
                         <div class="content-box">
@@ -345,7 +336,7 @@
                                                         <img src="images/logosansfond.png" loading="lazy" alt="">
                                                     </div>
                                                     <div class="form-inner">
-                                                        <form method="post"  name="form1" id="form1" name="form1" class="default-form">
+                                                        <form method="post" name="form1" id="form1" name="form1" class="default-form">
                                                             <div class="row">
                                                                 <div class="col-lg-6 col-md-12 col-sm-12 column">
                                                                     <div class="form-group">
@@ -390,34 +381,6 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <!-- <script>
-                                                                const firstName = document.getElementById('firstName');
-                                                                const phoneNum = document.getElementById('phoneNum');
-                                                                const lieuPerturb = document.getElementById('lieuPerturb');
-                                                                const catId = document.getElementById('catId');
-
-                                                                const addBtn = document.getElementById('addBtn');
-
-                                                                const database = firebase.database();
-
-                                                                const catRef = database.ref('/alerte');
-
-                                                                console.log("test");
-
-                                                                addBtn.addEventListener('click', e => {
-                                                                    e.preventDefault();
-                                                                    // const autoId = catRef.push().key
-                                                                    // catRef.child(autoId).set({
-                                                                    //     first_name: firstName.value,
-                                                                    //     phoneNum: phoneNum.value,
-                                                                    //     lieuPerturb: lieuPerturb.value,
-                                                                    //     catId: catId.value,
-                                                                    // });
-                                                                    alert("Message bien reçu");
-                                                                    //document.getElementById("leavemessage").reset();
-
-                                                                });
-                                                            </script> -->
                                                         </form>
                                                     </div>
                                                 </div>
@@ -562,34 +525,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- <script>
-                                            const plateNum = document.getElementById('plateNum');
-                                            const numPhone = document.getElementById('numPhone');
-                                            const alerte = document.getElementById('alerte');
-                                            const signId = document.getElementById('signId');
 
-                                            const sendBtn = document.getElementById('sendBtn');
 
-                                            const database1 = firebase.database();
-
-                                            const signRef = database.ref('/signalement');
-
-                                            console.log("test");
-
-                                            sendBtn.addEventListener('click', e => {
-                                                e.preventDefault();
-                                                const signalementId = signRef.push().key
-                                                signRef.child(signalementId).set({
-                                                    plateNum: plateNum.value,
-                                                    numPhone: numPhone.value,
-                                                    alerte: alerte.value,
-                                                    signId: signId.value
-                                                });
-                                                alert("Message bien reçu");
-                                                //document.getElementById("leavemessage").reset();
-                                            });
-                                        </script> -->
-                                        
                                     </div>
                                 </section>
                                 <!--signalement-section end -->
@@ -609,8 +546,8 @@
     </section>
     <!-- rider-section end -->
 
-<!--map section start-->
-    <div class="content-box wow fadeInLeft" data-wow-delay="300ms" data-wow-duration="1500ms">
+    <!--map section start-->
+    <div class="content-box wow fadeInLeft" data-wow-delay="300ms" data-wow-duration="1500ms" id="map">
         <h1>Zones inondables de Cocody</h1>
     </div>
     <br><br>
@@ -725,102 +662,13 @@
         </div>
     </section>
     <!-- feature-style-three -->
-
-    <!-- download-apps -->
-    <section class="download-apps home-17" id="appmobile">
-        <div class="image-layer" style="background-image: url(images/icons/layer-image-4.png);"></div>
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 col-md-12 col-sm-12 image-column wow slideInLeft" data-wow-delay="00ms" data-wow-duration="1500ms">
-                    <div id="default_image_block">
-                        <figure class="image-box js-tilt"><img src="images/resource/APP.png" alt="" loading="lazy"></figure>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12 col-sm-12 content-column">
-                    <div id="content_block_16">
-                        <div class="content-box wow fadeInUp" data-wow-delay="00ms" data-wow-duration="1500ms">
-                            <div class="sec-title">
-                                <h2>Téléchargez l'application maintenant!</h2>
-                            </div>
-                            <div class="text">Profitez d'une meilleure expérience d'utilisation avec l'application disponible pour le moment sur Google PLay.<br />Elle sera bientôt disponible pour les utilisateurs de iphone</div>
-                            <div class="download-btn">
-
-                                <a rel="noreferrer" href="#" class="google-play-btn">
-                                    <i><img src="images/icons/google-play-brands.svg" alt="" loading="lazy" width="25px"></i>
-                                    <span>Disponible sur</span> Google Play
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- download-apps end -->
-
-
     <!-- main-footer -->
     <footer class="main-footer style-five">
         <div class="anim-icons">
             <div class="icon icon-1"><img src="images/icons/pattern-21.png" loading="lazy" alt=""></div>
         </div>
         <div class="image-layer" style="background-image: url(images/icons/footer-bg-6.png);"></div>
-        <div class="footer-top">
-            <div class="container">
-                <div class="widget-section">
-                    <div class="row">
-                        <div class="col-lg-4 col-md-6 col-sm-12 footer-column">
-                            <div class="about-widget footer-widget">
-                                <figure class="footer-logo">
-                                    <a rel="noreferrer" href="#"><img src="images/001preview.png" loading="lazy" alt=""></a>
-                                </figure>
-                                <div class="text">Tous ensemble,luttons pour une sécurité routière garantie sur toute l'étendue du territoire nationale</div>
-                                <h2 class="phone"><i><img src="images/icons/whatsapp-brands.svg" loading="lazy" alt="" width="30px"></i><a rel="noreferrer" href="tel:0759937956">07 - 5993 - 7956</a></h2>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 col-md-6 col-sm-12 footer-column">
-                            <div class="links-widget footer-widget">
-                                <h4 class="widget-title">Services</h4>
-                                <div class="widget-content">
-                                    <ul class="list clearfix">
-                                        <li><a rel="noreferrer" href="#">Informer en temps réel</a></li>
-                                        <li><a rel="noreferrer" href="#">Former les usagers</a></li>
-                                        <li><a rel="noreferrer" href="#">Sensibiliser</a></li>
-                                        <li><a rel="noreferrer" href="#">Alerter sur les pertubations</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-6 col-sm-12 footer-column">
-                            <div class="contact-widget footer-widget">
-                                <h4 class="widget-title">Contactez nous</h4>
-                                <div class="widget-content">
-                                    <ul class="contact-info clearfix">
-                                        <li><i><img src="images/icons/map-marker-alt-solid.svg" loading="lazy" alt="" width="20px"></i> Cocody, Riviera4, Abidjan</li>
-                                        <li><i><img src="images/icons/whatsapp-brands.svg" loading="lazy" alt="" width="20px"></i><a rel="noreferrer" href="tel:02250759937956">+0225 07 - 5993 - 7956</a></li>
-                                        <li><i><img src="images/icons/envelope-solid.svg" loading="lazy" alt="" width="20px"></i><a rel="noreferrer" href="mailto:armelyara29@thedayinfo.com">armelyara29@thedayinfo.com</a></li>
-                                    </ul>
-                                </div>
 
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-6 col-sm-12 footer-column">
-                            <div class="links-widget footer-widget">
-                                <h4 class="widget-title">A propos de nous</h4>
-                                <div class="widget-content">
-                                    <ul class="list clearfix">
-                                        <li><a rel="noreferrer" href="https://traffic-day.web.app/">Trafic Day en ligne</a></li>
-                                        <li><a rel="noreferrer" href="#">Notre Leadership</a></li>
-                                        <li><a rel="noreferrer" href="#">Histoire</a></li>
-                                        <li><a rel="noreferrer" href="#">Ce que nous faisons</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="footer-bottom">
             <div class="container clearfix">
                 <div class="copyright pull-left">&copy; 2021 <a rel="noreferrer" href="#">Trafic Day</a>. Tous droits réservés</div>
@@ -858,8 +706,8 @@
         // Retrieve Firebase Messaging object.
         const messaging = firebase.messaging();
 
-            // [START set_public_vapid_key]
-            // Add the public key generated from the console here.
+        // [START set_public_vapid_key]
+        // Add the public key generated from the console here.
         messaging.usePublicVapidKey('BHtXSoyYnFdHweuKE4VPD7zzDpZVb78CRp75T-ErVUyEl6KO6AwejeGzQvV8SzWJkPiK6WazlrLF-P7HK2wg2ms');
         // [END set_public_vapid_key]
         NotisElem = document.getElementById("notis");

@@ -109,6 +109,7 @@
      .container {
          max-width: 1200px;
          padding: 0px 15px;
+         text-align: center;
      }
  }
  
@@ -19825,19 +19826,19 @@
  .pricing-style-three.pricing-page-4 {
      padding-bottom: 0px;
  }
+ 
  .inondation {
-    width: 100%;
-    height: 600px;
+     width: 100%;
+     height: 600px;
  }
-
-
+ 
  @media only screen and (max-width: 768px) {
-    .inondation {
-        width: 100%;
-        height:320px;
-     } 
-  }
-
+     .inondation {
+         width: 100%;
+         height: 320px;
+     }
+ }
+ 
  .feature-style-three.elements {
      padding: 200px 0px 50px 0px;
  }
