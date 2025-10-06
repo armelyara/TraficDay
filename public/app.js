@@ -538,19 +538,23 @@ function getObstacleLabel(type) {
 }
 
 function showObstacleDetails(obstacle) {
+    console.log('🔍 Showing obstacle details:', obstacle);
+    console.log('🆔 Obstacle ID:', obstacle.id);
+
     const timeAgo = getTimeAgo(obstacle.timestamp);
     const label = getObstacleLabel(obstacle.type);
 
     const message = `
 ${label}
-${obstacle.description}
+${obstacle.description || 'Aucune description'}
 
-📍 Zone: ${obstacle.zone}
+📍 Zone: ${obstacle.zone || 'Inconnue'}
 ⏰ Signalé il y a ${timeAgo}
-👥 ${obstacle.reports} confirmations
+👥 ${obstacle.confirmations || 1} confirmations
   `;
 
     if (confirm(message + '\n\nVoulez-vous confirmer cet obstacle ?')) {
+        console.log('✅ User wants to confirm obstacle ID:', obstacle.id);
         handleConfirmObstacle(obstacle.id);
     }
 }

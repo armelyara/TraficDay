@@ -8,7 +8,7 @@
       ".write": "auth != null",
       ".indexOn": ["timestamp", "active"],
       "$obstacleId": {
-        ".validate": "newData.hasChildren(['type', 'lat', 'lng', 'timestamp', 'userId', 'active', 'confirmations'])",
+        ".validate": "newData.hasChildren(['type', 'lat', 'lng', 'timestamp', 'userId', 'active', 'confirmations']) || (data.exists() && auth != null)",
         "type": {
           ".validate": "newData.isString() && newData.val().matches(/^(flood|protest|closure|traffic|police)$/)"
         },
@@ -22,7 +22,8 @@
           ".validate": "newData.isBoolean()"
         },
         "confirmations": {
-          ".validate": "newData.isNumber() && newData.val() >= 1"
+          ".validate": "newData.isNumber() && newData.val() >= 1",
+          ".write": "auth != null"
         },
         "userId": {
           ".validate": "newData.isString()"
@@ -34,7 +35,11 @@
           ".validate": "newData.isString() && newData.val().length <= 200"
         },
         "confirmedBy": {
-          ".validate": "newData.hasChildren()"
+          ".validate": "newData.hasChildren()",
+          ".write": "auth != null",
+          "$confirmedUid": {
+            ".validate": "newData.isBoolean()"
+          }
         }
       }
     },

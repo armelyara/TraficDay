@@ -1,14 +1,12 @@
 // Service Worker pour AlerteRoute PWA
 // Version du cache - Update this version number whenever you deploy changes
-const CACHE_VERSION = 'traficday-v3.1.0';
+const CACHE_VERSION = 'traficday-v3.1.3';
 
-// Fichiers à mettre en cache
+// Fichiers à mettre en cache (essentials only, dynamic files cached on-demand)
 const CACHE_FILES = [
     '/',
     '/index.html',
     '/styles.css',
-    '/app.js',
-    '/firebase-config.js',
     '/manifest.json'
 ];
 
@@ -95,7 +93,18 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Stratégie Network First pour Firebase
+    // Only cache requests from our own domain
+    const isOwnDomain = url.hostname === self.location.hostname ||
+                        url.hostname.includes('traficday-91045') ||
+                        url.hostname.includes('firebaseapp.com');
+
+    // Don't intercept external resources (Leaflet, Firebase CDN, etc.)
+    if (!isOwnDomain) {
+        // Let browser handle external resources normally
+        return;
+    }
+
+    // Stratégie Network First pour Firebase API calls
     if (url.hostname.includes('firebase') ||
         url.hostname.includes('googleapis.com') ||
         url.hostname.includes('firebaseio.com')) {
@@ -103,7 +112,7 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Stratégie Cache First pour les assets statiques
+    // Stratégie Cache First pour les assets statiques de notre domaine
     if (request.destination === 'image' ||
         request.destination === 'style' ||
         request.destination === 'script') {

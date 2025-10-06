@@ -25,7 +25,7 @@ This comprehensive security audit identifies vulnerabilities, security risks, an
 **Issue:**
 ```javascript
 const firebaseConfig = {
-    apiKey: "AIzaSyDSsuLhD9vZ_jiMlPJT5IwmOc_cI5b3n7k",
+    apiKey: " ",
     authDomain: "traficday-91045.firebaseapp.com",
     // ... other sensitive config
 };

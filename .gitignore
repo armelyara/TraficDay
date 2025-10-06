@@ -13,6 +13,12 @@ firebase-debug.*.log*
 # Firebase config
 public/firebase-config.js
 
+# Security audit report
+SECURITY_AUDIT.md
+
+#Security fixes
+SECURITY_FIXES_APPLIED.md
+
 # Uncomment this if you'd like others to create their own Firebase project.
 # For a team working on the same Firebase project(s), it is recommended to leave
 # it commented so all members can deploy to the same project(s) in .firebaserc.
