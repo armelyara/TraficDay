@@ -1,17 +1,13 @@
 // AlerteRoute PWA - JavaScript Principal
 // Import Firebase functions
 import {
-    loginWithGoogle,
-    logout as firebaseLogout,
+    signInWithGoogle,
+    signOutUser,
     onAuthChange,
-    addObstacle as firebaseAddObstacle,
-    listenToObstacles as firebaseListenToObstacles,
-    confirmObstacle as firebaseConfirmObstacle,
-    saveUserLocation,
-    createUserProfile,
-    requestNotificationToken,
-    saveUserFCMToken,
-    createObstacleNotification
+    createObstacle,
+    firebaseListenToObstacles,
+    confirmObstacle,
+    createUserProfile
 } from './firebase-config.js';
 
 // État global de l'application
@@ -219,7 +215,7 @@ async function login(provider) {
     console.log('🔐 Tentative de connexion avec:', provider);
 
     if (provider === 'google') {
-        const result = await loginWithGoogle();
+        const result = await signInWithGoogle();
 
         if (result.success) {
             closeModal('auth-modal');
@@ -236,7 +232,7 @@ async function login(provider) {
 
 async function logout() {
     if (confirm('Voulez-vous vraiment vous déconnecter ?')) {
-        const result = await firebaseLogout();
+        const result = await signOutUser();
 
         if (result.success) {
             alert('✅ Vous êtes déconnecté. Vous pouvez toujours consulter la carte.');
@@ -350,7 +346,7 @@ async function handleReport(type) {
     };
 
     // Enregistrer dans Firebase
-    const result = await firebaseAddObstacle(newObstacle);
+    const result = await createObstacle(newObstacle);
 
     if (result.success) {
         closeModal('report-modal');
@@ -495,7 +491,7 @@ async function confirmObstacle(obstacleId) {
         return;
     }
 
-    const result = await firebaseConfirmObstacle(obstacleId, app.user.uid);
+    const result = await confirmObstacle(obstacleId);
 
     if (result.success) {
         alert('Obstacle confirmé !');
