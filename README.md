@@ -188,7 +188,7 @@ Pour toute question ou problème :
 
 ## 📊 Statistiques
 
-- Version: 1.0.0
+- Version: 3.0.0
 - Date de sortie: Octobre 2025
 - Pays cible: Côte d'Ivoire
 - Plateforme: Web (PWA)
@@ -197,4 +197,3 @@ Pour toute question ou problème :
 
 © 2025 The Day Info. Tous droits réservés.
 
-Fait avec ❤️ en Côte d'Ivoire
