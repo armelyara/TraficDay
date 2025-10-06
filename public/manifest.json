@@ -1,0 +1,109 @@
+{
+    "name": "TraficDay - Sécurité Routière en Temps Réel",
+    "short_name": "TraficDay",
+    "description": "Application d'alertes routières en temps réel pour éviter les inondations, manifestations et routes fermées. Contribuez à la sécurité de tous les conducteurs.",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#ffffff",
+    "theme_color": "#3b82f6",
+    "icons": [
+        {
+            "src": "/icons/icon-48.png",
+            "sizes": "48x48",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/icons/icon-72.png",
+            "sizes": "72x72",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/icons/icon-96.png",
+            "sizes": "96x96",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/icons/icon-144.png",
+            "sizes": "144x144",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "screenshots/screenshot1.png",
+            "sizes": "540x720",
+            "type": "image/png",
+            "label": "Carte interactive avec obstacles en temps réel"
+        },
+        {
+            "src": "screenshots/screenshot2.png",
+            "sizes": "540x720",
+            "type": "image/png",
+            "label": "Signalement rapide d'obstacles"
+        }
+    ],
+    "categories": [
+        "navigation",
+        "utilities",
+        "lifestyle",
+        "travel"
+    ],
+    "lang": "fr",
+    "dir": "ltr",
+    "prefer_related_applications": false,
+    "related_applications": [],
+    "shortcuts": [
+        {
+            "name": "Signaler un obstacle",
+            "short_name": "Signaler",
+            "description": "Signaler rapidement un obstacle routier",
+            "url": "/?action=report",
+            "icons": [
+                {
+                    "src": "icons/icon-192.png",
+                    "sizes": "192x192"
+                }
+            ]
+        },
+        {
+            "name": "Voir les alertes",
+            "short_name": "Alertes",
+            "description": "Consulter les alertes actives",
+            "url": "/?action=alerts",
+            "icons": [
+                {
+                    "src": "icons/icon-192.png",
+                    "sizes": "192x192"
+                }
+            ]
+        }
+    ],
+    "share_target": {
+        "action": "/share",
+        "method": "POST",
+        "enctype": "multipart/form-data",
+        "params": {
+            "title": "title",
+            "text": "text",
+            "url": "url"
+        }
+    }
+}

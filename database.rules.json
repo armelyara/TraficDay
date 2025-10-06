@@ -1,0 +1,14 @@
+{
+  "rules": {
+    ".read": true,
+    ".write": "auth != null",
+    "obstacles": {
+      ".indexOn": ["timestamp", "active"]
+    },
+    "users": {
+      "$uid": {
+        ".write": "$uid === auth.uid"
+      }
+    }
+  }
+}
