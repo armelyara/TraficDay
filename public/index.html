@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#3b82f6">
     <meta name="description"
         content="Alertes routières en temps réel - Évitez les inondations, manifestations et routes fermées">
@@ -83,6 +83,27 @@
                 <p class="title" id="danger-title">⚠️ Attention requise</p>
                 <p class="subtitle" id="danger-subtitle">Obstacles modérés dans la zone</p>
             </div>
+
+            <!-- Bandeau d'installation PWA -->
+            <div id="install-banner" class="install-banner" style="display: none;">
+                <div class="install-banner-content">
+                    <div class="install-banner-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                    </div>
+                    <div class="install-banner-text">
+                        <p class="install-banner-title">Installer TraficDay</p>
+                        <p class="install-banner-subtitle">Accès rapide et notifications en temps réel</p>
+                    </div>
+                    <div class="install-banner-actions">
+                        <button id="btn-install-pwa" class="btn-install-yes">Installer</button>
+                        <button id="btn-install-dismiss" class="btn-install-no">×</button>
+                    </div>
+                </div>
+            </div>
         </header>
 
         <!-- Main - Carte -->
@@ -120,7 +141,7 @@
                         </div>
                         <div class="settings-section">
                             <h3>À propos</h3>
-                            <p style="color: #6b7280; font-size: 14px;">TraficDay v1.0.0</p>
+                            <p style="color: #6b7280; font-size: 14px;">v3.0.0</p>
                             <p style="color: #6b7280; font-size: 12px; margin-top: 12px;">© 2025-TraficDay Powered By The Day Info</p>
                             <div style="margin-top: 12px;">
                                 <a href="/PRIVACY.html" style="color: #43938A; font-size: 12px; text-decoration: none;">Confidentialité</a>

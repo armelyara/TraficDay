@@ -1,12 +1,100 @@
 {
   "rules": {
-    ".read": true,
-    ".write": "auth != null",
+    ".read": false,
+    ".write": false,
+
     "obstacles": {
-      ".indexOn": ["timestamp", "active"]
+      ".read": true,
+      ".write": "auth != null",
+      ".indexOn": ["timestamp", "active"],
+      "$obstacleId": {
+        ".validate": "newData.hasChildren(['type', 'lat', 'lng', 'timestamp', 'userId', 'active', 'confirmations'])",
+        "type": {
+          ".validate": "newData.isString() && newData.val().matches(/^(flood|protest|closure|traffic|police)$/)"
+        },
+        "lat": {
+          ".validate": "newData.isNumber() && newData.val() >= -90 && newData.val() <= 90"
+        },
+        "lng": {
+          ".validate": "newData.isNumber() && newData.val() >= -180 && newData.val() <= 180"
+        },
+        "active": {
+          ".validate": "newData.isBoolean()"
+        },
+        "confirmations": {
+          ".validate": "newData.isNumber() && newData.val() >= 1"
+        },
+        "userId": {
+          ".validate": "newData.isString()"
+        },
+        "timestamp": {
+          ".validate": "newData.isNumber()"
+        },
+        "description": {
+          ".validate": "newData.isString() && newData.val().length <= 200"
+        },
+        "confirmedBy": {
+          ".validate": "newData.hasChildren()"
+        }
+      }
     },
+
     "users": {
       "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid",
+        ".validate": "newData.hasChildren(['email', 'displayName', 'lastLogin'])",
+        "email": {
+          ".validate": "newData.isString()"
+        },
+        "displayName": {
+          ".validate": "newData.isString()"
+        },
+        "photoURL": {
+          ".validate": "newData.isString()"
+        },
+        "lastLogin": {
+          ".validate": "newData.isNumber()"
+        },
+        "notificationToken": {
+          ".validate": "newData.isString()"
+        },
+        "fcmToken": {
+          ".validate": "newData.isString()"
+        },
+        "location": {
+          ".validate": "newData.hasChildren(['lat', 'lng', 'timestamp'])",
+          "lat": {
+            ".validate": "newData.isNumber() && newData.val() >= -90 && newData.val() <= 90"
+          },
+          "lng": {
+            ".validate": "newData.isNumber() && newData.val() >= -180 && newData.val() <= 180"
+          },
+          "timestamp": {
+            ".validate": "newData.isNumber()"
+          }
+        }
+      }
+    },
+
+    "notifications": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$notificationId": {
+        ".validate": "newData.hasChildren(['obstacleId', 'type', 'lat', 'lng', 'reports', 'timestamp'])"
+      }
+    },
+
+    "userRateLimits": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    },
+
+    "adminRateLimit": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid"
       }
     }

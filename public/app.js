@@ -7,8 +7,54 @@ import {
     createObstacle,
     firebaseListenToObstacles,
     confirmObstacle,
-    createUserProfile
+    createUserProfile,
+    saveUserLocation,
+    subscribeToLocationTopic
 } from './firebase-config.js';
+
+// Security: HTML escaping function to prevent XSS
+function escapeHtml(text) {
+    if (!text) return '';
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return String(text).replace(/[&<>"']/g, m => map[m]);
+}
+
+// Security: Validation functions
+function validateCoordinates(lat, lng) {
+    return (
+        typeof lat === 'number' &&
+        typeof lng === 'number' &&
+        !isNaN(lat) &&
+        !isNaN(lng) &&
+        lat >= -90 && lat <= 90 &&
+        lng >= -180 && lng <= 180
+    );
+}
+
+function validateObstacleType(type) {
+    const validTypes = ['flood', 'protest', 'closure', 'traffic', 'police'];
+    return validTypes.includes(type);
+}
+
+function checkRateLimit(action) {
+    const lastAction = localStorage.getItem(`lastAction_${action}`);
+    const now = Date.now();
+    const cooldown = 60000; // 1 minute
+
+    if (lastAction && (now - parseInt(lastAction)) < cooldown) {
+        const remaining = Math.ceil((cooldown - (now - parseInt(lastAction))) / 1000);
+        return { allowed: false, remaining };
+    }
+
+    localStorage.setItem(`lastAction_${action}`, now.toString());
+    return { allowed: true };
+}
 
 // État global de l'application
 const app = {
@@ -263,9 +309,11 @@ function initGeolocation() {
             updateUserMarker(app.userLocation.lat, app.userLocation.lng);
             calculateDangerLevel();
 
-            // Sauvegarder la position si connecté
+            // Sauvegarder la position et subscribe to location topic si connecté
             if (app.user) {
                 saveUserLocation(app.user.uid, app.userLocation.lat, app.userLocation.lng);
+                // Subscribe to location-based FCM topic (only once on initial position)
+                subscribeToLocationTopic(app.user.uid, app.userLocation.lat, app.userLocation.lng);
             }
         },
         (error) => {
@@ -315,13 +363,36 @@ function loadObstacles() {
 }
 
 async function handleReport(type) {
+    // Validation 1: Check location
     if (!app.userLocation) {
         alert('Veuillez activer la géolocalisation');
         return;
     }
 
+    // Validation 2: Check authentication
     if (!app.user) {
         promptLogin('report');
+        return;
+    }
+
+    // Validation 3: Validate obstacle type
+    if (!validateObstacleType(type)) {
+        alert('❌ Type d\'obstacle invalide');
+        console.error('Invalid obstacle type:', type);
+        return;
+    }
+
+    // Validation 4: Validate coordinates
+    if (!validateCoordinates(app.userLocation.lat, app.userLocation.lng)) {
+        alert('❌ Coordonnées GPS invalides');
+        console.error('Invalid coordinates:', app.userLocation);
+        return;
+    }
+
+    // Validation 5: Rate limiting
+    const rateCheck = checkRateLimit('reportObstacle');
+    if (!rateCheck.allowed) {
+        alert(`⚠️ Veuillez attendre ${rateCheck.remaining} secondes avant de signaler un autre obstacle`);
         return;
     }
 
@@ -335,8 +406,8 @@ async function handleReport(type) {
 
     const newObstacle = {
         type: type,
-        lat: app.userLocation.lat,
-        lng: app.userLocation.lng,
+        lat: Math.round(app.userLocation.lat * 1000) / 1000, // Round to ~111m for privacy
+        lng: Math.round(app.userLocation.lng * 1000) / 1000,
         description: `${getObstacleLabel(type)} signalé(e)`,
         reports: 1,
         severity: severities[type],
@@ -480,14 +551,21 @@ ${obstacle.description}
   `;
 
     if (confirm(message + '\n\nVoulez-vous confirmer cet obstacle ?')) {
-        confirmObstacle(obstacle.id);
+        handleConfirmObstacle(obstacle.id);
     }
 }
 
-async function confirmObstacle(obstacleId) {
+async function handleConfirmObstacle(obstacleId) {
     if (!app.user) {
         alert('Vous devez être connecté pour confirmer un obstacle');
         promptLogin('report');
+        return;
+    }
+
+    // Rate limiting
+    const rateCheck = checkRateLimit('confirmObstacle');
+    if (!rateCheck.allowed) {
+        alert(`⚠️ Veuillez attendre ${rateCheck.remaining} secondes avant de confirmer un autre obstacle`);
         return;
     }
 
@@ -496,13 +574,7 @@ async function confirmObstacle(obstacleId) {
     if (result.success) {
         alert('Obstacle confirmé !');
 
-        // Vérifier si l'obstacle a atteint 2 confirmations pour envoyer notification
-        const obstacle = app.obstacles.find(obs => obs.id === obstacleId);
-        if (obstacle && obstacle.reports >= 2) {
-            // Créer une entrée de notification pour la Cloud Function
-            await createObstacleNotification(obstacleId, obstacle);
-            console.log('📩 Notification déclenchée pour obstacle:', obstacleId);
-        }
+        // Notification is automatically handled in firebase-config.js after 2+ confirmations
     } else {
         if (result.error === 'Déjà confirmé') {
             alert('ℹ️ Vous avez déjà confirmé cet obstacle');
@@ -536,12 +608,12 @@ function updateAlertsList() {
         if (alertsContent) {
             alertsContent.innerHTML = app.obstacles.slice(0, 10).map(obs => `
           <div class="alert-item">
-            <div class="alert-item-icon ${obs.type}">
+            <div class="alert-item-icon ${escapeHtml(obs.type)}">
               ${getObstacleIcon(obs.type)}
             </div>
             <div class="alert-item-content">
-              <p class="alert-item-title">${getObstacleLabel(obs.type)}</p>
-              <p class="alert-item-meta">${getTimeAgo(obs.timestamp)} • ${obs.reports} confirmations</p>
+              <p class="alert-item-title">${escapeHtml(getObstacleLabel(obs.type))}</p>
+              <p class="alert-item-meta">${escapeHtml(getTimeAgo(obs.timestamp))} • ${escapeHtml(obs.reports)} confirmations</p>
             </div>
           </div>
         `).join('');
@@ -862,15 +934,15 @@ function updateAlertsListView() {
     }
 
     listView.innerHTML = app.obstacles.map(obs => `
-        <div class="alert-card" onclick="showObstacleDetails({id: '${obs.id}'})">
+        <div class="alert-card" onclick="showObstacleDetails({id: '${escapeHtml(obs.id)}'})">
             <div class="alert-card-header">
-                <span class="alert-type-badge" style="background: ${getObstacleColor(obs.type)}">${getObstacleLabel(obs.type)}</span>
-                <span class="alert-time">${getTimeAgo(obs.timestamp)}</span>
+                <span class="alert-type-badge" style="background: ${getObstacleColor(obs.type)}">${escapeHtml(getObstacleLabel(obs.type))}</span>
+                <span class="alert-time">${escapeHtml(getTimeAgo(obs.timestamp))}</span>
             </div>
-            <p class="alert-description">${obs.description}</p>
+            <p class="alert-description">${escapeHtml(obs.description)}</p>
             <div class="alert-footer">
-                <span>📍 ${obs.zone || 'Zone inconnue'}</span>
-                <span>👥 ${obs.reports} confirmations</span>
+                <span>📍 ${escapeHtml(obs.zone || 'Zone inconnue')}</span>
+                <span>👥 ${escapeHtml(obs.reports)} confirmations</span>
             </div>
         </div>
     `).join('');
@@ -965,6 +1037,158 @@ function attachEventListeners() {
             }
         });
     });
+}
+
+// ============================================
+// PAGE VISIBILITY & APP RESUME
+// ============================================
+
+// Prevent reload when returning to app (fix for Samsung Galaxy)
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+        console.log('📱 App resumed - updating data without reload');
+
+        // Update data without full reload
+        if (app.map) {
+            app.map.invalidateSize();
+        }
+
+        // Refresh danger level
+        if (app.userLocation) {
+            calculateDangerLevel();
+        }
+    }
+});
+
+// Handle app resume from background
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+        console.log('📱 App resumed from bfcache');
+        // Page was restored from back/forward cache
+        if (app.map) {
+            app.map.invalidateSize();
+        }
+    }
+});
+
+// Prevent pull-to-refresh on Android
+let touchStartY = 0;
+document.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+document.addEventListener('touchmove', (e) => {
+    const touchY = e.touches[0].clientY;
+    const touchDiff = touchY - touchStartY;
+
+    // Prevent pull-to-refresh when at top of page
+    if (touchDiff > 0 && window.scrollY === 0) {
+        e.preventDefault();
+    }
+}, { passive: false });
+
+// ============================================
+// PWA INSTALL PROMPT
+// ============================================
+
+let deferredPrompt = null;
+
+// Capture the beforeinstallprompt event
+window.addEventListener('beforeinstallprompt', (e) => {
+    console.log('💾 PWA Install prompt available');
+
+    // Prevent the default browser install prompt
+    e.preventDefault();
+
+    // Store the event for later use
+    deferredPrompt = e;
+
+    // Check if user has dismissed before
+    const installDismissed = localStorage.getItem('pwa-install-dismissed');
+    const dismissedDate = localStorage.getItem('pwa-install-dismissed-date');
+
+    // Show banner if not dismissed, or if dismissed more than 7 days ago
+    const now = Date.now();
+    const sevenDays = 7 * 24 * 60 * 60 * 1000;
+
+    if (!installDismissed || (dismissedDate && (now - parseInt(dismissedDate)) > sevenDays)) {
+        showInstallBanner();
+    }
+});
+
+function showInstallBanner() {
+    const installBanner = document.getElementById('install-banner');
+    if (installBanner) {
+        installBanner.style.display = 'block';
+    }
+}
+
+function hideInstallBanner() {
+    const installBanner = document.getElementById('install-banner');
+    if (installBanner) {
+        installBanner.style.display = 'none';
+    }
+}
+
+// Install button click
+document.getElementById('btn-install-pwa')?.addEventListener('click', async () => {
+    if (!deferredPrompt) {
+        console.log('❌ No install prompt available');
+        return;
+    }
+
+    // Show the browser's install prompt
+    deferredPrompt.prompt();
+
+    // Wait for user response
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`👤 User response: ${outcome}`);
+
+    if (outcome === 'accepted') {
+        console.log('✅ PWA installed');
+    } else {
+        console.log('❌ PWA installation declined');
+    }
+
+    // Clear the deferred prompt
+    deferredPrompt = null;
+
+    // Hide banner
+    hideInstallBanner();
+});
+
+// Dismiss button click
+document.getElementById('btn-install-dismiss')?.addEventListener('click', () => {
+    console.log('❌ Install prompt dismissed');
+
+    // Store dismissal in localStorage
+    localStorage.setItem('pwa-install-dismissed', 'true');
+    localStorage.setItem('pwa-install-dismissed-date', Date.now().toString());
+
+    // Hide banner
+    hideInstallBanner();
+});
+
+// Detect when PWA is installed
+window.addEventListener('appinstalled', () => {
+    console.log('✅ PWA successfully installed');
+
+    // Hide banner
+    hideInstallBanner();
+
+    // Clear dismissal flag
+    localStorage.removeItem('pwa-install-dismissed');
+    localStorage.removeItem('pwa-install-dismissed-date');
+
+    // Optional: Show success message
+    // You could add a toast notification here
+});
+
+// Check if app is already installed (running in standalone mode)
+if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+    console.log('✅ App is running in standalone mode');
+    // App is already installed, don't show install banner
+    hideInstallBanner();
 }
 
 console.log('app.js chargé');

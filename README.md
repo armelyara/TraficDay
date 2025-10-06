@@ -4,9 +4,9 @@
 
 TraficDay est une application web progressive (PWA) qui permet aux usagers de la route de signaler et consulter en temps réel les obstacles routiers tels que les inondations, manifestations, embouteillages, routes fermées et contrôles de police.
 
-![TraficDay Logo](./logo.png)
+![TraficDay Logo](./public/logo.png)
 
-## 🌟 Fonctionnalités
+## Fonctionnalités
 
 - **📍 Carte interactive en temps réel** - Visualisez tous les obstacles signalés sur une carte Leaflet
 - **🚨 Signalement d'obstacles** - Signalez rapidement :
@@ -15,14 +15,14 @@ TraficDay est une application web progressive (PWA) qui permet aux usagers de la
   - Routes fermées
   - Embouteillages
   - Police routière
-- **👥 Système de confirmation** - Les alertes sont vérifiées par la communauté
-- **🔔 Notifications push** - Recevez des alertes pour les obstacles dans votre zone (rayon de 1,6 km)
-- **🎨 Interface adaptive** - Les couleurs changent selon le niveau de danger dans votre zone
-- **📱 PWA** - Installez l'app sur votre téléphone comme une app native
-- **🔐 Authentification Google** - Connexion sécurisée avec votre compte Google
-- **🌍 Géolocalisation** - Votre position est suivie pour vous alerter des dangers à proximité
+- **Système de confirmation** - Les alertes sont vérifiées par la communauté
+- **Notifications push** - Recevez des alertes pour les obstacles dans votre zone (rayon de 1,6 km)
+- **Interface adaptive** - Les couleurs changent selon le niveau de danger dans votre zone
+- **PWA** - Installez l'app sur votre téléphone comme une app native
+- **Authentification Google** - Connexion sécurisée avec votre compte Google
+- **Géolocalisation** - Votre position est suivie pour vous alerter des dangers à proximité
 
-## 🎨 Niveaux de Danger
+## Niveaux de Danger
 
 - **Zone sûre** 🟢 - Aucun danger signalé (Teal)
 - **Vigilance normale** 🟢 - Obstacles mineurs à 5km (Vert)
@@ -30,7 +30,7 @@ TraficDay est une application web progressive (PWA) qui permet aux usagers de la
 - **Danger élevé** 🟠 - Vigilance accrue à 2km (Orange)
 - **Danger critique** 🔴 - Zone dangereuse à 500m (Rouge)
 
-## 🛠️ Technologies Utilisées
+## Technologies Utilisées
 
 - **Frontend**: HTML5, CSS3, JavaScript (ES6 modules)
 - **Carte**: Leaflet.js avec OpenStreetMap
@@ -42,7 +42,7 @@ TraficDay est une application web progressive (PWA) qui permet aux usagers de la
   - Firebase Hosting
 - **PWA**: Service Worker, Web App Manifest
 
-## 📦 Installation
+## Installation
 
 ### Prérequis
 
@@ -103,7 +103,7 @@ TraficDay est une application web progressive (PWA) qui permet aux usagers de la
    firebase deploy
    ```
 
-## 🚀 Utilisation
+## Utilisation
 
 1. **Ouvrir l'application** sur https://votre-projet.web.app
 2. **Autoriser la géolocalisation** pour voir votre position
@@ -124,7 +124,7 @@ TraficDay est une application web progressive (PWA) qui permet aux usagers de la
 2. Appuyez sur le bouton Partager
 3. Sélectionnez "Sur l'écran d'accueil"
 
-## 🔔 Notifications
+## Notifications
 
 Les notifications sont envoyées automatiquement lorsque :
 - Un obstacle est confirmé par 2+ utilisateurs
@@ -132,7 +132,7 @@ Les notifications sont envoyées automatiquement lorsque :
 
 L'administrateur peut aussi envoyer des notifications manuelles depuis Firebase Console.
 
-## 🗂️ Structure du Projet
+## Structure du Projet
 
 ```
 traficday/
@@ -155,38 +155,38 @@ traficday/
 └── README.md                  # Ce fichier
 ```
 
-## 🤝 Contribution
+## Contribution
 
 Les contributions sont les bienvenues ! Consultez [CONTRIBUTING.md](CONTRIBUTING.md) pour plus de détails.
 
-## 📄 Licence
+## Licence
 
 Ce projet est sous licence MIT. Voir [LICENSE](LICENSE) pour plus d'informations.
 
-## 🔒 Confidentialité
+## Confidentialité
 
 Consultez notre [Politique de Confidentialité](PRIVACY.md) pour savoir comment nous traitons vos données.
 
-## 👨‍💻 Auteur
+## Auteur
 
 **The Day Info**
-- Site web: [À venir]
-- Email: contact@thedayinfo.com
+- Site web: www.thedayinfo.com
+- Email: armelyara@thedayinfo.com
 
-## 📞 Support
+## Support
 
 Pour toute question ou problème :
 - Ouvrez une issue sur GitHub
-- Contactez-nous à support@thedayinfo.com
+- Contactez-nous à armelyara@thedayinfo.com
 
-## 🙏 Remerciements
+## Remerciements
 
 - OpenStreetMap pour les données cartographiques
 - Leaflet.js pour la bibliothèque de cartes
 - Firebase pour l'infrastructure backend
 - La communauté open source
 
-## 📊 Statistiques
+## Statistiques
 
 - Version: 3.0.0
 - Date de sortie: Octobre 2025

@@ -33,6 +33,7 @@ Vous devez avoir au moins 16 ans pour utiliser le Service.
 
 L'inscription se fait via :
 - Compte Google (requis pour signaler des obstacles)
+- Adresse email et mot de passe
 
 ### 4.3 Responsabilité du compte
 
@@ -169,7 +170,7 @@ Nous pouvons suspendre ou résilier votre accès si :
 
 ### 12.2 Par vous
 
-Vous pouvez fermer votre compte à tout moment en nous contactant à support@thedayinfo.com.
+Vous pouvez fermer votre compte à tout moment en nous contactant à armelyara@thedayinfo.com.
 
 ### 12.3 Effet de la résiliation
 

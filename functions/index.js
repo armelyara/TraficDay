@@ -1,4 +1,4 @@
-const functions = require('firebase-functions');
+const {onValueCreated} = require('firebase-functions/v2/database');
 const admin = require('firebase-admin');
 
 admin.initializeApp();
@@ -26,10 +26,12 @@ const obstacleLabels = {
     police: 'Police routière'
 };
 
-// Fonction déclenchée lors de la création d'une notification
-exports.sendObstacleNotification = functions.database
-    .ref('/notifications/{notificationId}')
-    .onCreate(async (snapshot, context) => {
+// Fonction déclenchée lors de la création d'une notification (Cloud Functions v2)
+exports.sendObstacleNotification = onValueCreated(
+    '/notifications/{notificationId}',
+    async (event) => {
+        const snapshot = event.data;
+        const {notificationId} = event.params;
         const notification = snapshot.val();
         const { obstacleId, type, lat, lng, description, reports } = notification;
 
@@ -102,20 +104,46 @@ exports.sendObstacleNotification = functions.database
             console.log(`✅ ${response.successCount} notifications envoyées sur ${tokens.length}`);
 
             // Marquer la notification comme envoyée
-            await snapshot.ref.update({ sent: true, sentAt: Date.now() });
+            await admin.database().ref(`/notifications/${notificationId}`).update({ sent: true, sentAt: Date.now() });
 
             // Supprimer les tokens invalides
             if (response.failureCount > 0) {
-                const failedTokens = [];
+                const cleanupPromises = [];
+
                 response.responses.forEach((resp, idx) => {
                     if (!resp.success) {
-                        failedTokens.push(tokens[idx]);
+                        const errorCode = resp.error?.code;
+                        const token = tokens[idx];
+
                         console.error('❌ Erreur envoi:', resp.error);
+
+                        // Supprimer les tokens invalides ou expirés
+                        if (errorCode === 'messaging/invalid-registration-token' ||
+                            errorCode === 'messaging/registration-token-not-registered') {
+
+                            // Trouver et supprimer le token de la base
+                            const userQuery = admin.database()
+                                .ref('users')
+                                .orderByChild('fcmToken')
+                                .equalTo(token);
+
+                            cleanupPromises.push(
+                                userQuery.once('value').then(snapshot => {
+                                    snapshot.forEach(child => {
+                                        console.log(`🧹 Suppression token invalide pour user: ${child.key}`);
+                                        child.ref.child('fcmToken').remove();
+                                    });
+                                })
+                            );
+                        }
                     }
                 });
 
-                // Nettoyer les tokens invalides de la base
-                // TODO: Implémenter la suppression des tokens invalides
+                // Exécuter tous les nettoyages
+                if (cleanupPromises.length > 0) {
+                    await Promise.all(cleanupPromises);
+                    console.log(`🧹 ${cleanupPromises.length} tokens invalides nettoyés`);
+                }
             }
 
             return response;
@@ -123,33 +151,5 @@ exports.sendObstacleNotification = functions.database
             console.error('❌ Erreur envoi notification:', error);
             return null;
         }
-    });
-
-// Fonction pour envoyer des notifications manuelles depuis la console Firebase
-exports.sendManualNotification = functions.https.onCall(async (data, context) => {
-    // Vérifier que l'utilisateur est authentifié (optionnel)
-    // if (!context.auth) {
-    //     throw new functions.https.HttpsError('unauthenticated', 'Authentification requise');
-    // }
-
-    const { title, body, topic } = data;
-
-    try {
-        const message = {
-            notification: {
-                title: title || 'TraficDay',
-                body: body || 'Nouvelle alerte',
-                icon: '/icons/icon-192.png'
-            },
-            topic: topic || 'all'
-        };
-
-        const response = await admin.messaging().send(message);
-        console.log('✅ Notification manuelle envoyée:', response);
-
-        return { success: true, messageId: response };
-    } catch (error) {
-        console.error('❌ Erreur notification manuelle:', error);
-        throw new functions.https.HttpsError('internal', error.message);
     }
-});
+);

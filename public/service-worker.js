@@ -1,6 +1,6 @@
 // Service Worker pour AlerteRoute PWA
-// Version du cache
-const CACHE_VERSION = 'alerteroute-v1.0.0';
+// Version du cache - Update this version number whenever you deploy changes
+const CACHE_VERSION = 'traficday-v3.1.0';
 
 // Fichiers à mettre en cache
 const CACHE_FILES = [
@@ -8,6 +8,7 @@ const CACHE_FILES = [
     '/index.html',
     '/styles.css',
     '/app.js',
+    '/firebase-config.js',
     '/manifest.json'
 ];
 

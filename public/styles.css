@@ -193,6 +193,108 @@ body {
     opacity: 0.9;
 }
 
+/* Install banner */
+.install-banner {
+    padding: 12px 16px;
+    background: linear-gradient(135deg, var(--green-500), var(--green-600));
+    margin: 0 16px 12px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(67, 147, 138, 0.3);
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.install-banner-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--white);
+}
+
+.install-banner-icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.install-banner-text {
+    flex: 1;
+}
+
+.install-banner-title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.install-banner-subtitle {
+    margin: 2px 0 0 0;
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+.install-banner-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.btn-install-yes {
+    padding: 8px 16px;
+    background: var(--white);
+    color: var(--green-600);
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-install-yes:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-install-yes:active {
+    transform: scale(0.98);
+}
+
+.btn-install-no {
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--white);
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    font-weight: 300;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-install-no:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
 /* Main content */
 .main-content {
     flex: 1;
@@ -646,9 +748,16 @@ body {
 
 /* Navigation bottom */
 .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
     background: var(--white);
     border-top: 1px solid var(--gray-200);
     box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.05);
+    z-index: 1000;
+    /* Fix for Samsung Galaxy and other Android devices */
+    padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
 .bottom-nav-content {
