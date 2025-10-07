@@ -1,6 +1,6 @@
 // Service Worker pour AlerteRoute PWA
 // Version du cache - Update this version number whenever you deploy changes
-const CACHE_VERSION = 'traficday-v3.1.3';
+const CACHE_VERSION = 'traficday-v3.1.6';
 
 // Fichiers à mettre en cache (essentials only, dynamic files cached on-demand)
 const CACHE_FILES = [

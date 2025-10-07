@@ -772,55 +772,7 @@ function adjustBrightness(color, percent) {
         .toString(16).slice(1);
 }
 
-// ============================================
-// SIGNALEMENT
-// ============================================
 
-function reportObstacle(type) {
-    if (!app.user) {
-        alert('Vous devez être connecté pour signaler un obstacle');
-        closeModal('report-modal');
-        openModal('auth-modal');
-        return;
-    }
-
-    if (!app.userLocation) {
-        alert('Veuillez activer la géolocalisation');
-        return;
-    }
-
-    const severities = {
-        flood: 'high',
-        protest: 'critical',
-        closure: 'medium',
-        other: 'medium'
-    };
-
-    const newObstacle = {
-        id: Date.now().toString(),
-        type: type,
-        lat: app.userLocation.lat,
-        lng: app.userLocation.lng,
-        description: `${getObstacleLabel(type)} signalé(e)`,
-        reports: 1,
-        timestamp: Date.now(),
-        severity: severities[type],
-        zone: 'Ma zone',
-        userId: app.user.uid
-    };
-
-    app.obstacles.push(newObstacle);
-
-    renderObstacles();
-    updateAlertsList();
-    calculateDangerLevel();
-    closeModal('report-modal');
-
-    alert(`${getObstacleLabel(type)} signalé(e) avec succès !`);
-
-    // TODO: Enregistrer dans Firebase
-    // TODO: Notifier les utilisateurs à proximité
-}
 
 // ============================================
 // NOTIFICATIONS
@@ -836,18 +788,11 @@ async function requestNotificationPermission() {
     app.notificationsEnabled = permission === 'granted';
 
     if (permission === 'granted') {
-        console.log('Notifications activées');
+        console.log('✅ Notifications activées');
         document.getElementById('btn-notifications').classList.add('active');
-
-        // Obtenir le token FCM
-        if (app.user) {
-            const tokenResult = await requestNotificationToken();
-            if (tokenResult.success) {
-                // Sauvegarder le token dans Firebase
-                await saveUserFCMToken(app.user.uid, tokenResult.token);
-                console.log('Token FCM sauvegardé');
-            }
-        }
+    } else {
+        console.log('❌ Notifications refusées');
+        document.getElementById('btn-notifications').classList.remove('active');
     }
 }
 
@@ -1029,7 +974,7 @@ function attachEventListeners() {
     document.querySelectorAll('.report-card').forEach(card => {
         card.addEventListener('click', () => {
             const type = card.getAttribute('data-type');
-            reportObstacle(type);
+            handleReport(type);
         });
     });
 

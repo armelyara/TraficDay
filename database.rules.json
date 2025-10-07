@@ -48,7 +48,7 @@
       "$uid": {
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid",
-        ".validate": "newData.hasChildren(['email', 'displayName', 'lastLogin'])",
+        ".validate": "newData.hasChildren(['email', 'displayName', 'lastLogin']) || data.exists()",
         "email": {
           ".validate": "newData.isString()"
         },
@@ -62,20 +62,27 @@
           ".validate": "newData.isNumber()"
         },
         "notificationToken": {
-          ".validate": "newData.isString()"
+          ".validate": "newData.isString()",
+          ".write": "$uid === auth.uid"
         },
         "fcmToken": {
-          ".validate": "newData.isString()"
+          ".validate": "newData.isString()",
+          ".write": "$uid === auth.uid"
+        },
+        "zone": {
+          ".validate": "newData.isString()",
+          ".write": "$uid === auth.uid"
         },
         "location": {
-          ".validate": "newData.hasChildren(['lat', 'lng', 'timestamp'])",
+          ".validate": "newData.hasChildren(['lat', 'lng', 'lastUpdated'])",
+          ".write": "$uid === auth.uid",
           "lat": {
             ".validate": "newData.isNumber() && newData.val() >= -90 && newData.val() <= 90"
           },
           "lng": {
             ".validate": "newData.isNumber() && newData.val() >= -180 && newData.val() <= 180"
           },
-          "timestamp": {
+          "lastUpdated": {
             ".validate": "newData.isNumber()"
           }
         }
@@ -101,6 +108,22 @@
       "$uid": {
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid"
+      }
+    },
+
+    "fcmTopics": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      "$topic": {
+        "$tokenId": {
+          ".validate": "newData.hasChildren(['subscribedAt', 'topic'])",
+          "subscribedAt": {
+            ".validate": "newData.isNumber()"
+          },
+          "topic": {
+            ".validate": "newData.isString()"
+          }
+        }
       }
     }
   }
