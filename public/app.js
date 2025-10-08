@@ -10,7 +10,7 @@ import {
     createUserProfile,
     saveUserLocation,
     subscribeToLocationTopic
-} from 'firebase';
+} from './firebase-config.js';
 
 // Security: HTML escaping function to prevent XSS
 function escapeHtml(text) {

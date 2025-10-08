@@ -24,8 +24,8 @@ messaging.onBackgroundMessage((payload) => {
     const notificationTitle = payload.notification?.title || 'TraficDay';
     const notificationOptions = {
         body: payload.notification?.body || 'Nouvelle alerte',
-        icon: '/icons/icon-192.png',
-        badge: '/icons/icon-72.png',
+        icon: '../icons/icon-192.png',
+        badge: '../icons/icon-72.png',
         tag: payload.data?.obstacleId || 'traficday-notification',
         data: payload.data,
         requireInteraction: true,
