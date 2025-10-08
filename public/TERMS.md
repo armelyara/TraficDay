@@ -224,17 +224,17 @@ Vous ne pouvez pas céder ces Conditions. The Day Info peut les céder librement
 Pour toute question concernant ces Conditions :
 
 **The Day Info**
-- Email : legal@thedayinfo.com
-- Support : support@thedayinfo.com
+- Email : armelyara@thedayinfo.com
+- Support : armelyara@thedayinfo.com
 
 ## 17. Résumé des Points Clés
 
-📌 Signalements véridiques uniquement
-📌 Utilisation respectueuse de la communauté
-📌 Ne pas consulter en conduisant
-📌 The Day Info n'est pas responsable des accidents
-📌 Votre compte peut être suspendu en cas d'abus
-📌 Vous pouvez fermer votre compte à tout moment
+  Signalements véridiques uniquement
+  Utilisation respectueuse de la communauté
+  Ne pas consulter en conduisant
+  The Day Info n'est pas responsable des accidents
+  Votre compte peut être suspendu en cas d'abus
+  Vous pouvez fermer votre compte à tout moment
 
 ---
 

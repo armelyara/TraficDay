@@ -206,13 +206,13 @@ Pour toute question concernant cette politique :
 
 ## 16. Résumé des points clés
 
-✅ Nous collectons uniquement les données nécessaires au Service
-✅ Votre position exacte est privée et protégée
-✅ Nous ne vendons jamais vos données
-✅ Vous contrôlez vos données (accès, suppression)
-✅ Communication chiffrée (HTTPS)
-✅ Conformité RGPD et lois ivoiriennes
+  Nous collectons uniquement les données nécessaires au Service
+  Votre position exacte est privée et protégée
+  Nous ne vendons jamais vos données
+  Vous contrôlez vos données (accès, suppression)
+  Communication chiffrée (HTTPS)
+  Conformité RGPD et lois ivoiriennes
 
 ---
 
-© 2025 The Day Info. Tous droits réservés.
+© 2025 TraficDay by The Day Info. Tous droits réservés.

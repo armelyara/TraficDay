@@ -1145,16 +1145,49 @@ function openPrivacyViewer() {
         return;
     }
 
-    // Créer et ajouter le composant
+    // Create and append the component
     const privacyViewer = document.createElement('privacy-viewer');
     document.body.appendChild(privacyViewer);
 
-    // Donner le focus pour la navigation au clavier
+    // Give focus for keyboard navigation
     privacyViewer.focus();
 }
 
-// Initialiser les liens de confidentialité au chargement
+// Initialise terms links on load
 document.addEventListener('DOMContentLoaded', function () {
     setupPrivacyLinks();
 });
+
+// Manager links for terms of service
+function setupTermsLinks() {
+    document.addEventListener('click', function (e) {
+        // check if it's a terms link
+        if (e.target.matches('a.terms-link') ||
+            e.target.closest('a.terms-link') ||
+            (e.target.tagName === 'A' && e.target.textContent.includes('Condition d"utilisation'))) {
+            e.preventDefault();
+            openTermsViewer();
+        }
+    });
+}
+
+function openTermsViewer() {
+    // Vérifier si une instance existe déjà
+    if (document.querySelector('terms-viewer')) {
+        return;
+    }
+
+    // create and append the component
+    const termsViewer = document.createElement('terms-viewer');
+    document.body.appendChild(termsViewer);
+
+    // Give focus for keyboard navigation
+    termsViewer.focus();
+}
+
+// Initialize terms links on load
+document.addEventListener('DOMContentLoaded', function () {
+    setupTermsLinks();
+});
+
 console.log('app.js chargé');
