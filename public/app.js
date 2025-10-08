@@ -1125,4 +1125,36 @@ if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.
     hideInstallBanner();
 }
 
+
+// Gestionnaire pour les liens de confidentialité
+function setupPrivacyLinks() {
+    document.addEventListener('click', function (e) {
+        // Vérifier si c'est un lien de confidentialité
+        if (e.target.matches('a.privacy-link') ||
+            e.target.closest('a.privacy-link') ||
+            (e.target.tagName === 'A' && e.target.textContent.includes('Confidentialité'))) {
+            e.preventDefault();
+            openPrivacyViewer();
+        }
+    });
+}
+
+function openPrivacyViewer() {
+    // Vérifier si une instance existe déjà
+    if (document.querySelector('privacy-viewer')) {
+        return;
+    }
+
+    // Créer et ajouter le composant
+    const privacyViewer = document.createElement('privacy-viewer');
+    document.body.appendChild(privacyViewer);
+
+    // Donner le focus pour la navigation au clavier
+    privacyViewer.focus();
+}
+
+// Initialiser les liens de confidentialité au chargement
+document.addEventListener('DOMContentLoaded', function () {
+    setupPrivacyLinks();
+});
 console.log('app.js chargé');
