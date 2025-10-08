@@ -48,13 +48,13 @@
     ],
     "screenshots": [
         {
-            "src": "screenshots/screenshot1.png",
+            "src": "../screenshots/screenshot1.png",
             "sizes": "540x720",
             "type": "image/png",
             "label": "Carte interactive avec obstacles en temps réel"
         },
         {
-            "src": "screenshots/screenshot2.png",
+            "src": "../screenshots/screenshot2.png",
             "sizes": "540x720",
             "type": "image/png",
             "label": "Signalement rapide d'obstacles"
