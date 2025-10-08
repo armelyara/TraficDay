@@ -1,4 +1,4 @@
-// AlerteRoute PWA - JavaScript Principal
+// TraficDay PWA - JavaScript Principal
 // Import Firebase functions
 import {
     signInWithGoogle,
@@ -56,7 +56,7 @@ function checkRateLimit(action) {
     return { allowed: true };
 }
 
-// État global de l'application
+// State management
 const app = {
     user: null,
     userLocation: null,
@@ -102,37 +102,36 @@ const DANGER_LEVELS = {
     }
 };
 
-// ============================================
+
 // INITIALISATION
-// ============================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🚀 AlerteRoute démarrage...');
+    console.log('TraficDay démarrage...');
 
-    // Initialiser la carte Leaflet
+    // Initialize the map
     initMap();
 
-    // Vérifier si l'utilisateur est connecté
+    // Check user authentication state
     checkUser();
 
-    // Initialiser la géolocalisation
+    // Initialise the geolocation
     initGeolocation();
 
-    // Charger les obstacles
+    // Load obstacles from Firebase
     loadObstacles();
 
-    // Attacher les événements
+    // A
     attachEventListeners();
 
-    // Enregistrer le Service Worker
+    // Register Service Worker
     registerServiceWorker();
 
-    // Masquer l'écran de chargement après 2 secondes
+    // Hide loading screen after a delay
     setTimeout(() => {
         document.getElementById('loading-screen').style.display = 'none';
         document.getElementById('app').style.display = 'flex';
 
-        // Forcer le redimensionnement de la carte après l'affichage
+        // Force map resize
         if (app.map) {
             setTimeout(() => {
                 app.map.invalidateSize();
@@ -141,39 +140,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2000);
 });
 
-// ============================================
+
 // CARTE LEAFLET
-// ============================================
 
 function initMap() {
-    // Vérifier que Leaflet est chargé
+    // Check if Leaflet is loaded
     if (typeof L === 'undefined') {
-        console.error('❌ Leaflet non chargé');
+        console.error('Leaflet non chargé');
         setTimeout(initMap, 100);
         return;
     }
 
-    // Créer la carte centrée sur Abidjan par défaut
+    // Create the map centered on Abidjan, Côte d'Ivoire
     app.map = L.map('map', {
         zoomControl: true,
         attributionControl: true
     }).setView([5.345317, -4.024429], 13);
 
-    // Ajouter les tuiles OpenStreetMap
+    // Add OpenStreetMap tile layerß
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors',
         maxZoom: 19,
         minZoom: 3
     }).addTo(app.map);
 
-    console.log('🗺️ Carte Leaflet initialisée');
+    console.log('Carte Leaflet initialisée');
 
-    // Forcer le redimensionnement après un court délai
+    // Force map resize after a short delay to fix display issues
     setTimeout(() => {
         app.map.invalidateSize();
     }, 100);
 
-    // Gérer le redimensionnement de la fenêtre (rotation mobile, etc.)
+    // Handle window resize
     window.addEventListener('resize', () => {
         if (app.map) {
             app.map.invalidateSize();
@@ -185,7 +183,7 @@ function updateUserMarker(lat, lng) {
     if (app.userMarker) {
         app.userMarker.setLatLng([lat, lng]);
     } else {
-        // Créer un marqueur avec la couleur "zone sûre" pour l'utilisateur
+        // Create a custom user marker for areas without obstacles
         app.userMarker = L.marker([lat, lng], {
             icon: L.divIcon({
                 className: 'user-marker',
@@ -196,15 +194,14 @@ function updateUserMarker(lat, lng) {
         }).addTo(app.map);
     }
 
-    // Centrer la carte sur l'utilisateur uniquement s'il est connecté
+    // Center the map on the user location if authenticated
     if (app.user) {
         app.map.setView([lat, lng], 15);
     }
 }
 
-// ============================================
+
 // AUTHENTIFICATION
-// ============================================
 
 function promptLogin(action) {
     const messages = {
@@ -218,23 +215,23 @@ function promptLogin(action) {
 }
 
 function checkUser() {
-    // Écouter les changements d'authentification Firebase
+    // Écouter les changements d'état d'authentification
     onAuthChange((user) => {
         if (user) {
             app.user = user;
-            console.log('👤 Utilisateur connecté:', user.email);
+            console.log('Utilisateur connecté:', user.email);
             updateUIForAuthState(true);
 
-            // Créer/mettre à jour le profil
+            // Create and update user profile in Firestore
             createUserProfile(user);
 
-            // Sauvegarder la position si disponible
+            // Save user location if available
             if (app.userLocation) {
                 saveUserLocation(user.uid, app.userLocation.lat, app.userLocation.lng);
             }
         } else {
             app.user = null;
-            console.log('👤 Utilisateur déconnecté');
+            console.log('Utilisateur déconnecté');
             updateUIForAuthState(false);
         }
     });
@@ -258,21 +255,21 @@ function updateUIForAuthState(isAuthenticated) {
 }
 
 async function login(provider) {
-    console.log('🔐 Tentative de connexion avec:', provider);
+    console.log('Tentative de connexion avec:', provider);
 
     if (provider === 'google') {
         const result = await signInWithGoogle();
 
         if (result.success) {
             closeModal('auth-modal');
-            alert('✅ Connexion réussie !');
+            alert('Connexion réussie !');
             requestNotificationPermission();
         } else {
-            alert('❌ Erreur de connexion : ' + result.error);
+            alert('Erreur de connexion : ' + result.error);
         }
     } else {
-        // Email/Phone à implémenter plus tard
-        alert('🚧 Connexion Email/Phone bientôt disponible');
+        // Config Email/Phone login
+        alert('Connexion Email/Phone bientôt disponible');
     }
 }
 
@@ -281,20 +278,20 @@ async function logout() {
         const result = await signOutUser();
 
         if (result.success) {
-            alert('✅ Vous êtes déconnecté. Vous pouvez toujours consulter la carte.');
+            alert('Vous êtes déconnecté. Vous pouvez toujours consulter la carte.');
         } else {
-            alert('❌ Erreur de déconnexion');
+            alert('Erreur de déconnexion');
         }
     }
 }
 
-// ============================================
+
 // GÉOLOCALISATION
-// ============================================
+
 
 function initGeolocation() {
     if (!navigator.geolocation) {
-        console.error('❌ Géolocalisation non supportée');
+        console.error('Géolocalisation non supportée');
         return;
     }
 
@@ -305,11 +302,11 @@ function initGeolocation() {
                 lng: position.coords.longitude
             };
 
-            console.log('📍 Position:', app.userLocation);
+            console.log('Position:', app.userLocation);
             updateUserMarker(app.userLocation.lat, app.userLocation.lng);
             calculateDangerLevel();
 
-            // Sauvegarder la position et subscribe to location topic si connecté
+            // Save user location if authenticated
             if (app.user) {
                 saveUserLocation(app.user.uid, app.userLocation.lat, app.userLocation.lng);
                 // Subscribe to location-based FCM topic (only once on initial position)
@@ -317,12 +314,12 @@ function initGeolocation() {
             }
         },
         (error) => {
-            console.error('❌ Erreur géolocalisation:', error);
-            // Montrer quand même la carte sans position
+            console.error('Erreur géolocalisation:', error);
+            // Show the map even if location fails
         }
     );
 
-    // Suivre la position en continu
+    // Follow position changes
     navigator.geolocation.watchPosition(
         (position) => {
             app.userLocation = {
@@ -332,7 +329,7 @@ function initGeolocation() {
             updateUserMarker(app.userLocation.lat, app.userLocation.lng);
             calculateDangerLevel();
 
-            // Sauvegarder la position si connecté
+            // Save user location if authenticated
             if (app.user) {
                 saveUserLocation(app.user.uid, app.userLocation.lat, app.userLocation.lng);
             }
@@ -348,9 +345,9 @@ function showUserPosition() {
     }
 }
 
-// ============================================
+
 // OBSTACLES
-// ============================================
+
 
 function loadObstacles() {
     firebaseListenToObstacles((obstacles) => {
@@ -358,7 +355,7 @@ function loadObstacles() {
         renderObstacles();
         updateAlertsList();
         calculateDangerLevel();
-        console.log('📊 Obstacles chargés:', obstacles.length);
+        console.log('Obstacles chargés:', obstacles.length);
     });
 }
 
@@ -377,14 +374,14 @@ async function handleReport(type) {
 
     // Validation 3: Validate obstacle type
     if (!validateObstacleType(type)) {
-        alert('❌ Type d\'obstacle invalide');
+        alert('Type d\'obstacle invalide');
         console.error('Invalid obstacle type:', type);
         return;
     }
 
     // Validation 4: Validate coordinates
     if (!validateCoordinates(app.userLocation.lat, app.userLocation.lng)) {
-        alert('❌ Coordonnées GPS invalides');
+        alert('Coordonnées GPS invalides');
         console.error('Invalid coordinates:', app.userLocation);
         return;
     }
@@ -392,7 +389,7 @@ async function handleReport(type) {
     // Validation 5: Rate limiting
     const rateCheck = checkRateLimit('reportObstacle');
     if (!rateCheck.allowed) {
-        alert(`⚠️ Veuillez attendre ${rateCheck.remaining} secondes avant de signaler un autre obstacle`);
+        alert(`Veuillez attendre ${rateCheck.remaining} secondes avant de signaler un autre obstacle`);
         return;
     }
 
@@ -416,31 +413,31 @@ async function handleReport(type) {
         confirmedBy: [app.user.uid]
     };
 
-    // Enregistrer dans Firebase
+    // Report the obstacle in Firebase
     const result = await createObstacle(newObstacle);
 
     if (result.success) {
         closeModal('report-modal');
-        alert(`✅ ${getObstacleLabel(type)} signalé(e) avec succès !`);
+        alert(`${getObstacleLabel(type)} signalé(e) avec succès !`);
     } else {
-        alert('❌ Erreur lors du signalement : ' + result.error);
+        alert('Erreur lors du signalement : ' + result.error);
     }
 }
 
 function renderObstacles() {
     // Vérifier que la carte est initialisée
     if (!app.map) {
-        console.warn('⚠️ Carte non initialisée, impossible de rendre les obstacles');
+        console.warn('Carte non initialisée, impossible de rendre les obstacles');
         return;
     }
 
-    // Supprimer tous les anciens marqueurs
+    // Delete existing markers
     Object.values(app.obstacleMarkers).forEach(marker => {
         app.map.removeLayer(marker);
     });
     app.obstacleMarkers = {};
 
-    // Ajouter les nouveaux marqueurs
+    // Add markers for each obstacle
     app.obstacles.forEach(obstacle => {
         createObstacleMarker(obstacle);
     });
@@ -538,8 +535,8 @@ function getObstacleLabel(type) {
 }
 
 function showObstacleDetails(obstacle) {
-    console.log('🔍 Showing obstacle details:', obstacle);
-    console.log('🆔 Obstacle ID:', obstacle.id);
+    console.log('Showing obstacle details:', obstacle);
+    console.log('Obstacle ID:', obstacle.id);
 
     const timeAgo = getTimeAgo(obstacle.timestamp);
     const label = getObstacleLabel(obstacle.type);
@@ -554,7 +551,7 @@ ${obstacle.description || 'Aucune description'}
   `;
 
     if (confirm(message + '\n\nVoulez-vous confirmer cet obstacle ?')) {
-        console.log('✅ User wants to confirm obstacle ID:', obstacle.id);
+        console.log('User wants to confirm obstacle ID:', obstacle.id);
         handleConfirmObstacle(obstacle.id);
     }
 }
@@ -569,7 +566,7 @@ async function handleConfirmObstacle(obstacleId) {
     // Rate limiting
     const rateCheck = checkRateLimit('confirmObstacle');
     if (!rateCheck.allowed) {
-        alert(`⚠️ Veuillez attendre ${rateCheck.remaining} secondes avant de confirmer un autre obstacle`);
+        alert(`Veuillez attendre ${rateCheck.remaining} secondes avant de confirmer un autre obstacle`);
         return;
     }
 
@@ -581,9 +578,9 @@ async function handleConfirmObstacle(obstacleId) {
         // Notification is automatically handled in firebase-config.js after 2+ confirmations
     } else {
         if (result.error === 'Déjà confirmé') {
-            alert('ℹ️ Vous avez déjà confirmé cet obstacle');
+            alert('Vous avez déjà confirmé cet obstacle');
         } else {
-            alert('❌ Erreur : ' + result.error);
+            alert('Erreur : ' + result.error);
         }
     }
 }
@@ -603,12 +600,12 @@ function updateAlertsList() {
     }
 
     if (app.obstacles.length > 0) {
-        // Afficher le bouton flottant
+        // Show the alerts button
         if (alertsToggleBtn) {
             alertsToggleBtn.style.display = 'flex';
         }
 
-        // Remplir le contenu
+        // Fill the alerts dropdown
         if (alertsContent) {
             alertsContent.innerHTML = app.obstacles.slice(0, 10).map(obs => `
           <div class="alert-item">
@@ -629,9 +626,8 @@ function updateAlertsList() {
     }
 }
 
-// ============================================
-// NIVEAU DE DANGER
-// ============================================
+
+// Danger level calculation
 
 function calculateDangerLevel() {
     if (!app.userLocation || app.obstacles.length === 0) {
@@ -654,15 +650,15 @@ function calculateDangerLevel() {
             obstacle.lng
         );
 
-        // Déterminer la sévérité basée sur la distance ET le type d'obstacle
+        // Determine severity based on distance and obstacle severity
         let currentSeverity = 'safe';
 
         if (distance <= CRITICAL_RADIUS) {
-            // Très proche (< 500m) - toujours critique
+            // Too close (< 500m) - stick to critical
             currentSeverity = 'critical';
             closestObstacleType = obstacle.type;
         } else if (distance <= HIGH_RADIUS) {
-            // Proche (< 2km) - utiliser la sévérité de l'obstacle
+            // Close (< 2km) - Use obstacle severity
             if (obstacle.severity === 'critical') {
                 currentSeverity = 'critical';
             } else if (obstacle.severity === 'high') {
@@ -672,12 +668,12 @@ function calculateDangerLevel() {
             }
             if (!closestObstacleType) closestObstacleType = obstacle.type;
         } else if (distance <= MEDIUM_RADIUS) {
-            // Moyen (< 5km) - avertissement bas
+            // Low (< 5km) - low severity
             currentSeverity = 'low';
             if (!closestObstacleType) closestObstacleType = obstacle.type;
         }
 
-        // Mettre à jour le niveau max
+        //Update max severity
         const severityOrder = { 'safe': 0, 'low': 1, 'medium': 2, 'high': 3, 'critical': 4 };
         if (severityOrder[currentSeverity] > severityOrder[maxSeverity]) {
             maxSeverity = currentSeverity;
@@ -700,7 +696,7 @@ function updateDangerLevel(level, obstacleType = null) {
         police: '#8b5cf6'      // Violet
     };
 
-    // Couleur par défaut basée sur le niveau si pas d'obstacle spécifique
+    // Color by level if no specific obstacle type
     const levelColors = {
         safe: '#43938A',  // RGB(67, 147, 138)
         low: '#10b981',
@@ -709,18 +705,18 @@ function updateDangerLevel(level, obstacleType = null) {
         critical: '#dc2626'
     };
 
-    // Choisir la couleur appropriée
+    // Choose header color
     const headerColor = obstacleType ? obstacleColors[obstacleType] : levelColors[level];
 
-    // Mettre à jour le header avec la couleur de l'obstacle
+    // Update header style with gradient based on level and obstacle type
     const header = document.getElementById('header');
     header.className = `header ${config.class}`;
     header.style.background = `linear-gradient(to right, ${headerColor}, ${adjustBrightness(headerColor, -20)})`;
 
-    // Mettre à jour le statut
+    // update danger status text
     document.getElementById('danger-status').textContent = `${config.icon} ${config.label}`;
 
-    // Mettre à jour le bandeau de danger
+    // Update banners
     const dangerBanner = document.getElementById('danger-banner');
     const guestBanner = document.getElementById('guest-banner');
 
@@ -730,7 +726,7 @@ function updateDangerLevel(level, obstacleType = null) {
         guestBanner.style.display = 'none';
         document.getElementById('danger-title').textContent = `${config.icon} ${config.label}`;
 
-        // Ajouter le type d'obstacle dans la description
+        // Add obstacle type to description if available
         let description = config.description;
         if (obstacleType) {
             const obstacleLabel = getObstacleLabel(obstacleType);
@@ -745,11 +741,11 @@ function updateDangerLevel(level, obstacleType = null) {
         }
     }
 
-    // Mettre à jour la couleur du marqueur utilisateur
+    // Update user marker color
     if (app.userMarker) {
         const markerColor = obstacleType ? obstacleColors[obstacleType] : levelColors[level];
 
-        // Mettre à jour l'icône du marqueur avec la nouvelle couleur
+        // Update user marker color
         app.userMarker.setIcon(L.divIcon({
             className: 'user-marker',
             html: `<div style="background: ${markerColor}; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3);"></div>`,
@@ -759,7 +755,7 @@ function updateDangerLevel(level, obstacleType = null) {
     }
 }
 
-// Fonction helper pour ajuster la luminosité d'une couleur
+// Function to adjust brightness of a hex color
 function adjustBrightness(color, percent) {
     const num = parseInt(color.replace('#', ''), 16);
     const amt = Math.round(2.55 * percent);
@@ -774,9 +770,8 @@ function adjustBrightness(color, percent) {
 
 
 
-// ============================================
-// NOTIFICATIONS
-// ============================================
+
+// Notification push
 
 async function requestNotificationPermission() {
     if (!('Notification' in window)) {
@@ -788,17 +783,16 @@ async function requestNotificationPermission() {
     app.notificationsEnabled = permission === 'granted';
 
     if (permission === 'granted') {
-        console.log('✅ Notifications activées');
+        console.log('Notifications activées');
         document.getElementById('btn-notifications').classList.add('active');
     } else {
-        console.log('❌ Notifications refusées');
+        console.log('Notifications refusées');
         document.getElementById('btn-notifications').classList.remove('active');
     }
 }
 
-// ============================================
+
 // SERVICE WORKER
-// ============================================
 
 function registerServiceWorker() {
     if ('serviceWorker' in navigator) {
@@ -812,10 +806,8 @@ function registerServiceWorker() {
     }
 }
 
-// ============================================
-// UTILITAIRES
-// ============================================
 
+// UTILS
 function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // Rayon de la Terre en km
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -846,29 +838,29 @@ function closeModal(modalId) {
 }
 
 function switchView(viewName) {
-    // Masquer toutes les vues
+    // Hide all views
     document.querySelectorAll('.view-container').forEach(view => {
         view.style.display = 'none';
     });
 
-    // Afficher la vue sélectionnée
+    // Show the selected view
     const viewId = `view-${viewName}`;
     const viewElement = document.getElementById(viewId);
     if (viewElement) {
         viewElement.style.display = 'block';
     }
 
-    // Si on revient à la carte, redimensionner
+    // Show map and invalidate size
     if (viewName === 'map' && app.map) {
         setTimeout(() => app.map.invalidateSize(), 100);
     }
 
-    // Si on affiche les alertes, mettre à jour la liste
+    // Show alerts list
     if (viewName === 'alerts') {
         updateAlertsListView();
     }
 
-    // Si on affiche les paramètres, mettre à jour les infos
+    // Show settings information
     if (viewName === 'settings') {
         updateSettingsView();
     }
@@ -890,8 +882,8 @@ function updateAlertsListView() {
             </div>
             <p class="alert-description">${escapeHtml(obs.description)}</p>
             <div class="alert-footer">
-                <span>📍 ${escapeHtml(obs.zone || 'Zone inconnue')}</span>
-                <span>👥 ${escapeHtml(obs.reports)} confirmations</span>
+                <span>${escapeHtml(obs.zone || 'Zone inconnue')}</span>
+                <span>${escapeHtml(obs.reports)} confirmations</span>
             </div>
         </div>
     `).join('');
@@ -917,12 +909,10 @@ function getObstacleColor(type) {
     return colors[type] || colors.traffic;
 }
 
-// ============================================
-// ÉVÉNEMENTS
-// ============================================
+// events listeners
 
 function attachEventListeners() {
-    // Bouton d'authentification
+    // Auth button
     document.getElementById('btn-auth').addEventListener('click', () => {
         if (app.user) {
             logout();
@@ -931,7 +921,7 @@ function attachEventListeners() {
         }
     });
 
-    // Bouton de notifications
+    // Notifications button
     document.getElementById('btn-notifications').addEventListener('click', () => {
         if (!app.user) {
             alert('Connectez-vous pour activer les notifications');
@@ -941,7 +931,7 @@ function attachEventListeners() {
         }
     });
 
-    // Bouton de signalement
+    // report button
     document.getElementById('btn-report').addEventListener('click', () => {
         if (!app.user) {
             alert('Connectez-vous pour signaler un obstacle');
@@ -962,7 +952,7 @@ function attachEventListeners() {
         });
     });
 
-    // Modals - Fermeture
+    // Modals - Close buttons
     document.getElementById('close-auth-modal').addEventListener('click', () => closeModal('auth-modal'));
     document.getElementById('close-report-modal').addEventListener('click', () => closeModal('report-modal'));
 
@@ -970,7 +960,7 @@ function attachEventListeners() {
     document.getElementById('btn-google-auth').addEventListener('click', () => login('google'));
     document.getElementById('btn-email-auth').addEventListener('click', () => login('email'));
 
-    // Modals - Signalement
+    // Modals - reporting
     document.querySelectorAll('.report-card').forEach(card => {
         card.addEventListener('click', () => {
             const type = card.getAttribute('data-type');
@@ -978,7 +968,7 @@ function attachEventListeners() {
         });
     });
 
-    // Fermer les modals en cliquant en dehors
+    // Close 
     document.querySelectorAll('.modal-overlay').forEach(modal => {
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
@@ -988,14 +978,11 @@ function attachEventListeners() {
     });
 }
 
-// ============================================
-// PAGE VISIBILITY & APP RESUME
-// ============================================
-
+// Page visibilty change event
 // Prevent reload when returning to app (fix for Samsung Galaxy)
 document.addEventListener('visibilitychange', () => {
     if (!document.hidden) {
-        console.log('📱 App resumed - updating data without reload');
+        console.log('App resumed - updating data without reload');
 
         // Update data without full reload
         if (app.map) {
@@ -1012,7 +999,7 @@ document.addEventListener('visibilitychange', () => {
 // Handle app resume from background
 window.addEventListener('pageshow', (event) => {
     if (event.persisted) {
-        console.log('📱 App resumed from bfcache');
+        console.log('App resumed from bfcache');
         // Page was restored from back/forward cache
         if (app.map) {
             app.map.invalidateSize();
@@ -1036,10 +1023,8 @@ document.addEventListener('touchmove', (e) => {
     }
 }, { passive: false });
 
-// ============================================
-// PWA INSTALL PROMPT
-// ============================================
 
+// Pwa install prompt handling
 let deferredPrompt = null;
 
 // Capture the beforeinstallprompt event
@@ -1082,7 +1067,7 @@ function hideInstallBanner() {
 // Install button click
 document.getElementById('btn-install-pwa')?.addEventListener('click', async () => {
     if (!deferredPrompt) {
-        console.log('❌ No install prompt available');
+        console.log('No install prompt available');
         return;
     }
 
@@ -1091,12 +1076,12 @@ document.getElementById('btn-install-pwa')?.addEventListener('click', async () =
 
     // Wait for user response
     const { outcome } = await deferredPrompt.userChoice;
-    console.log(`👤 User response: ${outcome}`);
+    console.log(`User response: ${outcome}`);
 
     if (outcome === 'accepted') {
-        console.log('✅ PWA installed');
+        console.log('PWA installed');
     } else {
-        console.log('❌ PWA installation declined');
+        console.log('PWA installation declined');
     }
 
     // Clear the deferred prompt
@@ -1108,7 +1093,7 @@ document.getElementById('btn-install-pwa')?.addEventListener('click', async () =
 
 // Dismiss button click
 document.getElementById('btn-install-dismiss')?.addEventListener('click', () => {
-    console.log('❌ Install prompt dismissed');
+    console.log('Install prompt dismissed');
 
     // Store dismissal in localStorage
     localStorage.setItem('pwa-install-dismissed', 'true');
@@ -1120,7 +1105,7 @@ document.getElementById('btn-install-dismiss')?.addEventListener('click', () => 
 
 // Detect when PWA is installed
 window.addEventListener('appinstalled', () => {
-    console.log('✅ PWA successfully installed');
+    console.log('PWA successfully installed');
 
     // Hide banner
     hideInstallBanner();
@@ -1135,7 +1120,7 @@ window.addEventListener('appinstalled', () => {
 
 // Check if app is already installed (running in standalone mode)
 if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
-    console.log('✅ App is running in standalone mode');
+    console.log('App is running in standalone mode');
     // App is already installed, don't show install banner
     hideInstallBanner();
 }
