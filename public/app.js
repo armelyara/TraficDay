@@ -10,7 +10,7 @@ import {
     createUserProfile,
     saveUserLocation,
     subscribeToLocationTopic
-} from './firebase-config.js';
+} from 'firebase';
 
 // Security: HTML escaping function to prevent XSS
 function escapeHtml(text) {
@@ -792,11 +792,11 @@ async function requestNotificationPermission() {
 }
 
 
-// SERVICE WORKER
+// Service Worker
 
 function registerServiceWorker() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/service-worker.js')
+        navigator.serviceWorker.register('service-worker.js')
             .then(registration => {
                 console.log('Service Worker enregistré:', registration);
             })
