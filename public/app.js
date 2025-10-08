@@ -1168,7 +1168,7 @@ function setupTermsLinks() {
         // check if it's a terms link
         if (e.target.matches('a.terms-link') ||
             e.target.closest('a.terms-link') ||
-            (e.target.tagName === 'A' && e.target.textContent.includes('Condition d"utilisation'))) {
+            (e.target.tagName === 'A' && e.target.textContent.includes('Condition Générales d"Utilisation'))) {
             e.preventDefault();
             openTermsViewer();
         }
