@@ -129,7 +129,7 @@ class TermsViewer extends HTMLElement {
             <div class="terms-container">
                 <div class="terms-header">
                     <button class="close-btn" id="closeBtn">×</button>
-                    <h1>Conditions d'utilisation</h1>
+                    <h1>Conditions Générales d'utilisation</h1>
                 </div>
                 <div class="terms-content" id="content">
                     <div class="loading">Chargement des conditions d'utilisation...</div>
