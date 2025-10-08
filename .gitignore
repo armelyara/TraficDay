@@ -19,6 +19,10 @@ SECURITY_AUDIT.md
 #Security fixes
 SECURITY_FIXES_APPLIED.md
 
+# Terms of service and privacy policy
+public/TERMS.md
+public/PRIVACY.md
+
 # Uncomment this if you'd like others to create their own Firebase project.
 # For a team working on the same Firebase project(s), it is recommended to leave
 # it commented so all members can deploy to the same project(s) in .firebaserc.
