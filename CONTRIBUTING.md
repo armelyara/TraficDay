@@ -1,6 +1,6 @@
 # Guide de Contribution
 
-Merci de votre intérêt pour contribuer à TraficDay ! 🚗
+Merci de votre intérêt pour contribuer à TraficDay ! 
 
 TraficDay est développé et maintenu par **The Day Info**. Nous accueillons les contributions de la communauté pour améliorer la sécurité routière.
 
@@ -34,23 +34,23 @@ Nous nous engageons à faire de la participation à ce projet une expérience sa
 ### Nos standards
 
 Exemples de comportements qui contribuent à créer un environnement positif :
-- ✅ Utiliser un langage accueillant et inclusif
-- ✅ Respecter les différents points de vue et expériences
-- ✅ Accepter gracieusement les critiques constructives
-- ✅ Se concentrer sur ce qui est le mieux pour la communauté
-- ✅ Faire preuve d'empathie envers les autres membres
+-   Utiliser un langage accueillant et inclusif
+-   Respecter les différents points de vue et expériences
+-   Accepter gracieusement les critiques constructives
+-   Se concentrer sur ce qui est le mieux pour la communauté
+-   Faire preuve d'empathie envers les autres membres
 
 Exemples de comportements inacceptables :
-- ❌ Langage ou imagerie sexualisés et attention sexuelle non sollicitée
-- ❌ Trolling, commentaires insultants/désobligeants
-- ❌ Harcèlement public ou privé
-- ❌ Publication d'informations privées d'autrui sans permission
-- ❌ Autres conduites considérées comme inappropriées
+-  Langage ou imagerie sexualisés et attention sexuelle non sollicitée
+-  Trolling, commentaires insultants/désobligeants
+-  Harcèlement public ou privé
+-  Publication d'informations privées d'autrui sans permission
+-  Autres conduites considérées comme inappropriées
 
 ### Application
 
 Les instances de comportement abusif, harcelant ou autrement inacceptable peuvent être signalées à :
-**conduct@thedayinfo.com**
+**armelyara@thedayinfo.com**
 
 ## Comment contribuer
 
@@ -58,26 +58,26 @@ Les instances de comportement abusif, harcelant ou autrement inacceptable peuven
 
 Nous recherchons des contributions dans les domaines suivants :
 
-#### 🐛 Corrections de bugs
+#### Corrections de bugs
 - Résoudre les problèmes signalés
 - Améliorer la stabilité de l'application
 - Corriger les erreurs de sécurité
 
-#### ✨ Nouvelles fonctionnalités
+#### Nouvelles fonctionnalités
 - Nouveaux types d'obstacles
 - Améliorations de l'interface utilisateur
 - Intégrations avec d'autres services
 
-#### 📝 Documentation
+#### Documentation
 - Améliorer le README
 - Ajouter des commentaires dans le code
 - Créer des tutoriels
 
-#### 🌍 Traductions
+#### Traductions
 - Ajouter de nouvelles langues
 - Améliorer les traductions existantes
 
-#### 🎨 Design
+#### Design
 - Améliorer l'UI/UX
 - Créer des icônes
 - Optimiser les performances visuelles
@@ -233,13 +233,13 @@ traficday/
 ### JavaScript
 
 ```javascript
-// ✅ Bon
+// Bon
 function calculateDistance(lat1, lng1, lat2, lng2) {
     const R = 6371; // Rayon de la Terre en km
     // ... logique claire et commentée
 }
 
-// ❌ Mauvais
+// Mauvais
 function calc(a,b,c,d) {
     let x=6371;
     // ... code non commenté
@@ -256,7 +256,7 @@ function calc(a,b,c,d) {
 ### CSS
 
 ```css
-/* ✅ Bon */
+/* Bon */
 .report-button {
     position: fixed;
     bottom: 80px;
@@ -264,7 +264,7 @@ function calc(a,b,c,d) {
     background: linear-gradient(to right, var(--green-500), var(--green-600));
 }
 
-/* ❌ Mauvais */
+/* Mauvais */
 .btn {
     position: fixed;
     bottom: 80px;
@@ -282,7 +282,7 @@ function calc(a,b,c,d) {
 ### Firebase
 
 ```javascript
-// ✅ Bon
+// Bon
 try {
     const obstacleRef = ref(database, `obstacles/${obstacleId}`);
     await update(obstacleRef, { active: false });
@@ -291,7 +291,7 @@ try {
     throw error;
 }
 
-// ❌ Mauvais
+// Mauvais
 update(ref(database, `obstacles/${obstacleId}`), { active: false });
 ```
 
@@ -385,7 +385,7 @@ update(ref(database, `obstacles/${obstacleId}`), { active: false });
 
 ## Questions et support
 
-- **Email** : support@thedayinfo.com
+- **Email** : armelyara@thedayinfo.com
 - **Issues GitHub** : Pour les bugs et features
 - **Discussions** : Pour les questions générales
 
@@ -399,6 +399,6 @@ En contribuant à TraficDay, vous acceptez que vos contributions soient sous [li
 
 ---
 
-**Merci de contribuer à rendre les routes plus sûres ! 🚗✨**
+**Merci de contribuer à rendre les routes plus sûres !**
 
-© 2025 The Day Info. Produit par The Day Info.
+© 2025 TraficDay by The Day Info.

@@ -3,7 +3,7 @@ const admin = require('firebase-admin');
 
 admin.initializeApp();
 
-// Fonction pour calculer la distance entre deux points (Haversine)
+// Function to calculate distance between two coordinates using Haversine formula
 function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // Rayon de la Terre en km
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -17,7 +17,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
     return R * c;
 }
 
-// Labels pour les types d'obstacles
+// Labels for obstacle types
 const obstacleLabels = {
     flood: 'Inondation',
     protest: 'Manifestation',
@@ -26,7 +26,7 @@ const obstacleLabels = {
     police: 'Police routière'
 };
 
-// Fonction déclenchée lors de la création d'une notification (Cloud Functions v2)
+// Function initiated when a new notification is created
 exports.sendObstacleNotification = onValueCreated(
     '/notifications/{notificationId}',
     async (event) => {
@@ -37,14 +37,14 @@ exports.sendObstacleNotification = onValueCreated(
 
         console.log('📩 Nouvelle notification à envoyer:', obstacleId);
 
-        // Vérifier que l'obstacle a au moins 2 confirmations
+        // Check if the notification has already been sent
         if (reports < 2) {
             console.log('⚠️ Obstacle n\'a pas assez de confirmations:', reports);
             return null;
         }
 
         try {
-            // Récupérer tous les utilisateurs
+            // Retrieve all users
             const usersSnapshot = await admin.database().ref('users').once('value');
             const users = usersSnapshot.val();
 
@@ -56,11 +56,11 @@ exports.sendObstacleNotification = onValueCreated(
             const tokens = [];
             const radiusKm = 1.6; // 1 mile ≈ 1.6 km
 
-            // Filtrer les utilisateurs dans le rayon
+            // Filter users within the radius
             Object.keys(users).forEach(userId => {
                 const user = users[userId];
 
-                // Vérifier que l'utilisateur a une position et un token
+                // Check if user has location and fcmToken
                 if (user.location && user.fcmToken) {
                     const distance = calculateDistance(
                         lat, lng,
@@ -69,7 +69,7 @@ exports.sendObstacleNotification = onValueCreated(
 
                     if (distance <= radiusKm) {
                         tokens.push(user.fcmToken);
-                        console.log(`✅ Utilisateur ${userId} dans le rayon (${distance.toFixed(2)} km)`);
+                        console.log(`Utilisateur ${userId} dans le rayon (${distance.toFixed(2)} km)`);
                     }
                 }
             });
@@ -98,15 +98,15 @@ exports.sendObstacleNotification = onValueCreated(
                 tokens: tokens
             };
 
-            // Envoyer les notifications
+            // Send the notification
             const response = await admin.messaging().sendMulticast(message);
 
-            console.log(`✅ ${response.successCount} notifications envoyées sur ${tokens.length}`);
+            console.log(`{response.successCount} notifications envoyées sur ${tokens.length}`);
 
-            // Marquer la notification comme envoyée
+            // Mark notification as sent
             await admin.database().ref(`/notifications/${notificationId}`).update({ sent: true, sentAt: Date.now() });
 
-            // Supprimer les tokens invalides
+            // Delete invalid tokens
             if (response.failureCount > 0) {
                 const cleanupPromises = [];
 
@@ -115,13 +115,13 @@ exports.sendObstacleNotification = onValueCreated(
                         const errorCode = resp.error?.code;
                         const token = tokens[idx];
 
-                        console.error('❌ Erreur envoi:', resp.error);
+                        console.error('Erreur envoi:', resp.error);
 
-                        // Supprimer les tokens invalides ou expirés
+                        // Delete the invalid token from all users
                         if (errorCode === 'messaging/invalid-registration-token' ||
                             errorCode === 'messaging/registration-token-not-registered') {
 
-                            // Trouver et supprimer le token de la base
+                            // Find user(s) with this token
                             const userQuery = admin.database()
                                 .ref('users')
                                 .orderByChild('fcmToken')
@@ -130,7 +130,7 @@ exports.sendObstacleNotification = onValueCreated(
                             cleanupPromises.push(
                                 userQuery.once('value').then(snapshot => {
                                     snapshot.forEach(child => {
-                                        console.log(`🧹 Suppression token invalide pour user: ${child.key}`);
+                                        console.log(`Suppression token invalide pour user: ${child.key}`);
                                         child.ref.child('fcmToken').remove();
                                     });
                                 })
@@ -139,16 +139,16 @@ exports.sendObstacleNotification = onValueCreated(
                     }
                 });
 
-                // Exécuter tous les nettoyages
+                // Execute the cleanup
                 if (cleanupPromises.length > 0) {
                     await Promise.all(cleanupPromises);
-                    console.log(`🧹 ${cleanupPromises.length} tokens invalides nettoyés`);
+                    console.log(`${cleanupPromises.length} tokens invalides nettoyés`);
                 }
             }
 
             return response;
         } catch (error) {
-            console.error('❌ Erreur envoi notification:', error);
+            console.error('Erreur envoi notification:', error);
             return null;
         }
     }
