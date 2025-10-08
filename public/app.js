@@ -1045,7 +1045,11 @@ window.addEventListener('beforeinstallprompt', (e) => {
     const now = Date.now();
     const sevenDays = 7 * 24 * 60 * 60 * 1000;
 
-    if (!installDismissed || (dismissedDate && (now - parseInt(dismissedDate)) > sevenDays)) {
+    const shouldShowBanner = !installDismissed ||
+        !dismissedDate ||
+        (now - parseInt(dismissedDate)) > sevenDays;
+
+    if (shouldShowBanner) {
         showInstallBanner();
     }
 });
