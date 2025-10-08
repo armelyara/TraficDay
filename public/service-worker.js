@@ -11,14 +11,14 @@ const CACHE_FILES = [
 ];
 
 const OPTIONAL_CACHE_FILES = [
-    '/icons/icon-72.png',
-    '/icons/icon-96.png',
-    '/icons/icon-128.png',
-    '/icons/icon-144.png',
-    '/icons/icon-152.png',
-    '/icons/icon-192.png',
-    '/icons/icon-384.png',
-    '/icons/icon-512.png'
+    '../icons/icon-72.png',
+    '../icons/icon-96.png',
+    '../icons/icon-128.png',
+    '../icons/icon-144.png',
+    '../icons/icon-152.png',
+    '../icons/icon-192.png',
+    '../icons/icon-384.png',
+    '../icons/icon-512.png'
 ];
 
 // ============================================
@@ -30,7 +30,7 @@ self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_VERSION)
             .then((cache) => {
-                console.log('📦 Service Worker: Mise en cache des fichiers essentiels');
+                console.log('Service Worker: Mise en cache des fichiers essentiels');
                 // Mettre en cache les fichiers essentiels
                 return cache.addAll(CACHE_FILES);
             })
@@ -47,7 +47,7 @@ self.addEventListener('install', (event) => {
                 });
             })
             .then(() => {
-                console.log('✅ Service Worker: Installation terminée');
+                console.log('Service Worker: Installation terminée');
                 return self.skipWaiting();
             })
             .catch((error) => {
@@ -75,7 +75,7 @@ self.addEventListener('activate', (event) => {
             );
         })
             .then(() => {
-                console.log('✅ Service Worker: Activation terminée');
+                console.log('Service Worker: Activation terminée');
                 return self.clients.claim();
             })
     );
@@ -133,7 +133,7 @@ async function cacheFirst(request) {
     const cachedResponse = await caches.match(request);
 
     if (cachedResponse) {
-        console.log('📦 Cache hit:', request.url);
+        console.log('Cache hit:', request.url);
         return cachedResponse;
     }
 
@@ -188,14 +188,14 @@ async function networkFirst(request) {
 // NOTIFICATIONS PUSH
 // ============================================
 self.addEventListener('push', (event) => {
-    console.log('📩 Service Worker: Notification push reçue');
+    console.log('Service Worker: Notification push reçue');
 
     let notificationData = {
         title: 'AlerteRoute',
         body: 'Nouvelle alerte routière',
-        icon: '/icons/icon-192.png',
-        badge: '/icons/icon-72.png',
-        tag: 'alerte-route',
+        icon: '../icons/icon-192.png',
+        badge: '../icons/icon-72.png',
+        tag: 'trafic-day',
         requireInteraction: true,
         vibrate: [200, 100, 200],
         data: {
@@ -231,8 +231,8 @@ self.addEventListener('push', (event) => {
             actions: [
                 {
                     action: 'view',
-                    title: '👁️ Voir',
-                    icon: '/icons/icon-96.png'
+                    title: 'Voir',
+                    icon: '../icons/icon-96.png'
                 },
                 {
                     action: 'close',
@@ -277,7 +277,7 @@ self.addEventListener('notificationclick', (event) => {
 // SYNCHRONISATION EN ARRIÈRE-PLAN
 // ============================================
 self.addEventListener('sync', (event) => {
-    console.log('🔄 Service Worker: Synchronisation en arrière-plan');
+    console.log('Service Worker: Synchronisation en arrière-plan');
 
     if (event.tag === 'sync-obstacles') {
         event.waitUntil(syncObstacles());
@@ -286,7 +286,7 @@ self.addEventListener('sync', (event) => {
 
 async function syncObstacles() {
     try {
-        console.log('🔄 Synchronisation des obstacles...');
+        console.log('Synchronisation des obstacles...');
 
         // Récupérer les obstacles en attente depuis IndexedDB
         // const pendingObstacles = await getPendingObstacles();
@@ -296,7 +296,7 @@ async function syncObstacles() {
         //   await sendObstacleToFirebase(obstacle);
         // }
 
-        console.log('✅ Synchronisation terminée');
+        console.log('Synchronisation terminée');
     } catch (error) {
         console.error('❌ Erreur synchronisation:', error);
     }
@@ -306,7 +306,7 @@ async function syncObstacles() {
 // MESSAGES DEPUIS L'APPLICATION
 // ============================================
 self.addEventListener('message', (event) => {
-    console.log('💬 Service Worker: Message reçu', event.data);
+    console.log('Service Worker: Message reçu', event.data);
 
     if (event.data && event.data.type === 'SKIP_WAITING') {
         self.skipWaiting();
