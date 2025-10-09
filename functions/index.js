@@ -1,9 +1,9 @@
-const {onValueCreated} = require('firebase-functions/v2/database');
+const { onValueCreated, onValueWritten } = require('firebase-functions/v2/database');
 const admin = require('firebase-admin');
 
 admin.initializeApp();
 
-// Function to calculate distance between two coordinates using Haversine formula
+// Calculate distance between two coordinates
 function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // Rayon de la Terre en km
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -19,136 +19,167 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 
 // Labels for obstacle types
 const obstacleLabels = {
-    flood: 'Inondation',
-    protest: 'Manifestation',
-    closure: 'Route fermée',
-    traffic: 'Embouteillage',
-    police: 'Police routière'
+    flood: '🌊 Inondation',
+    protest: '📢 Manifestation',
+    closure: '🚧 Route fermée',
+    traffic: '🚗 Embouteillage',
+    police: '👮 Police routière'
 };
 
-// Function initiated when a new notification is created
-exports.sendObstacleNotification = onValueCreated(
-    '/notifications/{notificationId}',
+// FLOW 1: Triggered when a NEW obstacle is created
+exports.checkForDuplicateAlerts = onValueCreated(
+    '/obstacles/{obstacleId}',
     async (event) => {
-        const snapshot = event.data;
-        const {notificationId} = event.params;
-        const notification = snapshot.val();
-        const { obstacleId, type, lat, lng, description, reports } = notification;
+        const obstacleId = event.params.obstacleId;
+        const newObstacle = event.data.val();
+        const { type, lat, lng, userId } = newObstacle;
 
-        console.log('📩 Nouvelle notification à envoyer:', obstacleId);
-
-        // Check if the notification has already been sent
-        if (reports < 2) {
-            console.log('⚠️ Obstacle n\'a pas assez de confirmations:', reports);
-            return null;
-        }
+        console.log('🔍 Nouvel obstacle créé:', obstacleId, 'Type:', type);
 
         try {
-            // Retrieve all users
-            const usersSnapshot = await admin.database().ref('users').once('value');
-            const users = usersSnapshot.val();
+            // Récupérer TOUS les obstacles actifs
+            const obstaclesSnapshot = await admin.database().ref('obstacles').once('value');
+            const allObstacles = obstaclesSnapshot.val();
 
-            if (!users) {
-                console.log('⚠️ Aucun utilisateur trouvé');
+            if (!allObstacles) {
+                console.log('⚠️ Aucun autre obstacle trouvé');
                 return null;
             }
 
-            const tokens = [];
-            const radiusKm = 1.6; // 1 mile ≈ 1.6 km
+            // Trouver les obstacles du MÊME TYPE dans un rayon de 500m
+            const DETECTION_RADIUS = 0.5; // 500 mètres
+            const sameTypeNearby = [];
+            const reportingUsers = [userId]; // Users qui ont signalé
 
-            // Filter users within the radius
-            Object.keys(users).forEach(userId => {
-                const user = users[userId];
+            Object.keys(allObstacles).forEach(id => {
+                const obstacle = allObstacles[id];
 
-                // Check if user has location and fcmToken
-                if (user.location && user.fcmToken) {
-                    const distance = calculateDistance(
-                        lat, lng,
-                        user.location.lat, user.location.lng
-                    );
+                // Ignorer l'obstacle actuel
+                if (id === obstacleId) return;
 
-                    if (distance <= radiusKm) {
-                        tokens.push(user.fcmToken);
-                        console.log(`Utilisateur ${userId} dans le rayon (${distance.toFixed(2)} km)`);
+                // Même type ET actif
+                if (obstacle.type === type && obstacle.active) {
+                    const distance = calculateDistance(lat, lng, obstacle.lat, obstacle.lng);
+
+                    if (distance <= DETECTION_RADIUS) {
+                        sameTypeNearby.push({ id, obstacle, distance });
+                        reportingUsers.push(obstacle.userId);
+                        console.log(`✅ Obstacle similaire trouvé: ${id} à ${distance.toFixed(2)}km`);
                     }
                 }
             });
 
-            if (tokens.length === 0) {
-                console.log('⚠️ Aucun utilisateur dans le rayon');
-                return null;
-            }
+            console.log(`📊 Total obstacles ${type} dans la zone: ${sameTypeNearby.length + 1}`);
 
-            // Préparer le message
-            const obstacleLabel = obstacleLabels[type] || 'Obstacle';
-            const message = {
-                notification: {
-                    title: `⚠️ ${obstacleLabel} signalé`,
-                    body: `${description} - ${reports} confirmations`,
-                    icon: '/icons/icon-192.png',
-                    badge: '/icons/icon-72.png'
-                },
-                data: {
-                    obstacleId: obstacleId,
-                    type: type,
-                    lat: lat.toString(),
-                    lng: lng.toString(),
-                    click_action: '/'
-                },
-                tokens: tokens
-            };
+            // Si c'est le 2ème obstacle du même type dans la zone → ENVOYER NOTIFICATION
+            if (sameTypeNearby.length === 1) {
+                console.log('🚨 2 alertes détectées ! Envoi des notifications...');
 
-            // Send the notification
-            const response = await admin.messaging().sendMulticast(message);
+                // Récupérer tous les users
+                const usersSnapshot = await admin.database().ref('users').once('value');
+                const users = usersSnapshot.val();
 
-            console.log(`{response.successCount} notifications envoyées sur ${tokens.length}`);
+                if (!users) {
+                    console.log('⚠️ Aucun utilisateur trouvé');
+                    return null;
+                }
 
-            // Mark notification as sent
-            await admin.database().ref(`/notifications/${notificationId}`).update({ sent: true, sentAt: Date.now() });
+                const tokens = [];
+                const NOTIFICATION_RADIUS = 1.6; // 1.6 km
 
-            // Delete invalid tokens
-            if (response.failureCount > 0) {
-                const cleanupPromises = [];
+                // Filtrer users dans le rayon ET exclure ceux qui ont signalé
+                Object.keys(users).forEach(uid => {
+                    const user = users[uid];
 
-                response.responses.forEach((resp, idx) => {
-                    if (!resp.success) {
-                        const errorCode = resp.error?.code;
-                        const token = tokens[idx];
+                    // Exclure users qui ont déjà signalé
+                    if (reportingUsers.includes(uid)) {
+                        console.log(`⏭️ User ${uid} exclu (a signalé)`);
+                        return;
+                    }
 
-                        console.error('Erreur envoi:', resp.error);
+                    // Vérifier location et token
+                    if (user.location && user.notificationToken) {
+                        const distance = calculateDistance(
+                            lat, lng,
+                            user.location.lat, user.location.lng
+                        );
 
-                        // Delete the invalid token from all users
-                        if (errorCode === 'messaging/invalid-registration-token' ||
-                            errorCode === 'messaging/registration-token-not-registered') {
-
-                            // Find user(s) with this token
-                            const userQuery = admin.database()
-                                .ref('users')
-                                .orderByChild('fcmToken')
-                                .equalTo(token);
-
-                            cleanupPromises.push(
-                                userQuery.once('value').then(snapshot => {
-                                    snapshot.forEach(child => {
-                                        console.log(`Suppression token invalide pour user: ${child.key}`);
-                                        child.ref.child('fcmToken').remove();
-                                    });
-                                })
-                            );
+                        if (distance <= NOTIFICATION_RADIUS) {
+                            tokens.push(user.notificationToken);
+                            console.log(`✅ User ${uid} ajouté (${distance.toFixed(2)}km)`);
                         }
                     }
                 });
 
-                // Execute the cleanup
-                if (cleanupPromises.length > 0) {
-                    await Promise.all(cleanupPromises);
-                    console.log(`${cleanupPromises.length} tokens invalides nettoyés`);
+                if (tokens.length === 0) {
+                    console.log('⚠️ Aucun utilisateur à notifier');
+                    return null;
                 }
+
+                // Préparer et envoyer le message
+                const obstacleLabel = obstacleLabels[type] || 'Obstacle';
+                const message = {
+                    notification: {
+                        title: `🚨 Alerte confirmée : ${obstacleLabel}`,
+                        body: `2 signalements dans votre zone. Soyez vigilant !`,
+                        icon: '/icons/android/icon-192.png',
+                        badge: '/icons/android/icon-72.png'
+                    },
+                    data: {
+                        obstacleId: obstacleId,
+                        type: type,
+                        lat: lat.toString(),
+                        lng: lng.toString(),
+                        click_action: '/'
+                    },
+                    tokens: tokens
+                };
+
+                const response = await admin.messaging().sendEachForMulticast(message);
+
+                console.log(`✅ ${response.successCount} notifications envoyées sur ${tokens.length}`);
+
+                if (response.failureCount > 0) {
+                    console.log(`⚠️ ${response.failureCount} échecs`);
+                }
+
+                // Marquer dans la database que notification a été envoyée
+                await admin.database().ref(`obstacles/${obstacleId}/notificationSent`).set(true);
+                await admin.database().ref(`obstacles/${obstacleId}/notifiedUsers`).set(tokens.length);
+
+                return null;
+            } else {
+                console.log(`ℹ️ Seulement ${sameTypeNearby.length + 1} alerte(s) de type ${type} dans la zone`);
+                return null;
             }
 
-            return response;
         } catch (error) {
-            console.error('Erreur envoi notification:', error);
+            console.error('❌ Erreur:', error);
+            return null;
+        }
+    }
+);
+
+// FLOW 2: Subscribe user to "all" topic when token is created/updated
+exports.subscribeToAllTopic = onValueWritten(
+    '/users/{userId}/notificationToken',
+    async (event) => {
+        const token = event.data.after.val();
+        const previousToken = event.data.before.val();
+        const userId = event.params.userId;
+
+        if (!token || token === previousToken) {
+            return null;
+        }
+
+        try {
+            await admin.messaging().subscribeToTopic([token], 'all');
+            console.log(`✅ User ${userId} abonné au topic "all"`);
+
+            await admin.database().ref(`users/${userId}/subscribedToAll`).set(true);
+            return null;
+        } catch (error) {
+            console.error(`❌ Erreur abonnement:`, error);
             return null;
         }
     }
