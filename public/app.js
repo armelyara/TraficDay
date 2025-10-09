@@ -1194,4 +1194,28 @@ document.addEventListener('DOMContentLoaded', function () {
     setupTermsLinks();
 });
 
+// Fonction globale pour zoomer sur un obstacle depuis une notification
+window.zoomToObstacle = function (obstacleId) {
+    console.log('🔍 Recherche obstacle:', obstacleId);
+
+    const obstacle = app.obstacles.find(o => o.id === obstacleId);
+
+    if (obstacle) {
+        // Zoomer sur la carte
+        app.map.setView([obstacle.lat, obstacle.lng], 16);
+
+        // Ouvrir le popup du marker
+        if (app.obstacleMarkers[obstacleId]) {
+            app.obstacleMarkers[obstacleId].openPopup();
+        }
+
+        // Afficher les détails
+        showObstacleDetails(obstacle);
+
+        console.log('✅ Obstacle affiché:', obstacleId);
+    } else {
+        console.warn('⚠️ Obstacle introuvable:', obstacleId);
+    }
+};
+
 console.log('app.js chargé');
