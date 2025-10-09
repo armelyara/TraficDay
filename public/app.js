@@ -263,7 +263,7 @@ async function login(provider) {
         if (result.success) {
             closeModal('auth-modal');
             alert('Connexion réussie !');
-            requestNotificationPermission();
+            
         } else {
             alert('Erreur de connexion : ' + result.error);
         }
