@@ -1,5 +1,5 @@
 {
-    "name": "TraficDay - Sécurité Routière",
+    "name": "TraficDay",
     "short_name": "TraficDay",
     "description": "Alertes routières en temps réel pour éviter les obstacles. Contribuez à la sécurité de tous les conducteurs.",
     "start_url": "/",
