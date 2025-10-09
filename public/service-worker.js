@@ -111,7 +111,12 @@ self.addEventListener('fetch', (event) => {
     if (event.request.url.includes('firebasestorage.googleapis.com') ||
         event.request.url.includes('firebaseinstallations.googleapis.com') ||
         event.request.url.includes('firebaseio.com') ||
-        event.request.url.includes('googleapis.com')) {
+        event.request.url.includes('googleapis.com')||
+        event.request.url.includes('apis.google.com') || // ✅ AJOUTER CETTE LIGNE
+        event.request.url.includes('accounts.google.com') || // ✅ AJOUTER CETTE LIGNE
+        event.request.url.includes('securetoken.googleapis.com') || // ✅ AJOUTER CETTE LIGNE
+        event.request.url.includes('identitytoolkit.googleapis.com')) { // ✅ AJOUTER CETTE LIGNE
+        
         return;
     }
 
