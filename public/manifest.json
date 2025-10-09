@@ -1,5 +1,5 @@
 {
-    "name": "TraficDay - Sécurité Routière en Temps Réel",
+    "name": "TraficDay",
     "short_name": "TraficDay",
     "description": "Application d'alertes routières en temps réel pour éviter les inondations, manifestations et routes fermées. Contribuez à la sécurité de tous les conducteurs.",
     "start_url": "/",
@@ -7,40 +7,40 @@
     "display": "standalone",
     "orientation": "portrait",
     "background_color": "#ffffff",
-    "theme_color": "#3b82f6",
+    "theme_color": "#5f9491",
     "icons": [
         {
-            "src": "../icons/icon-48.png",
+            "src": "../icons/android/icon-48.png",
             "sizes": "48x48",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "../icons/icon-72.png",
+            "src": "../icons/android/icon-72.png",
             "sizes": "72x72",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "../icons/icon-96.png",
+            "src": "../icons/android/icon-96.png",
             "sizes": "96x96",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "../icons/icon-144.png",
+            "src": "../icons/android/icon-144.png",
             "sizes": "144x144",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "../icons/icon-192.png",
+            "src": "../icons/android/icon-192.png",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "any maskable"
         },
         {
-            "src": "../icons/icon-512.png",
+            "src": "../icons/android/icon-512.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any maskable"
@@ -90,7 +90,7 @@
             "url": "/?action=alerts",
             "icons": [
                 {
-                    "src": "../icons/icon-192.png",
+                    "src": "../icons/android/icon-192.png",
                     "sizes": "192x192"
                 }
             ]
