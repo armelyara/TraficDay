@@ -23,6 +23,9 @@ import { ref, get } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-dat
 // Import getToken from Firebase messaging
 import { getToken } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js';
 
+// Import Mapbox configuration
+import { MAPBOX_CONFIG } from './mapbox-config.js';
+
 // Security: HTML escaping function to prevent XSS
 function escapeHtml(text) {
     if (!text) return '';
@@ -76,7 +79,9 @@ const app = {
     notificationsEnabled: false,
     map: null,
     userMarker: null,
-    obstacleMarkers: {}
+    obstacleMarkers: {},
+    trafficLayer: null,  // Mapbox traffic overlay
+    dangerCircles: {}    // Circles around point obstacles
 };
 
 // Constantes
@@ -168,14 +173,24 @@ function initMap() {
         attributionControl: true
     }).setView([5.345317, -4.024429], 13);
 
-    // Add OpenStreetMap tile layerß
+    // Add OpenStreetMap tile layer
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors',
         maxZoom: 19,
         minZoom: 3
     }).addTo(app.map);
 
-    console.log('Carte Leaflet initialisée');
+    // Add Mapbox real-time traffic overlay (semi-transparent)
+    app.trafficLayer = L.tileLayer(MAPBOX_CONFIG.trafficTileUrl, {
+        accessToken: MAPBOX_CONFIG.accessToken,
+        attribution: MAPBOX_CONFIG.options.attribution,
+        maxZoom: MAPBOX_CONFIG.options.maxZoom,
+        opacity: MAPBOX_CONFIG.options.opacity,
+        zIndex: 10  // Above base map, below markers
+    }).addTo(app.map);
+
+    console.log('✅ Carte Leaflet initialisée');
+    console.log('✅ Mapbox traffic layer ajouté');
 
     // Force map resize after a short delay to fix display issues
     setTimeout(() => {
@@ -448,6 +463,12 @@ function renderObstacles() {
     });
     app.obstacleMarkers = {};
 
+    // Delete existing circles
+    Object.values(app.dangerCircles).forEach(circle => {
+        app.map.removeLayer(circle);
+    });
+    app.dangerCircles = {};
+
     // Filter to show only primary obstacles (hide duplicates)
     const primaryObstacles = app.obstacles.filter(obs => obs.isPrimary !== false);
 
@@ -496,6 +517,26 @@ function createObstacleMarker(obstacle, totalCount) {
     const color = colors[obstacle.type] || colors.traffic;
     const icon = getObstacleIcon(obstacle.type);
     const displayCount = totalCount || obstacle.reports || 1;
+
+    // ✅ Add danger circle for point obstacles (not for traffic jams)
+    if (obstacle.type !== 'traffic') {
+        // Determine circle radius based on current danger distance
+        const CRITICAL_RADIUS = 0.5; // 500m - same as calculateDangerLevel
+        const radiusInMeters = CRITICAL_RADIUS * 1000; // Convert km to meters
+
+        // Create circle with same color as marker
+        const circle = L.circle([obstacle.lat, obstacle.lng], {
+            color: color,
+            fillColor: color,
+            fillOpacity: 0.15,  // Very transparent
+            opacity: 0.5,       // Semi-transparent border
+            radius: radiusInMeters,
+            weight: 2
+        }).addTo(app.map);
+
+        // Store circle reference for cleanup
+        app.dangerCircles[obstacle.id] = circle;
+    }
 
     const marker = L.marker([obstacle.lat, obstacle.lng], {
         icon: L.divIcon({
