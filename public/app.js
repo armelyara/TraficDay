@@ -7,12 +7,18 @@ import {
     createObstacle,
     firebaseListenToObstacles,
     confirmObstacle,
+    markAsResolved,
     createUserProfile,
     saveUserLocation,
     subscribeToLocationTopic,
     saveNotificationToken,
+    subscribeToAllTopic,
+    unsubscribeFromAllTopic,
+    database,
     messaging
 } from './firebase-config.js';
+
+import { ref, get } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js';
 
 // Import getToken from Firebase messaging
 import { getToken } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js';
@@ -576,6 +582,7 @@ function showObstacleDetails(obstacle) {
 
     const timeAgo = getTimeAgo(obstacle.timestamp);
     const label = getObstacleLabel(obstacle.type);
+    const resolvedCount = obstacle.resolvedCount || 0;
 
     const message = `
 ${label}
@@ -583,12 +590,18 @@ ${obstacle.description || 'Aucune description'}
 
 📍 Zone: ${obstacle.zone || 'Inconnue'}
 ⏰ Signalé il y a ${timeAgo}
-👥 ${obstacle.confirmations || 1} confirmations
+👥 ${obstacle.confirmations || 1} confirmations | ✅ ${resolvedCount}/5 résolu
   `;
 
-    if (confirm(message + '\n\nVoulez-vous confirmer cet obstacle ?')) {
+    // Ask what the user wants to do
+    const action = prompt(message + '\n\nQue voulez-vous faire ?\n1 = Confirmer\n2 = Marquer comme résolu\n0 = Annuler');
+
+    if (action === '1') {
         console.log('User wants to confirm obstacle ID:', obstacle.id);
         handleConfirmObstacle(obstacle.id);
+    } else if (action === '2') {
+        console.log('User wants to mark as resolved:', obstacle.id);
+        handleMarkAsResolved(obstacle.id);
     }
 }
 
@@ -615,6 +628,37 @@ async function handleConfirmObstacle(obstacleId) {
     } else {
         if (result.error === 'Déjà confirmé') {
             alert('Vous avez déjà confirmé cet obstacle');
+        } else {
+            alert('Erreur : ' + result.error);
+        }
+    }
+}
+
+async function handleMarkAsResolved(obstacleId) {
+    if (!app.user) {
+        alert('Vous devez être connecté pour marquer un obstacle comme résolu');
+        promptLogin('report');
+        return;
+    }
+
+    // Rate limiting
+    const rateCheck = checkRateLimit('markAsResolved');
+    if (!rateCheck.allowed) {
+        alert(`Veuillez attendre ${rateCheck.remaining} secondes avant de marquer un autre obstacle comme résolu`);
+        return;
+    }
+
+    const result = await markAsResolved(obstacleId);
+
+    if (result.success) {
+        if (result.deleted) {
+            alert('✅ Obstacle résolu et supprimé! (5 utilisateurs ont confirmé la résolution)');
+        } else {
+            alert(`✅ Marqué comme résolu (${result.resolvedCount}/5)`);
+        }
+    } else {
+        if (result.error === 'Déjà marqué comme résolu') {
+            alert('Vous avez déjà marqué cet obstacle comme résolu');
         } else {
             alert('Erreur : ' + result.error);
         }
@@ -848,6 +892,14 @@ async function requestNotificationPermission() {
                 // Step 6: Save token to database
                 await saveNotificationToken(app.user.uid, token);
 
+                // Step 6.5: Set default preference to suppress foreground notifications
+                const suppressForegroundKey = `suppressForegroundNotif_${app.user.uid}`;
+                if (!localStorage.getItem(suppressForegroundKey)) {
+                    // Default to true (suppress foreground notifications)
+                    localStorage.setItem(suppressForegroundKey, 'true');
+                    console.log('✅ Paramètre par défaut: Masquer notifications foreground = true');
+                }
+
                 // Step 7: Update UI
                 document.getElementById('btn-notifications').classList.add('active');
                 alert('✅ Notifications activées! Vous recevrez des alertes pour les obstacles dans un rayon de 1,6 km.');
@@ -969,12 +1021,40 @@ function updateAlertsListView() {
     `).join('');
 }
 
-function updateSettingsView() {
+async function updateSettingsView() {
     const userEmailDisplay = document.getElementById('user-email-display');
     if (app.user) {
         userEmailDisplay.textContent = app.user.email;
     } else {
         userEmailDisplay.textContent = 'Non connecté';
+    }
+
+    // Load user preference for foreground notification suppression
+    const userId = app.user?.uid;
+    if (userId) {
+        const suppressForegroundKey = `suppressForegroundNotif_${userId}`;
+        const suppressForeground = localStorage.getItem(suppressForegroundKey) === 'true';
+
+        const toggleBtn = document.getElementById('toggle-suppress-foreground');
+        if (toggleBtn) {
+            toggleBtn.textContent = suppressForeground ? 'Activé' : 'Désactivé';
+            toggleBtn.classList.toggle('active', suppressForeground);
+        }
+
+        // Load "all" topic subscription status from Firebase
+        try {
+            const allTopicRef = ref(database, `users/${userId}/subscribedToAll`);
+            const snapshot = await get(allTopicRef);
+            const subscribedToAll = snapshot.val() === true;
+
+            const allTopicToggleBtn = document.getElementById('toggle-all-topic');
+            if (allTopicToggleBtn) {
+                allTopicToggleBtn.textContent = subscribedToAll ? 'Activé' : 'Désactivé';
+                allTopicToggleBtn.classList.toggle('active', subscribedToAll);
+            }
+        } catch (error) {
+            console.error('Erreur chargement préférence "all" topic:', error);
+        }
     }
 }
 
@@ -1048,13 +1128,78 @@ function attachEventListeners() {
         });
     });
 
-    // Close 
+    // Close
     document.querySelectorAll('.modal-overlay').forEach(modal => {
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 modal.style.display = 'none';
             }
         });
+    });
+
+    // Settings - Suppress foreground notifications toggle
+    document.getElementById('toggle-suppress-foreground')?.addEventListener('click', () => {
+        if (!app.user) {
+            alert('Connectez-vous pour modifier ce paramètre');
+            return;
+        }
+
+        const userId = app.user.uid;
+        const suppressForegroundKey = `suppressForegroundNotif_${userId}`;
+        const currentValue = localStorage.getItem(suppressForegroundKey) === 'true';
+        const newValue = !currentValue;
+
+        // Save preference
+        localStorage.setItem(suppressForegroundKey, newValue.toString());
+
+        // Update UI
+        const toggleBtn = document.getElementById('toggle-suppress-foreground');
+        toggleBtn.textContent = newValue ? 'Activé' : 'Désactivé';
+        toggleBtn.classList.toggle('active', newValue);
+
+        console.log(`✅ Paramètre mis à jour: Masquer notifications foreground = ${newValue}`);
+    });
+
+    // Settings - "All" topic subscription toggle
+    document.getElementById('toggle-all-topic')?.addEventListener('click', async () => {
+        if (!app.user) {
+            alert('Connectez-vous pour modifier ce paramètre');
+            return;
+        }
+
+        const userId = app.user.uid;
+        const toggleBtn = document.getElementById('toggle-all-topic');
+        const currentValue = toggleBtn.classList.contains('active');
+        const newValue = !currentValue;
+
+        try {
+            if (newValue) {
+                // Subscribe to "all" topic
+                const result = await subscribeToAllTopic(userId);
+                if (result.success) {
+                    toggleBtn.textContent = 'Activé';
+                    toggleBtn.classList.add('active');
+                    alert('✅ Vous êtes maintenant abonné aux alertes nationales. Vous recevrez des notifications pour toute la Côte d\'Ivoire.');
+                    console.log('✅ Abonné au topic "all"');
+                } else {
+                    alert('Erreur lors de l\'abonnement: ' + result.error);
+                }
+            } else {
+                // Unsubscribe from "all" topic
+                const result = await unsubscribeFromAllTopic(userId);
+                if (result.success) {
+                    toggleBtn.textContent = 'Désactivé';
+                    toggleBtn.classList.remove('active');
+                    alert('✅ Vous ne recevrez plus que les alertes de votre zone.');
+                    console.log('✅ Désabonné du topic "all"');
+                } else {
+                    alert('Erreur lors du désabonnement: ' + result.error);
+                }
+            }
+        } catch (error) {
+            console.error('Erreur toggle topic "all":', error);
+            alert('Erreur: ' + error.message);
+        }
     });
 }
 

@@ -1,4 +1,5 @@
 const { onValueCreated, onValueWritten } = require('firebase-functions/v2/database');
+const { onSchedule } = require('firebase-functions/v2/scheduler');
 const admin = require('firebase-admin');
 
 admin.initializeApp();
@@ -262,6 +263,75 @@ exports.subscribeToAllTopic = onValueWritten(
             return { success: true };
         } catch (error) {
             console.error('❌ Erreur abonnement topic:', error);
+            return null;
+        }
+    }
+);
+
+// ========================================
+// FUNCTION 4: Auto-delete expired obstacles (runs every 15 minutes)
+// ========================================
+exports.cleanupExpiredObstacles = onSchedule(
+    {
+        schedule: 'every 15 minutes',
+        timeZone: 'Africa/Abidjan'
+    },
+    async (event) => {
+        console.log('🧹 Démarrage nettoyage des obstacles expirés...');
+
+        try {
+            const now = Date.now();
+            const obstaclesSnapshot = await admin.database().ref('obstacles').once('value');
+            const obstacles = obstaclesSnapshot.val();
+
+            if (!obstacles) {
+                console.log('ℹ️ Aucun obstacle à vérifier');
+                return null;
+            }
+
+            let expiredCount = 0;
+            let resolvedCount = 0;
+
+            // Check each obstacle
+            for (const obstacleId in obstacles) {
+                const obstacle = obstacles[obstacleId];
+
+                // Skip if already inactive
+                if (obstacle.active === false) {
+                    continue;
+                }
+
+                // Check if expired by time
+                if (obstacle.expiresAt && now >= obstacle.expiresAt) {
+                    console.log(`⏰ Obstacle expiré (temps): ${obstacleId}`);
+                    await admin.database().ref(`obstacles/${obstacleId}`).update({
+                        active: false,
+                        deletedReason: 'expired',
+                        deletedAt: now
+                    });
+                    expiredCount++;
+                }
+
+                // Check if resolved by community (resolvedCount >= 5)
+                if (obstacle.resolvedCount && obstacle.resolvedCount >= 5) {
+                    console.log(`✅ Obstacle résolu (communauté): ${obstacleId} (${obstacle.resolvedCount} résolutions)`);
+                    await admin.database().ref(`obstacles/${obstacleId}`).update({
+                        active: false,
+                        deletedReason: 'resolved',
+                        deletedAt: now
+                    });
+                    resolvedCount++;
+                }
+            }
+
+            console.log(`✅ Nettoyage terminé: ${expiredCount} expirés, ${resolvedCount} résolus`);
+            return {
+                success: true,
+                expired: expiredCount,
+                resolved: resolvedCount
+            };
+        } catch (error) {
+            console.error('❌ Erreur nettoyage obstacles:', error);
             return null;
         }
     }
