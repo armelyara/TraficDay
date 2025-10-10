@@ -81,7 +81,10 @@ const app = {
     userMarker: null,
     obstacleMarkers: {},
     trafficLayer: null,  // Mapbox traffic overlay
-    dangerCircles: {}    // Circles around point obstacles
+    dangerCircles: {},    // Circles around point obstacles
+    trafficPolylines: {},  // Polylines for traffic jams
+    previousDangerZones: new Set(),  // Track which danger zones user was in
+    lastProximityNotification: 0  // Timestamp of last notification (rate limiting)
 };
 
 // Constantes
@@ -469,15 +472,32 @@ function renderObstacles() {
     });
     app.dangerCircles = {};
 
+    // Delete existing traffic polylines
+    Object.values(app.trafficPolylines).forEach(trafficObj => {
+        app.map.removeLayer(trafficObj.polyline);
+        app.map.removeLayer(trafficObj.marker);
+    });
+    app.trafficPolylines = {};
+
     // Filter to show only primary obstacles (hide duplicates)
     const primaryObstacles = app.obstacles.filter(obs => obs.isPrimary !== false);
 
     console.log(`📍 Rendering ${primaryObstacles.length} primary obstacles (${app.obstacles.length} total)`);
 
-    // Add markers for each primary obstacle with combined count
-    primaryObstacles.forEach(obstacle => {
+    // Separate traffic jams from point obstacles
+    const trafficObstacles = primaryObstacles.filter(obs => obs.type === 'traffic');
+    const pointObstacles = primaryObstacles.filter(obs => obs.type !== 'traffic');
+
+    // Render point obstacles as markers
+    pointObstacles.forEach(obstacle => {
         const totalCount = calculateObstacleTotalCount(obstacle);
         createObstacleMarker(obstacle, totalCount);
+    });
+
+    // Render traffic jams as polylines
+    trafficObstacles.forEach(obstacle => {
+        const totalCount = calculateObstacleTotalCount(obstacle);
+        createTrafficPolyline(obstacle, totalCount);
     });
 }
 
@@ -578,6 +598,70 @@ function createObstacleMarker(obstacle, totalCount) {
 
     app.obstacleMarkers[obstacle.id] = marker;
     return marker;
+}
+
+// Create polyline for traffic jam obstacles
+function createTrafficPolyline(obstacle, totalCount) {
+    const color = '#fbbf24'; // Yellow for traffic
+
+    // For now, create a simple line segment around the reported location
+    // In the future, this will use start/end points from user drawing
+    // Create a short line segment (approx 200m) to represent traffic jam
+    const SEGMENT_LENGTH_KM = 0.2; // 200m
+    const latOffset = SEGMENT_LENGTH_KM / 111; // Approximate degrees per km
+
+    // Create a horizontal line centered on the obstacle location
+    const startLat = obstacle.lat;
+    const startLng = obstacle.lng - (latOffset / 2);
+    const endLat = obstacle.lat;
+    const endLng = obstacle.lng + (latOffset / 2);
+
+    // Create the polyline
+    const polyline = L.polyline(
+        [[startLat, startLng], [endLat, endLng]],
+        {
+            color: color,
+            weight: 8,  // Thick line to be visible
+            opacity: 0.8,
+            lineJoin: 'round',
+            lineCap: 'round'
+        }
+    ).addTo(app.map);
+
+    // Add a marker at the center to show count and allow interaction
+    const centerMarker = L.marker([obstacle.lat, obstacle.lng], {
+        icon: L.divIcon({
+            className: 'traffic-count-marker',
+            html: `
+                <div style="
+                    background: ${color};
+                    color: #1f2937;
+                    border-radius: 12px;
+                    padding: 4px 8px;
+                    font-size: 12px;
+                    font-weight: bold;
+                    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+                    border: 2px solid white;
+                    white-space: nowrap;
+                ">${totalCount} 🚗</div>
+            `,
+            iconSize: [40, 20],
+            iconAnchor: [20, 10]
+        })
+    }).addTo(app.map);
+
+    // Handle click on both polyline and marker
+    const handleClick = () => showObstacleDetails(obstacle);
+    polyline.on('click', handleClick);
+    centerMarker.on('click', handleClick);
+
+    // Store both polyline and marker for cleanup
+    app.trafficPolylines[obstacle.id] = {
+        polyline: polyline,
+        marker: centerMarker
+    };
+
+    return polyline;
 }
 
 function getObstacleIcon(type) {
@@ -753,6 +837,8 @@ function updateAlertsList() {
 function calculateDangerLevel() {
     if (!app.userLocation || app.obstacles.length === 0) {
         updateDangerLevel('safe');
+        // Clear danger zones when no obstacles
+        app.previousDangerZones.clear();
         return;
     }
 
@@ -762,6 +848,7 @@ function calculateDangerLevel() {
 
     let maxSeverity = 'safe';
     let closestObstacleType = null;
+    const currentDangerZones = new Set();
 
     app.obstacles.forEach(obstacle => {
         const distance = calculateDistance(
@@ -778,6 +865,15 @@ function calculateDangerLevel() {
             // Too close (< 500m) - stick to critical
             currentSeverity = 'critical';
             closestObstacleType = obstacle.type;
+
+            // Track zone entry for proximity notification
+            const zoneKey = `${obstacle.id}_critical`;
+            currentDangerZones.add(zoneKey);
+
+            // Check if this is a NEW zone entry
+            if (!app.previousDangerZones.has(zoneKey)) {
+                sendProximityNotification(obstacle, 'critical', distance);
+            }
         } else if (distance <= HIGH_RADIUS) {
             // Close (< 2km) - Use obstacle severity
             if (obstacle.severity === 'critical') {
@@ -788,10 +884,23 @@ function calculateDangerLevel() {
                 currentSeverity = 'medium';
             }
             if (!closestObstacleType) closestObstacleType = obstacle.type;
+
+            // Track zone entry for proximity notification
+            const zoneKey = `${obstacle.id}_high`;
+            currentDangerZones.add(zoneKey);
+
+            // Check if this is a NEW zone entry
+            if (!app.previousDangerZones.has(zoneKey)) {
+                sendProximityNotification(obstacle, 'high', distance);
+            }
         } else if (distance <= MEDIUM_RADIUS) {
             // Low (< 5km) - low severity
             currentSeverity = 'low';
             if (!closestObstacleType) closestObstacleType = obstacle.type;
+
+            // Track zone entry (but don't notify for low severity)
+            const zoneKey = `${obstacle.id}_medium`;
+            currentDangerZones.add(zoneKey);
         }
 
         //Update max severity
@@ -801,7 +910,78 @@ function calculateDangerLevel() {
         }
     });
 
+    // Update tracked zones
+    app.previousDangerZones = currentDangerZones;
+
     updateDangerLevel(maxSeverity, closestObstacleType);
+}
+
+// Send proximity notification when entering danger zone
+async function sendProximityNotification(obstacle, severity, distance) {
+    // Rate limiting: Prevent notification spam (max 1 per 30 seconds)
+    const now = Date.now();
+    const NOTIFICATION_COOLDOWN = 30000; // 30 seconds
+
+    if (now - app.lastProximityNotification < NOTIFICATION_COOLDOWN) {
+        console.log('⏭️ Proximity notification rate limited');
+        return;
+    }
+
+    app.lastProximityNotification = now;
+
+    const distanceText = distance < 1
+        ? `${Math.round(distance * 1000)}m`
+        : `${distance.toFixed(1)}km`;
+
+    const severityLabels = {
+        critical: '🔴 DANGER CRITIQUE',
+        high: '🟠 DANGER ÉLEVÉ'
+    };
+
+    const title = severityLabels[severity] || '⚠️ ALERTE';
+    const obstacleLabel = getObstacleLabel(obstacle.type);
+    const body = `${obstacleLabel} à ${distanceText} de votre position`;
+
+    console.log(`🚨 Sending proximity notification: ${title} - ${body}`);
+
+    // Check if app is in foreground
+    const isAppInForeground = !document.hidden && document.visibilityState === 'visible';
+
+    // If app is open, show browser notification only (no FCM push)
+    if (isAppInForeground) {
+        // Check if user wants to suppress foreground notifications
+        const userId = app.user?.uid;
+        const suppressForegroundKey = `suppressForegroundNotif_${userId}`;
+        const suppressForeground = localStorage.getItem(suppressForegroundKey) === 'true';
+
+        if (!suppressForeground && 'Notification' in window && Notification.permission === 'granted') {
+            // Show browser notification
+            const notification = new Notification(title, {
+                body: body,
+                icon: '/icon-192.png',
+                badge: '/icon-192.png',
+                tag: `proximity_${obstacle.id}`,
+                requireInteraction: false,
+                vibrate: [200, 100, 200]
+            });
+
+            // Handle notification click
+            notification.onclick = () => {
+                window.focus();
+                if (app.map && obstacle.lat && obstacle.lng) {
+                    app.map.setView([obstacle.lat, obstacle.lng], 16);
+                    showObstacleDetails(obstacle);
+                }
+                notification.close();
+            };
+
+            console.log('✅ Browser notification shown (foreground)');
+        }
+    }
+
+    // Always send FCM push notification (works in background)
+    // The service worker will handle it when app is closed
+    // No action needed here - FCM handles background notifications automatically
 }
 
 function updateDangerLevel(level, obstacleType = null) {
