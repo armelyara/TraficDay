@@ -9,8 +9,13 @@ import {
     confirmObstacle,
     createUserProfile,
     saveUserLocation,
-    subscribeToLocationTopic
+    subscribeToLocationTopic,
+    saveNotificationToken,
+    messaging
 } from './firebase-config.js';
+
+// Import getToken from Firebase messaging
+import { getToken } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js';
 
 // Security: HTML escaping function to prevent XSS
 function escapeHtml(text) {
@@ -437,13 +442,43 @@ function renderObstacles() {
     });
     app.obstacleMarkers = {};
 
-    // Add markers for each obstacle
-    app.obstacles.forEach(obstacle => {
-        createObstacleMarker(obstacle);
+    // Filter to show only primary obstacles (hide duplicates)
+    const primaryObstacles = app.obstacles.filter(obs => obs.isPrimary !== false);
+
+    console.log(`📍 Rendering ${primaryObstacles.length} primary obstacles (${app.obstacles.length} total)`);
+
+    // Add markers for each primary obstacle with combined count
+    primaryObstacles.forEach(obstacle => {
+        const totalCount = calculateObstacleTotalCount(obstacle);
+        createObstacleMarker(obstacle, totalCount);
     });
 }
 
-function createObstacleMarker(obstacle) {
+// Calculate total count: alerts + manual confirmations
+function calculateObstacleTotalCount(obstacle) {
+    // Start with primary obstacle count (1)
+    let alertCount = 1;
+
+    // Add linked obstacles (duplicates reported by other users)
+    if (obstacle.linkedObstacles) {
+        alertCount += Object.keys(obstacle.linkedObstacles).length;
+    }
+
+    // Count total confirmations
+    const totalConfirmations = obstacle.confirmedBy ? Object.keys(obstacle.confirmedBy).length : 1;
+
+    // Manual confirmations = total confirmations - alert reports
+    const manualConfirmations = Math.max(0, totalConfirmations - alertCount);
+
+    // Total = alerts + manual confirmations
+    const totalCount = alertCount + manualConfirmations;
+
+    console.log(`📊 Obstacle ${obstacle.id}: ${alertCount} alerts + ${manualConfirmations} manual = ${totalCount} total`);
+
+    return totalCount;
+}
+
+function createObstacleMarker(obstacle, totalCount) {
     const colors = {
         flood: '#3b82f6',
         protest: '#f97316',
@@ -454,6 +489,7 @@ function createObstacleMarker(obstacle) {
 
     const color = colors[obstacle.type] || colors.traffic;
     const icon = getObstacleIcon(obstacle.type);
+    const displayCount = totalCount || obstacle.reports || 1;
 
     const marker = L.marker([obstacle.lat, obstacle.lng], {
         icon: L.divIcon({
@@ -483,7 +519,7 @@ function createObstacleMarker(obstacle) {
                         padding: 2px 6px;
                         font-size: 10px;
                         font-weight: bold;
-                    ">${obstacle.reports}</div>
+                    ">${displayCount}</div>
                 </div>
             `,
             iconSize: [40, 40],
@@ -774,20 +810,64 @@ function adjustBrightness(color, percent) {
 // Notification push
 
 async function requestNotificationPermission() {
+    // Step 1: Check browser support
     if (!('Notification' in window)) {
-        console.log('Notifications non supportées');
+        console.log('❌ Notifications non supportées');
+        alert('Votre navigateur ne supporte pas les notifications');
         return;
     }
 
+    // Step 2: Check user authentication
+    if (!app.user) {
+        alert('Connectez-vous pour activer les notifications');
+        return;
+    }
+
+    // Step 3: Request browser permission
     const permission = await Notification.requestPermission();
     app.notificationsEnabled = permission === 'granted';
 
     if (permission === 'granted') {
-        console.log('Notifications activées');
-        document.getElementById('btn-notifications').classList.add('active');
-    } else {
-        console.log('Notifications refusées');
+        console.log('✅ Permission accordée');
+
+        try {
+            // Step 4: Wait for Service Worker to be ready
+            if ('serviceWorker' in navigator) {
+                const registration = await navigator.serviceWorker.ready;
+                console.log('✅ Service Worker prêt');
+            }
+
+            // Step 5: Get FCM token from Firebase
+            const token = await getToken(messaging, {
+                vapidKey: 'BIL4dNbV90yM_ulonvJibpWlbV7IOOHyeE2JFgHJnf48Qqzr3kUaai0MxoR2byoO5n4Wpy6I4sd5SuezQ3eTrbU'
+            });
+
+            if (token) {
+                console.log('✅ Token FCM obtenu:', token.substring(0, 20) + '...');
+
+                // Step 6: Save token to database
+                await saveNotificationToken(app.user.uid, token);
+
+                // Step 7: Update UI
+                document.getElementById('btn-notifications').classList.add('active');
+                alert('✅ Notifications activées! Vous recevrez des alertes pour les obstacles dans un rayon de 1,6 km.');
+
+            } else {
+                console.error('❌ Impossible d\'obtenir le token FCM');
+                alert('Erreur: Impossible d\'activer les notifications');
+                document.getElementById('btn-notifications').classList.remove('active');
+            }
+
+        } catch (error) {
+            console.error('❌ Erreur FCM:', error);
+            alert('Erreur: ' + error.message);
+            document.getElementById('btn-notifications').classList.remove('active');
+        }
+
+    } else if (permission === 'denied') {
+        console.log('❌ Permission refusée');
         document.getElementById('btn-notifications').classList.remove('active');
+        alert('Vous avez refusé les notifications. Pour les activer, modifiez les paramètres de votre navigateur.');
     }
 }
 

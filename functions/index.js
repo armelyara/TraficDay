@@ -148,10 +148,11 @@ exports.checkForDuplicateAlerts = onValueCreated(
                 return null;
             }
 
-            const DUPLICATE_RADIUS = 0.05; // 50m
-            let foundSimilar = false;
+            const DUPLICATE_RADIUS = 0.05; // 50m (approximately)
+            let primaryObstacleId = null;
+            let minDistance = Infinity;
 
-            // Check for similar obstacles
+            // Find closest similar obstacle (potential primary)
             Object.keys(obstacles).forEach(oid => {
                 if (oid === obstacleId) return; // Skip self
 
@@ -166,17 +167,66 @@ exports.checkForDuplicateAlerts = onValueCreated(
                         obstacle.lng
                     );
 
-                    if (distance <= DUPLICATE_RADIUS) {
-                        console.log('✅ Obstacle similaire trouvé:', oid, `(${(distance * 1000).toFixed(0)}m)`);
-                        foundSimilar = true;
+                    if (distance <= DUPLICATE_RADIUS && distance < minDistance) {
+                        // Found a closer primary obstacle
+                        if (obstacle.isPrimary !== false) {
+                            primaryObstacleId = oid;
+                            minDistance = distance;
+                        }
                     }
                 }
             });
 
-            console.log('📊 Total obstacles:', Object.keys(obstacles).length);
-            console.log('🎯 Similaires trouvés:', foundSimilar ? 'Oui' : 'Non');
+            // If duplicate found, link it to primary
+            if (primaryObstacleId) {
+                console.log('✅ Duplicate détecté! Lien vers obstacle primaire:', primaryObstacleId, `(${(minDistance * 1000).toFixed(0)}m)`);
 
-            return { checked: true, foundSimilar };
+                // Mark new obstacle as duplicate
+                await admin.database().ref(`obstacles/${obstacleId}`).update({
+                    isPrimary: false,
+                    linkedTo: primaryObstacleId
+                });
+
+                // Link to primary obstacle
+                await admin.database().ref(`obstacles/${primaryObstacleId}/linkedObstacles/${obstacleId}`).set(true);
+
+                // Add reporter to primary obstacle's confirmedBy
+                if (newObstacle.userId) {
+                    await admin.database().ref(`obstacles/${primaryObstacleId}/confirmedBy/${newObstacle.userId}`).set(true);
+                    console.log('✅ Utilisateur ajouté aux confirmations:', newObstacle.userId);
+                }
+
+                // Check if threshold reached for notification
+                const primarySnapshot = await admin.database().ref(`obstacles/${primaryObstacleId}`).once('value');
+                const primaryObstacle = primarySnapshot.val();
+                const totalConfirmations = primaryObstacle.confirmedBy ? Object.keys(primaryObstacle.confirmedBy).length : 0;
+                const totalLinked = primaryObstacle.linkedObstacles ? Object.keys(primaryObstacle.linkedObstacles).length : 0;
+
+                console.log(`📊 Obstacle primaire: ${totalConfirmations} confirmations, ${totalLinked} obstacles liés`);
+
+                // Trigger notification if threshold reached (2 reports)
+                if (totalConfirmations >= 2 && !primaryObstacle.notificationSent) {
+                    console.log('🔔 Seuil atteint! Création de la notification...');
+
+                    await admin.database().ref(`notifications/${primaryObstacleId}`).set({
+                        obstacleId: primaryObstacleId,
+                        type: primaryObstacle.type,
+                        lat: primaryObstacle.lat,
+                        lng: primaryObstacle.lng,
+                        description: primaryObstacle.description,
+                        reports: totalConfirmations,
+                        timestamp: Date.now()
+                    });
+
+                    // Mark as notification sent
+                    await admin.database().ref(`obstacles/${primaryObstacleId}/notificationSent`).set(true);
+                }
+
+                return { checked: true, isDuplicate: true, linkedTo: primaryObstacleId };
+            } else {
+                console.log('ℹ️ Pas de duplicate trouvé - obstacle primaire');
+                return { checked: true, isDuplicate: false };
+            }
         } catch (error) {
             console.error('❌ Erreur vérification duplicata:', error);
             return null;
