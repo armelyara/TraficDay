@@ -1,4 +1,4 @@
-# TraficDay 🚦
+# TraficDay
 
 **Sécurité routière en temps réel pour la Côte d'Ivoire**
 
