@@ -876,14 +876,16 @@ async function requestNotificationPermission() {
 
         try {
             // Step 4: Wait for Service Worker to be ready
+            let registration = null;
             if ('serviceWorker' in navigator) {
-                const registration = await navigator.serviceWorker.ready;
-                console.log('✅ Service Worker prêt');
+                registration = await navigator.serviceWorker.ready;
+                console.log('✅ Service Worker prêt:', registration.active?.scriptURL);
             }
 
             // Step 5: Get FCM token from Firebase
             const token = await getToken(messaging, {
-                vapidKey: 'BIL4dNbV90yM_ulonvJibpWlbV7IOOHyeE2JFgHJnf48Qqzr3kUaai0MxoR2byoO5n4Wpy6I4sd5SuezQ3eTrbU'
+                vapidKey: 'BIL4dNbV90yM_ulonvJibpWlbV7IOOHyeE2JFgHJnf48Qqzr3kUaai0MxoR2byoO5n4Wpy6I4sd5SuezQ3eTrbU',
+                serviceWorkerRegistration: registration  // ✅ Use our custom service-worker.js
             });
 
             if (token) {
