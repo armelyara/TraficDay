@@ -202,6 +202,10 @@ exports.checkForDuplicateAlerts = onValueCreated(
                 const totalConfirmations = primaryObstacle.confirmedBy ? Object.keys(primaryObstacle.confirmedBy).length : 0;
                 const totalLinked = primaryObstacle.linkedObstacles ? Object.keys(primaryObstacle.linkedObstacles).length : 0;
 
+                // Update confirmations count to match confirmedBy
+                await admin.database().ref(`obstacles/${primaryObstacleId}/confirmations`).set(totalConfirmations);
+                console.log(`✅ Confirmations count updated: ${totalConfirmations}`);
+
                 console.log(`📊 Obstacle primaire: ${totalConfirmations} confirmations, ${totalLinked} obstacles liés`);
 
                 // Trigger notification if threshold reached (2 reports)
