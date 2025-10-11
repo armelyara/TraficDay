@@ -18,7 +18,7 @@ import {
     messaging
 } from './firebase-config.js';
 
-import { ref, get } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js';
+import { ref, get, push, set } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js';
 
 // Import getToken from Firebase messaging
 import { getToken } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js';
@@ -968,11 +968,26 @@ async function sendProximityNotification(obstacle, severity, distance) {
 
             console.log('✅ Browser notification shown (foreground)');
         }
+    } else {
+        // App is in background - Send FCM push notification via Cloud Function
+        if (app.user) {
+            try {
+                // Create proximity alert record in database
+                // This triggers the Cloud Function sendProximityNotification
+                const alertRef = database.ref(`proximityAlerts/${app.user.uid}`).push();
+                await alertRef.set({
+                    obstacleId: obstacle.id,
+                    obstacleType: obstacle.type,
+                    severity: severity,
+                    distance: distance,
+                    timestamp: Date.now()
+                });
+                console.log('✅ Proximity alert created in database for FCM push');
+            } catch (error) {
+                console.error('❌ Error creating proximity alert:', error);
+            }
+        }
     }
-
-    // Always send FCM push notification (works in background)
-    // The service worker will handle it when app is closed
-    // No action needed here - FCM handles background notifications automatically
 }
 
 function updateDangerLevel(level, obstacleType = null) {

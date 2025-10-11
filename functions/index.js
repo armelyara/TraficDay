@@ -269,7 +269,80 @@ exports.subscribeToAllTopic = onValueWritten(
 );
 
 // ========================================
-// FUNCTION 4: Auto-delete expired obstacles (runs every 15 minutes)
+// FUNCTION 4: Send proximity notification when user enters danger zone
+// Triggered when a record is created in /proximityAlerts/{userId}/{alertId}
+// ========================================
+exports.sendProximityNotification = onValueCreated(
+    '/proximityAlerts/{userId}/{alertId}',
+    async (event) => {
+        const snapshot = event.data;
+        const { userId, alertId } = event.params;
+        const alert = snapshot.val();
+        const { obstacleId, obstacleType, severity, distance } = alert;
+
+        console.log('🚨 Proximity alert triggered for user:', userId);
+
+        try {
+            // Get user's FCM token
+            const userSnapshot = await admin.database().ref(`users/${userId}`).once('value');
+            const user = userSnapshot.val();
+
+            if (!user || !user.notificationToken) {
+                console.log('⚠️ User has no FCM token');
+                // Clean up the alert record
+                await admin.database().ref(`proximityAlerts/${userId}/${alertId}`).remove();
+                return null;
+            }
+
+            const token = user.notificationToken;
+
+            // Format distance
+            const distanceText = distance < 1
+                ? `${Math.round(distance * 1000)}m`
+                : `${distance.toFixed(1)}km`;
+
+            const severityLabels = {
+                critical: '🔴 DANGER CRITIQUE',
+                high: '🟠 DANGER ÉLEVÉ'
+            };
+
+            const title = severityLabels[severity] || '⚠️ ALERTE';
+            const body = `${obstacleLabels[obstacleType]} à ${distanceText} de votre position`;
+
+            // Send FCM notification
+            const message = {
+                notification: {
+                    title: title,
+                    body: body
+                },
+                data: {
+                    type: 'proximity',
+                    obstacleId: obstacleId,
+                    obstacleType: obstacleType,
+                    severity: severity,
+                    distance: distance.toString()
+                },
+                token: token
+            };
+
+            await admin.messaging().send(message);
+            console.log('✅ Proximity notification sent to user:', userId);
+
+            // Clean up the alert record (it's processed)
+            await admin.database().ref(`proximityAlerts/${userId}/${alertId}`).remove();
+
+            return { success: true };
+        } catch (error) {
+            console.error('❌ Erreur proximity notification:', error);
+            // Clean up the alert record even on error
+            await admin.database().ref(`proximityAlerts/${userId}/${alertId}`).remove();
+            return null;
+        }
+    }
+);
+
+// ========================================
+// FUNCTION 5: Auto-delete expired obstacles (runs every 15 minutes)
 // ========================================
 exports.cleanupExpiredObstacles = onSchedule(
     {
