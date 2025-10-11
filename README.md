@@ -27,8 +27,8 @@ TraficDay est une application web progressive (PWA) qui permet aux usagers de la
 - **Zone sûre** 🟢 - Aucun danger signalé (Green)
 - **Attention requise** ⚠️ - Obstacles mineurs à 5km (Triangle jaune)
 - **Vigilance absolue** 🟡 - Obstacles modérés à 2km (Jaune)
-- **Zone critique** 🟠 - Vigilance accrue à 1km (Orange)
-- **Zone de danger** 🔴 - Zone dangereuse (Rouge)
+- **Zone critique** 🟠 - Vigilance accrue - 1km (Orange)
+- **Danger** 🔴 - Zone dangereuse (Rouge)
 
 ## Technologies Utilisées
 

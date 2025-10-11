@@ -90,33 +90,33 @@ const app = {
 const DANGER_LEVELS = {
     safe: {
         class: 'safe',
-        icon: '',
+        icon: '🟢',
         label: 'Zone sûre',
         description: 'Aucun danger signalé'
     },
     low: {
         class: 'low',
-        icon: '🟢',
-        label: 'Vigilance normale',
-        description: 'Quelques obstacles mineurs'
+        icon: '⚠️',
+        label: 'Attention requise',
+        description: 'obstacles mineurs'
     },
     medium: {
         class: 'medium',
         icon: '🟡',
-        label: 'Attention requise',
+        label: 'Vigilance absolue',
         description: 'Obstacles modérés dans la zone'
     },
     high: {
         class: 'high',
         icon: '🟠',
-        label: 'Danger élevé',
+        label: 'Zone critique',
         description: 'Vigilance accrue requise'
     },
     critical: {
         class: 'critical',
         icon: '🔴',
-        label: 'DANGER CRITIQUE',
-        description: 'Zone dangereuse - Évitez si possible'
+        label: 'DANGER',
+        description: 'Zone dangereuse - Veuillez sortir de la zone immédiatement'
     }
 };
 
