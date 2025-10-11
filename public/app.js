@@ -115,7 +115,7 @@ const DANGER_LEVELS = {
     critical: {
         class: 'critical',
         icon: '🔴',
-        label: 'DANGER',
+        label: 'Danger',
         description: 'Zone dangereuse - Veuillez sortir de la zone immédiatement'
     }
 };
