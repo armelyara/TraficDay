@@ -1478,6 +1478,32 @@ window.addEventListener('adminNotification', (event) => {
     }
 });
 
+// Listen for Service Worker messages (notification clicks)
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('message', (event) => {
+        console.log('📩 Message from Service Worker:', event.data);
+
+        if (event.data && event.data.type === 'notificationClick') {
+            const { notificationType, obstacleId } = event.data;
+
+            console.log(`🖱️ Notification clicked: ${notificationType}`);
+
+            // Handle different notification types
+            if (notificationType === 'admin') {
+                // Admin notification clicked - just focus the app
+                console.log('📢 Admin notification clicked');
+                // App is already focused by Service Worker
+            } else if (notificationType === 'obstacle' || notificationType === 'proximity') {
+                // Obstacle/Proximity notification - zoom to obstacle
+                if (obstacleId && window.zoomToObstacle) {
+                    console.log('🗺️ Zooming to obstacle:', obstacleId);
+                    window.zoomToObstacle(obstacleId);
+                }
+            }
+        }
+    });
+}
+
 // Page visibilty change event
 // Prevent reload when returning to app (fix for Samsung Galaxy)
 document.addEventListener('visibilitychange', () => {

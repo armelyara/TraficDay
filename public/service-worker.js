@@ -152,6 +152,7 @@ self.addEventListener('fetch', (event) => {
 // ============================================
 self.addEventListener('notificationclick', (event) => {
     console.log('[SW] Notification cliquée:', event);
+    console.log('[SW] Notification data:', event.notification.data);
 
     event.notification.close();
 
@@ -159,16 +160,32 @@ self.addEventListener('notificationclick', (event) => {
         return;
     }
 
+    const notificationType = event.notification.data?.type;
+    const obstacleId = event.notification.data?.obstacleId;
+
     event.waitUntil(
         clients.matchAll({ type: 'window', includeUncontrolled: true })
             .then((clientList) => {
+                // Try to focus existing window
                 for (let i = 0; i < clientList.length; i++) {
                     const client = clientList[i];
                     if (client.url.includes(self.registration.scope) && 'focus' in client) {
+                        console.log('[SW] Focusing existing window');
+
+                        // Send message to app about notification click
+                        client.postMessage({
+                            type: 'notificationClick',
+                            notificationType: notificationType,
+                            obstacleId: obstacleId
+                        });
+
                         return client.focus();
                     }
                 }
+
+                // No existing window, open new one
                 if (clients.openWindow) {
+                    console.log('[SW] Opening new window');
                     return clients.openWindow('/');
                 }
             })
