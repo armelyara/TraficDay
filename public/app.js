@@ -225,6 +225,13 @@ function initMap() {
     console.log('✅ Google Map initialisée');
     console.log('✅ Google Maps traffic layer ajouté');
 
+    // Apply pending user position if available
+    if (app.pendingUserPosition) {
+        console.log('✅ Applying pending user position:', app.pendingUserPosition);
+        updateUserMarker(app.pendingUserPosition.lat, app.pendingUserPosition.lng);
+        app.pendingUserPosition = null; // Clear pending position
+    }
+
     // Handle window resize
     window.addEventListener('resize', () => {
         if (app.map) {
@@ -235,25 +242,42 @@ function initMap() {
 }
 
 function updateUserMarker(lat, lng) {
+    // Guard check: Don't execute if Google Maps not loaded yet
+    if (typeof google === 'undefined' || !google.maps || !app.map) {
+        console.log('⏳ Waiting for Google Maps to load before updating user marker...');
+        // Store position for later
+        app.pendingUserPosition = { lat, lng };
+        return;
+    }
+
     const position = { lat, lng };
 
     if (app.userMarker) {
-        app.userMarker.setPosition(position);
+        // Update position of existing marker
+        app.userMarker.position = position;
     } else {
-        // Create a custom user marker
-        app.userMarker = new google.maps.Marker({
+        // Create custom HTML element for user marker
+        const markerDiv = document.createElement('div');
+        markerDiv.style.cssText = `
+            width: 20px;
+            height: 20px;
+            background: #43938A;
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        `;
+
+        // Create AdvancedMarkerElement with custom HTML
+        app.userMarker = new google.maps.marker.AdvancedMarkerElement({
             position: position,
             map: app.map,
-            icon: {
-                path: google.maps.SymbolPath.CIRCLE,
-                fillColor: '#43938A',
-                fillOpacity: 1,
-                strokeColor: '#ffffff',
-                strokeWeight: 3,
-                scale: 10
-            },
-            zIndex: 1000 // Always on top
+            content: markerDiv,
+            title: 'Votre position',
+            zIndex: 1000
         });
+
+        // Store reference to the marker div for color updates
+        app.userMarkerDiv = markerDiv;
     }
 
     // Center the map on the user location if authenticated
@@ -1005,21 +1029,12 @@ function updateDangerLevel(level, obstacleType = null) {
         }
     }
 
-    // Update user marker color (Google Maps)
-    if (app.userMarker) {
+    // Update user marker color (Google Maps AdvancedMarkerElement)
+    if (app.userMarker && app.userMarkerDiv) {
         const markerColor = obstacleType ? obstacleColors[obstacleType] : levelColors[level];
 
-        // Update user marker color for Google Maps
-        app.userMarker.setOptions({
-            icon: {
-                path: google.maps.SymbolPath.CIRCLE,
-                fillColor: markerColor,
-                fillOpacity: 1,
-                strokeColor: '#ffffff',
-                strokeWeight: 3,
-                scale: 10
-            }
-        });
+        // Update the background color of the marker div
+        app.userMarkerDiv.style.background = markerColor;
     }
 }
 
