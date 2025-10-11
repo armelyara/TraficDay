@@ -213,6 +213,9 @@ function initMap() {
         maxZoom: 19,
         disableDefaultUI: false,
         zoomControl: true,
+        zoomControlOptions: {
+            position: google.maps.ControlPosition.LEFT_TOP // Move zoom to top-left
+        },
         mapTypeControl: false,
         streetViewControl: false,
         fullscreenControl: false,
