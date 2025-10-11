@@ -206,6 +206,7 @@ function initMap() {
 
     // Create Google Map centered on Abidjan, Côte d'Ivoire
     app.map = new google.maps.Map(document.getElementById('map'), {
+        mapId: 'TRAFICDAY_MAP', // Required for AdvancedMarkerElement
         center: { lat: 5.345317, lng: -4.024429 },
         zoom: 13,
         minZoom: 3,
