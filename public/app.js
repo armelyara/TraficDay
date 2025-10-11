@@ -23,6 +23,9 @@ import { ref, get } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-dat
 // Import getToken from Firebase messaging
 import { getToken } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js';
 
+// Import secure configuration
+import { getGoogleMapsApiKey } from './config.js';
+
 // Security: HTML escaping function to prevent XSS
 function escapeHtml(text) {
     if (!text) return '';
@@ -123,8 +126,8 @@ const DANGER_LEVELS = {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('TraficDay démarrage...');
 
-    // Initialize the map
-    initMap();
+    // Load Google Maps API securely (will call initMap when ready)
+    loadGoogleMapsAPI();
 
     // Check user authentication state
     checkUser();
@@ -157,6 +160,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // GOOGLE MAPS
+
+// Load Google Maps API dynamically with secure API key
+async function loadGoogleMapsAPI() {
+    try {
+        // Get API key from Firebase Remote Config
+        const apiKey = await getGoogleMapsApiKey();
+
+        // Create script element to load Google Maps
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=marker&callback=initGoogleMapsCallback`;
+        script.async = true;
+        script.defer = true;
+
+        // Add error handler
+        script.onerror = () => {
+            console.error('❌ Failed to load Google Maps API');
+            alert('Erreur: Impossible de charger Google Maps');
+        };
+
+        document.head.appendChild(script);
+        console.log('✅ Google Maps API script injected');
+    } catch (error) {
+        console.error('❌ Error loading Google Maps:', error);
+        alert('Erreur: Clé API Google Maps non configurée');
+    }
+}
 
 // Google Maps callback (called when API loads)
 window.initGoogleMapsCallback = function() {
