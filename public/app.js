@@ -80,11 +80,15 @@ const app = {
     map: null,
     userMarker: null,
     obstacleMarkers: {},
-    trafficLayer: null,  // Mapbox traffic overlay
+    trafficLayer: null,  // Google Maps traffic overlay
     dangerCircles: {},    // Circles around point obstacles
     previousDangerZones: new Set(),  // Track which danger zones user was in
-    lastProximityNotification: 0  // Timestamp of last notification (rate limiting)
+    lastProximityNotification: 0,  // Timestamp of last notification (rate limiting)
+    pendingUserPosition: null  // Store user position if map not ready yet
 };
+
+// Make app globally accessible for firebase-config.js
+window.app = app;
 
 // Constantes
 const DANGER_LEVELS = {
@@ -228,6 +232,12 @@ function initMap() {
 
     console.log('✅ Google Map initialisée');
     console.log('✅ Google Maps traffic layer ajouté');
+
+    // Render obstacles if they were already loaded before map was ready
+    if (app.obstacles && app.obstacles.length > 0) {
+        console.log('✅ Rendering pending obstacles:', app.obstacles.length);
+        renderObstacles();
+    }
 
     // Apply pending user position if available
     if (app.pendingUserPosition) {
@@ -443,7 +453,14 @@ function showUserPosition() {
 function loadObstacles() {
     firebaseListenToObstacles((obstacles) => {
         app.obstacles = obstacles;
-        renderObstacles();
+
+        // Only render if map is initialized, otherwise obstacles will be rendered when map loads
+        if (app.map) {
+            renderObstacles();
+        } else {
+            console.log('⏳ Map not ready yet, obstacles will render when map initializes');
+        }
+
         updateAlertsList();
         calculateDangerLevel();
         console.log('Obstacles chargés:', obstacles.length);
