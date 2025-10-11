@@ -23,9 +23,6 @@ import { ref, get } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-dat
 // Import getToken from Firebase messaging
 import { getToken } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js';
 
-// Import Mapbox configuration
-import { MAPBOX_CONFIG } from './mapbox-config.js';
-
 // Security: HTML escaping function to prevent XSS
 function escapeHtml(text) {
     if (!text) return '';
@@ -149,82 +146,91 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('loading-screen').style.display = 'none';
         document.getElementById('app').style.display = 'flex';
 
-        // Force map resize
-        if (app.map) {
+        // Force map resize (Google Maps handles resize automatically)
+        if (app.map && typeof google !== 'undefined') {
             setTimeout(() => {
-                app.map.invalidateSize();
+                google.maps.event.trigger(app.map, 'resize');
             }, 100);
         }
     }, 2000);
 });
 
 
-// CARTE LEAFLET
+// GOOGLE MAPS
+
+// Google Maps callback (called when API loads)
+window.initGoogleMapsCallback = function() {
+    console.log('✅ Google Maps API loaded');
+    // Trigger map initialization if DOM is ready
+    if (document.readyState === 'complete') {
+        initMap();
+    }
+};
 
 function initMap() {
-    // Check if Leaflet is loaded
-    if (typeof L === 'undefined') {
-        console.error('Leaflet non chargé');
+    // Check if Google Maps is loaded
+    if (typeof google === 'undefined' || typeof google.maps === 'undefined') {
+        console.error('Google Maps non chargé, attente...');
         setTimeout(initMap, 100);
         return;
     }
 
-    // Create the map centered on Abidjan, Côte d'Ivoire
-    app.map = L.map('map', {
-        zoomControl: true,
-        attributionControl: true
-    }).setView([5.345317, -4.024429], 13);
-
-    // Add OpenStreetMap tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
+    // Create Google Map centered on Abidjan, Côte d'Ivoire
+    app.map = new google.maps.Map(document.getElementById('map'), {
+        center: { lat: 5.345317, lng: -4.024429 },
+        zoom: 13,
+        minZoom: 3,
         maxZoom: 19,
-        minZoom: 3
-    }).addTo(app.map);
+        disableDefaultUI: false,
+        zoomControl: true,
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: false,
+        gestureHandling: 'greedy' // Better for mobile
+    });
 
-    // Add Mapbox real-time traffic overlay (semi-transparent)
-    app.trafficLayer = L.tileLayer(MAPBOX_CONFIG.trafficTileUrl, {
-        accessToken: MAPBOX_CONFIG.accessToken,
-        attribution: MAPBOX_CONFIG.options.attribution,
-        maxZoom: MAPBOX_CONFIG.options.maxZoom,
-        opacity: MAPBOX_CONFIG.options.opacity,
-        zIndex: 10  // Above base map, below markers
-    }).addTo(app.map);
+    // Add Google Maps Traffic Layer
+    app.trafficLayer = new google.maps.TrafficLayer();
+    app.trafficLayer.setMap(app.map);
 
-    console.log('✅ Carte Leaflet initialisée');
-    console.log('✅ Mapbox traffic layer ajouté');
-
-    // Force map resize after a short delay to fix display issues
-    setTimeout(() => {
-        app.map.invalidateSize();
-    }, 100);
+    console.log('✅ Google Map initialisée');
+    console.log('✅ Google Maps traffic layer ajouté');
 
     // Handle window resize
     window.addEventListener('resize', () => {
         if (app.map) {
-            app.map.invalidateSize();
+            // Google Maps handles resize automatically, but trigger if needed
+            google.maps.event.trigger(app.map, 'resize');
         }
     });
 }
 
 function updateUserMarker(lat, lng) {
+    const position = { lat, lng };
+
     if (app.userMarker) {
-        app.userMarker.setLatLng([lat, lng]);
+        app.userMarker.setPosition(position);
     } else {
-        // Create a custom user marker for areas without obstacles
-        app.userMarker = L.marker([lat, lng], {
-            icon: L.divIcon({
-                className: 'user-marker',
-                html: `<div style="background: #43938A; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3);"></div>`,
-                iconSize: [20, 20],
-                iconAnchor: [10, 10]
-            })
-        }).addTo(app.map);
+        // Create a custom user marker
+        app.userMarker = new google.maps.Marker({
+            position: position,
+            map: app.map,
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                fillColor: '#43938A',
+                fillOpacity: 1,
+                strokeColor: '#ffffff',
+                strokeWeight: 3,
+                scale: 10
+            },
+            zIndex: 1000 // Always on top
+        });
     }
 
     // Center the map on the user location if authenticated
     if (app.user) {
-        app.map.setView([lat, lng], 15);
+        app.map.setCenter(position);
+        app.map.setZoom(15);
     }
 }
 
@@ -459,15 +465,15 @@ function renderObstacles() {
         return;
     }
 
-    // Delete existing markers
+    // Delete existing markers (Google Maps)
     Object.values(app.obstacleMarkers).forEach(marker => {
-        app.map.removeLayer(marker);
+        marker.map = null; // Remove marker from map
     });
     app.obstacleMarkers = {};
 
-    // Delete existing circles
+    // Delete existing circles (Google Maps)
     Object.values(app.dangerCircles).forEach(circle => {
-        app.map.removeLayer(circle);
+        circle.setMap(null); // Remove circle from map
     });
     app.dangerCircles = {};
 
@@ -528,56 +534,64 @@ function createObstacleMarker(obstacle, totalCount) {
         const radiusInMeters = CRITICAL_RADIUS * 1000; // Convert km to meters
 
         // Create circle with same color as marker
-        const circle = L.circle([obstacle.lat, obstacle.lng], {
-            color: color,
+        const circle = new google.maps.Circle({
+            strokeColor: color,
+            strokeOpacity: 0.5,
+            strokeWeight: 2,
             fillColor: color,
-            fillOpacity: 0.15,  // Very transparent
-            opacity: 0.5,       // Semi-transparent border
-            radius: radiusInMeters,
-            weight: 2
-        }).addTo(app.map);
+            fillOpacity: 0.15,
+            map: app.map,
+            center: { lat: obstacle.lat, lng: obstacle.lng },
+            radius: radiusInMeters
+        });
 
         // Store circle reference for cleanup
         app.dangerCircles[obstacle.id] = circle;
     }
 
-    const marker = L.marker([obstacle.lat, obstacle.lng], {
-        icon: L.divIcon({
-            className: 'obstacle-marker',
-            html: `
-                <div style="
-                    background: ${color};
-                    width: 40px;
-                    height: 40px;
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: white;
-                    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-                    border: 3px solid white;
-                    position: relative;
-                ">
-                    ${icon}
-                    <div style="
-                        position: absolute;
-                        bottom: -8px;
-                        right: -8px;
-                        background: #1f2937;
-                        color: white;
-                        border-radius: 12px;
-                        padding: 2px 6px;
-                        font-size: 10px;
-                        font-weight: bold;
-                    ">${displayCount}</div>
-                </div>
-            `,
-            iconSize: [40, 40],
-            iconAnchor: [20, 20]
-        })
-    }).addTo(app.map);
+    // Create custom HTML marker
+    const markerDiv = document.createElement('div');
+    markerDiv.className = 'custom-obstacle-marker';
+    markerDiv.style.cssText = 'cursor: pointer;';
+    markerDiv.innerHTML = `
+        <div style="
+            background: ${color};
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            border: 3px solid white;
+            position: relative;
+        ">
+            ${icon}
+            <div style="
+                position: absolute;
+                bottom: -8px;
+                right: -8px;
+                background: #1f2937;
+                color: white;
+                border-radius: 12px;
+                padding: 2px 6px;
+                font-size: 10px;
+                font-weight: bold;
+            ">${displayCount}</div>
+        </div>
+    `;
 
-    marker.on('click', () => showObstacleDetails(obstacle));
+    // Use AdvancedMarkerElement for custom HTML markers (modern Google Maps API)
+    const marker = new google.maps.marker.AdvancedMarkerElement({
+        position: { lat: obstacle.lat, lng: obstacle.lng },
+        map: app.map,
+        content: markerDiv,
+        title: getObstacleLabel(obstacle.type)
+    });
+
+    // Add click listener
+    markerDiv.addEventListener('click', () => showObstacleDetails(obstacle));
 
     app.obstacleMarkers[obstacle.id] = marker;
     return marker;
@@ -888,7 +902,8 @@ async function sendProximityNotification(obstacle, severity, distance) {
             notification.onclick = () => {
                 window.focus();
                 if (app.map && obstacle.lat && obstacle.lng) {
-                    app.map.setView([obstacle.lat, obstacle.lng], 16);
+                    app.map.setCenter({ lat: obstacle.lat, lng: obstacle.lng });
+                    app.map.setZoom(16);
                     showObstacleDetails(obstacle);
                 }
                 notification.close();
@@ -961,17 +976,21 @@ function updateDangerLevel(level, obstacleType = null) {
         }
     }
 
-    // Update user marker color
+    // Update user marker color (Google Maps)
     if (app.userMarker) {
         const markerColor = obstacleType ? obstacleColors[obstacleType] : levelColors[level];
 
-        // Update user marker color
-        app.userMarker.setIcon(L.divIcon({
-            className: 'user-marker',
-            html: `<div style="background: ${markerColor}; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3);"></div>`,
-            iconSize: [20, 20],
-            iconAnchor: [10, 10]
-        }));
+        // Update user marker color for Google Maps
+        app.userMarker.setOptions({
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                fillColor: markerColor,
+                fillOpacity: 1,
+                strokeColor: '#ffffff',
+                strokeWeight: 3,
+                scale: 10
+            }
+        });
     }
 }
 
@@ -1124,9 +1143,9 @@ function switchView(viewName) {
         viewElement.style.display = 'block';
     }
 
-    // Show map and invalidate size
-    if (viewName === 'map' && app.map) {
-        setTimeout(() => app.map.invalidateSize(), 100);
+    // Show map and trigger resize
+    if (viewName === 'map' && app.map && typeof google !== 'undefined') {
+        setTimeout(() => google.maps.event.trigger(app.map, 'resize'), 100);
     }
 
     // Show alerts list
@@ -1352,8 +1371,8 @@ document.addEventListener('visibilitychange', () => {
         console.log('App resumed - updating data without reload');
 
         // Update data without full reload
-        if (app.map) {
-            app.map.invalidateSize();
+        if (app.map && typeof google !== 'undefined') {
+            google.maps.event.trigger(app.map, 'resize');
         }
 
         // Refresh danger level
@@ -1368,8 +1387,8 @@ window.addEventListener('pageshow', (event) => {
     if (event.persisted) {
         console.log('App resumed from bfcache');
         // Page was restored from back/forward cache
-        if (app.map) {
-            app.map.invalidateSize();
+        if (app.map && typeof google !== 'undefined') {
+            google.maps.event.trigger(app.map, 'resize');
         }
     }
 });
@@ -1568,13 +1587,9 @@ window.zoomToObstacle = function (obstacleId) {
     const obstacle = app.obstacles.find(o => o.id === obstacleId);
 
     if (obstacle) {
-        // Zoomer sur la carte
-        app.map.setView([obstacle.lat, obstacle.lng], 16);
-
-        // Ouvrir le popup du marker
-        if (app.obstacleMarkers[obstacleId]) {
-            app.obstacleMarkers[obstacleId].openPopup();
-        }
+        // Zoomer sur la carte (Google Maps)
+        app.map.setCenter({ lat: obstacle.lat, lng: obstacle.lng });
+        app.map.setZoom(16);
 
         // Afficher les détails
         showObstacleDetails(obstacle);
