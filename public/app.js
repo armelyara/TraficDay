@@ -82,7 +82,6 @@ const app = {
     obstacleMarkers: {},
     trafficLayer: null,  // Mapbox traffic overlay
     dangerCircles: {},    // Circles around point obstacles
-    trafficPolylines: {},  // Polylines for traffic jams
     previousDangerZones: new Set(),  // Track which danger zones user was in
     lastProximityNotification: 0  // Timestamp of last notification (rate limiting)
 };
@@ -472,32 +471,16 @@ function renderObstacles() {
     });
     app.dangerCircles = {};
 
-    // Delete existing traffic polylines
-    Object.values(app.trafficPolylines).forEach(trafficObj => {
-        app.map.removeLayer(trafficObj.polyline);
-        app.map.removeLayer(trafficObj.marker);
-    });
-    app.trafficPolylines = {};
-
     // Filter to show only primary obstacles (hide duplicates)
     const primaryObstacles = app.obstacles.filter(obs => obs.isPrimary !== false);
 
     console.log(`📍 Rendering ${primaryObstacles.length} primary obstacles (${app.obstacles.length} total)`);
 
-    // Separate traffic jams from point obstacles
-    const trafficObstacles = primaryObstacles.filter(obs => obs.type === 'traffic');
-    const pointObstacles = primaryObstacles.filter(obs => obs.type !== 'traffic');
-
-    // Render point obstacles as markers
-    pointObstacles.forEach(obstacle => {
+    // Render ALL obstacles as markers (including traffic)
+    // Mapbox real-time traffic overlay shows the actual road colors (green/yellow/red)
+    primaryObstacles.forEach(obstacle => {
         const totalCount = calculateObstacleTotalCount(obstacle);
         createObstacleMarker(obstacle, totalCount);
-    });
-
-    // Render traffic jams as polylines
-    trafficObstacles.forEach(obstacle => {
-        const totalCount = calculateObstacleTotalCount(obstacle);
-        createTrafficPolyline(obstacle, totalCount);
     });
 }
 
@@ -598,70 +581,6 @@ function createObstacleMarker(obstacle, totalCount) {
 
     app.obstacleMarkers[obstacle.id] = marker;
     return marker;
-}
-
-// Create polyline for traffic jam obstacles
-function createTrafficPolyline(obstacle, totalCount) {
-    const color = '#fbbf24'; // Yellow for traffic
-
-    // For now, create a simple line segment around the reported location
-    // In the future, this will use start/end points from user drawing
-    // Create a short line segment (approx 200m) to represent traffic jam
-    const SEGMENT_LENGTH_KM = 0.2; // 200m
-    const latOffset = SEGMENT_LENGTH_KM / 111; // Approximate degrees per km
-
-    // Create a horizontal line centered on the obstacle location
-    const startLat = obstacle.lat;
-    const startLng = obstacle.lng - (latOffset / 2);
-    const endLat = obstacle.lat;
-    const endLng = obstacle.lng + (latOffset / 2);
-
-    // Create the polyline
-    const polyline = L.polyline(
-        [[startLat, startLng], [endLat, endLng]],
-        {
-            color: color,
-            weight: 8,  // Thick line to be visible
-            opacity: 0.8,
-            lineJoin: 'round',
-            lineCap: 'round'
-        }
-    ).addTo(app.map);
-
-    // Add a marker at the center to show count and allow interaction
-    const centerMarker = L.marker([obstacle.lat, obstacle.lng], {
-        icon: L.divIcon({
-            className: 'traffic-count-marker',
-            html: `
-                <div style="
-                    background: ${color};
-                    color: #1f2937;
-                    border-radius: 12px;
-                    padding: 4px 8px;
-                    font-size: 12px;
-                    font-weight: bold;
-                    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-                    border: 2px solid white;
-                    white-space: nowrap;
-                ">${totalCount} 🚗</div>
-            `,
-            iconSize: [40, 20],
-            iconAnchor: [20, 10]
-        })
-    }).addTo(app.map);
-
-    // Handle click on both polyline and marker
-    const handleClick = () => showObstacleDetails(obstacle);
-    polyline.on('click', handleClick);
-    centerMarker.on('click', handleClick);
-
-    // Store both polyline and marker for cleanup
-    app.trafficPolylines[obstacle.id] = {
-        polyline: polyline,
-        marker: centerMarker
-    };
-
-    return polyline;
 }
 
 function getObstacleIcon(type) {

@@ -12,12 +12,13 @@ export const MAPBOX_CONFIG = {
     trafficSource: 'mapbox://mapbox.mapbox-traffic-v1',
 
     // Traffic tile URL (for Leaflet overlay)
-    trafficTileUrl: 'https://api.mapbox.com/v4/mapbox.mapbox-traffic-v1/{z}/{x}/{y}.png?access_token={accessToken}',
+    // Using @2x for high-resolution retina displays
+    trafficTileUrl: 'https://api.mapbox.com/v4/mapbox.mapbox-traffic-v1/{z}/{x}/{y}@2x.png?access_token={accessToken}',
 
     // Configuration options
     options: {
         maxZoom: 19,
-        opacity: 0.65, // Semi-transparent to see roads underneath
+        opacity: 0.9, // Higher opacity for better visibility of traffic colors (red/yellow/green)
         attribution: '© Mapbox'
     }
 };
