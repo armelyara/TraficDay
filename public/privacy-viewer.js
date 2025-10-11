@@ -157,7 +157,7 @@ class PrivacyViewer extends HTMLElement {
         } catch (error) {
             this.querySelector('#content').innerHTML = `
                 <div class="error">
-                    <h3>❌ Erreur de chargement</h3>
+                    <h3>Erreur de chargement</h3>
                     <p>Impossible de charger la politique de confidentialité.</p>
                     <p>Vérifiez que le fichier PRIVACY.md existe à la racine de l'application.</p>
                 </div>
