@@ -27,9 +27,9 @@ const obstacleLabels = {
     police: 'Police routière'
 };
 
-// ========================================
+
 // FUNCTION 1: Send notification when obstacle confirmed
-// ========================================
+
 exports.sendObstacleNotification = onValueCreated(
     '/notifications/{notificationId}',
     async (event) => {
@@ -38,11 +38,11 @@ exports.sendObstacleNotification = onValueCreated(
         const notification = snapshot.val();
         const { obstacleId, type, lat, lng, description, reports } = notification;
 
-        console.log('📩 Nouvelle notification à envoyer:', obstacleId);
+        console.log('Nouvelle notification à envoyer:', obstacleId);
 
         // Check if the notification has enough confirmations
         if (reports < 2) {
-            console.log('⚠️ Obstacle n\'a pas assez de confirmations:', reports);
+            console.log('Obstacle n\'a pas assez de confirmations:', reports);
             return null;
         }
 
@@ -52,14 +52,14 @@ exports.sendObstacleNotification = onValueCreated(
             const obstacle = obstacleSnapshot.val();
             const confirmedByUsers = obstacle?.confirmedBy ? Object.keys(obstacle.confirmedBy) : [];
 
-            console.log('👥 Utilisateurs ayant confirmé:', confirmedByUsers);
+            console.log('Utilisateurs ayant confirmé:', confirmedByUsers);
 
             // Retrieve all users
             const usersSnapshot = await admin.database().ref('users').once('value');
             const users = usersSnapshot.val();
 
             if (!users) {
-                console.log('⚠️ Aucun utilisateur trouvé');
+                console.log('Aucun utilisateur trouvé');
                 return null;
             }
 
@@ -72,7 +72,7 @@ exports.sendObstacleNotification = onValueCreated(
 
                 // Skip users who confirmed the obstacle
                 if (confirmedByUsers.includes(uid)) {
-                    console.log('⏭️ User skip (confirmé):', uid);
+                    console.log('⏭User skip (confirmé):', uid);
                     return;
                 }
 
@@ -87,20 +87,20 @@ exports.sendObstacleNotification = onValueCreated(
 
                     if (distance <= radiusKm) {
                         tokens.push(user.notificationToken);
-                        console.log('✅ User dans rayon:', uid, `(${distance.toFixed(2)}km)`);
+                        console.log('User dans rayon:', uid, `(${distance.toFixed(2)}km)`);
                     }
                 }
             });
 
             if (tokens.length === 0) {
-                console.log('⚠️ Aucun utilisateur à proximité avec token');
+                console.log('Aucun utilisateur à proximité avec token');
                 return null;
             }
 
             // Send notification
             const message = {
                 notification: {
-                    title: `🚨 ${obstacleLabels[type]}`,
+                    title: `${obstacleLabels[type]}`,
                     body: `${description || 'Obstacle signalé'} - ${reports} confirmations`
                 },
                 data: {
@@ -113,23 +113,23 @@ exports.sendObstacleNotification = onValueCreated(
             };
 
             const response = await admin.messaging().sendEachForMulticast(message);
-            console.log('✅ Notifications envoyées:', response.successCount, '/', tokens.length);
+            console.log('Notifications envoyées:', response.successCount, '/', tokens.length);
 
             if (response.failureCount > 0) {
-                console.log('⚠️ Échecs:', response.failureCount);
+                console.log('Échecs:', response.failureCount);
             }
 
             return { success: true, sent: response.successCount };
         } catch (error) {
-            console.error('❌ Erreur envoi notification:', error);
+            console.error('Erreur envoi notification:', error);
             return null;
         }
     }
 );
 
-// ========================================
+
 // FUNCTION 2: Check for duplicate alerts when obstacle created
-// ========================================
+
 exports.checkForDuplicateAlerts = onValueCreated(
     '/obstacles/{obstacleId}',
     async (event) => {
@@ -137,7 +137,7 @@ exports.checkForDuplicateAlerts = onValueCreated(
         const newObstacle = snapshot.val();
         const { obstacleId } = event.params;
 
-        console.log('🔍 Nouvel obstacle créé:', obstacleId);
+        console.log('Nouvel obstacle créé:', obstacleId);
 
         try {
             // Get all obstacles
@@ -145,7 +145,7 @@ exports.checkForDuplicateAlerts = onValueCreated(
             const obstacles = obstaclesSnapshot.val();
 
             if (!obstacles) {
-                console.log('ℹ️ Aucun autre obstacle trouvé');
+                console.log('Aucun autre obstacle trouvé');
                 return null;
             }
 
@@ -180,7 +180,7 @@ exports.checkForDuplicateAlerts = onValueCreated(
 
             // If duplicate found, link it to primary
             if (primaryObstacleId) {
-                console.log('✅ Duplicate détecté! Lien vers obstacle primaire:', primaryObstacleId, `(${(minDistance * 1000).toFixed(0)}m)`);
+                console.log('Duplicate détecté! Lien vers obstacle primaire:', primaryObstacleId, `(${(minDistance * 1000).toFixed(0)}m)`);
 
                 // Mark new obstacle as duplicate
                 await admin.database().ref(`obstacles/${obstacleId}`).update({
@@ -194,7 +194,7 @@ exports.checkForDuplicateAlerts = onValueCreated(
                 // Add reporter to primary obstacle's confirmedBy
                 if (newObstacle.userId) {
                     await admin.database().ref(`obstacles/${primaryObstacleId}/confirmedBy/${newObstacle.userId}`).set(true);
-                    console.log('✅ Utilisateur ajouté aux confirmations:', newObstacle.userId);
+                    console.log('Utilisateur ajouté aux confirmations:', newObstacle.userId);
                 }
 
                 // Check if threshold reached for notification
@@ -205,13 +205,13 @@ exports.checkForDuplicateAlerts = onValueCreated(
 
                 // Update confirmations count to match confirmedBy
                 await admin.database().ref(`obstacles/${primaryObstacleId}/confirmations`).set(totalConfirmations);
-                console.log(`✅ Confirmations count updated: ${totalConfirmations}`);
+                console.log(`Confirmations count updated: ${totalConfirmations}`);
 
-                console.log(`📊 Obstacle primaire: ${totalConfirmations} confirmations, ${totalLinked} obstacles liés`);
+                console.log(`Obstacle primaire: ${totalConfirmations} confirmations, ${totalLinked} obstacles liés`);
 
                 // Trigger notification if threshold reached (2 reports)
                 if (totalConfirmations >= 2 && !primaryObstacle.notificationSent) {
-                    console.log('🔔 Seuil atteint! Création de la notification...');
+                    console.log('Seuil atteint! Création de la notification...');
 
                     await admin.database().ref(`notifications/${primaryObstacleId}`).set({
                         obstacleId: primaryObstacleId,
@@ -229,19 +229,19 @@ exports.checkForDuplicateAlerts = onValueCreated(
 
                 return { checked: true, isDuplicate: true, linkedTo: primaryObstacleId };
             } else {
-                console.log('ℹ️ Pas de duplicate trouvé - obstacle primaire');
+                console.log('Pas de duplicate trouvé - obstacle primaire');
                 return { checked: true, isDuplicate: false };
             }
         } catch (error) {
-            console.error('❌ Erreur vérification duplicata:', error);
+            console.error('Erreur vérification duplicata:', error);
             return null;
         }
     }
 );
 
-// ========================================
+
 // FUNCTION 3: Subscribe user to "all" topic when they get a token
-// ========================================
+
 exports.subscribeToAllTopic = onValueWritten(
     '/users/{userId}/notificationToken',
     async (event) => {
@@ -249,29 +249,29 @@ exports.subscribeToAllTopic = onValueWritten(
         const token = event.data.after.val();
 
         if (!token) {
-            console.log('⚠️ Token supprimé pour:', userId);
+            console.log('Token supprimé pour:', userId);
             return null;
         }
 
-        console.log('🔔 Nouveau token pour:', userId);
+        console.log('Nouveau token pour:', userId);
 
         try {
             // Subscribe to "all" topic
             await admin.messaging().subscribeToTopic(token, 'all');
-            console.log('✅ Utilisateur abonné au topic "all":', userId);
+            console.log('Utilisateur abonné au topic "all":', userId);
 
             return { success: true };
         } catch (error) {
-            console.error('❌ Erreur abonnement topic:', error);
+            console.error('Erreur abonnement topic:', error);
             return null;
         }
     }
 );
 
-// ========================================
+
 // FUNCTION 4: Send proximity notification when user enters danger zone
 // Triggered when a record is created in /proximityAlerts/{userId}/{alertId}
-// ========================================
+
 exports.sendProximityNotification = onValueCreated(
     '/proximityAlerts/{userId}/{alertId}',
     async (event) => {
@@ -280,7 +280,7 @@ exports.sendProximityNotification = onValueCreated(
         const alert = snapshot.val();
         const { obstacleId, obstacleType, severity, distance } = alert;
 
-        console.log('🚨 Proximity alert triggered for user:', userId);
+        console.log('Proximity alert triggered for user:', userId);
 
         try {
             // Get user's FCM token
@@ -288,7 +288,7 @@ exports.sendProximityNotification = onValueCreated(
             const user = userSnapshot.val();
 
             if (!user || !user.notificationToken) {
-                console.log('⚠️ User has no FCM token');
+                console.log('User has no FCM token');
                 // Clean up the alert record
                 await admin.database().ref(`proximityAlerts/${userId}/${alertId}`).remove();
                 return null;
@@ -302,8 +302,8 @@ exports.sendProximityNotification = onValueCreated(
                 : `${distance.toFixed(1)}km`;
 
             const severityLabels = {
-                critical: '🔴 DANGER CRITIQUE',
-                high: '🟠 DANGER ÉLEVÉ'
+                critical: '🔴 Danger',
+                high: '🟠 Vigilance Accrue'
             };
 
             const title = severityLabels[severity] || '⚠️ ALERTE';
@@ -326,14 +326,14 @@ exports.sendProximityNotification = onValueCreated(
             };
 
             await admin.messaging().send(message);
-            console.log('✅ Proximity notification sent to user:', userId);
+            console.log('Proximity notification sent to user:', userId);
 
             // Clean up the alert record (it's processed)
             await admin.database().ref(`proximityAlerts/${userId}/${alertId}`).remove();
 
             return { success: true };
         } catch (error) {
-            console.error('❌ Erreur proximity notification:', error);
+            console.error('Erreur proximity notification:', error);
             // Clean up the alert record even on error
             await admin.database().ref(`proximityAlerts/${userId}/${alertId}`).remove();
             return null;
@@ -341,16 +341,16 @@ exports.sendProximityNotification = onValueCreated(
     }
 );
 
-// ========================================
+
 // FUNCTION 5: Auto-delete expired obstacles (runs every 15 minutes)
-// ========================================
+
 exports.cleanupExpiredObstacles = onSchedule(
     {
         schedule: 'every 15 minutes',
         timeZone: 'Africa/Abidjan'
     },
     async (event) => {
-        console.log('🧹 Démarrage nettoyage des obstacles expirés...');
+        console.log('Démarrage nettoyage des obstacles expirés...');
 
         try {
             const now = Date.now();
@@ -358,7 +358,7 @@ exports.cleanupExpiredObstacles = onSchedule(
             const obstacles = obstaclesSnapshot.val();
 
             if (!obstacles) {
-                console.log('ℹ️ Aucun obstacle à vérifier');
+                console.log('Aucun obstacle à vérifier');
                 return null;
             }
 
@@ -376,7 +376,7 @@ exports.cleanupExpiredObstacles = onSchedule(
 
                 // Check if expired by time
                 if (obstacle.expiresAt && now >= obstacle.expiresAt) {
-                    console.log(`⏰ Obstacle expiré (temps): ${obstacleId}`);
+                    console.log(`Obstacle expiré (temps): ${obstacleId}`);
                     await admin.database().ref(`obstacles/${obstacleId}`).update({
                         active: false,
                         deletedReason: 'expired',
@@ -387,7 +387,7 @@ exports.cleanupExpiredObstacles = onSchedule(
 
                 // Check if resolved by community (resolvedCount >= 5)
                 if (obstacle.resolvedCount && obstacle.resolvedCount >= 5) {
-                    console.log(`✅ Obstacle résolu (communauté): ${obstacleId} (${obstacle.resolvedCount} résolutions)`);
+                    console.log(`Obstacle résolu (communauté): ${obstacleId} (${obstacle.resolvedCount} résolutions)`);
                     await admin.database().ref(`obstacles/${obstacleId}`).update({
                         active: false,
                         deletedReason: 'resolved',
@@ -397,14 +397,14 @@ exports.cleanupExpiredObstacles = onSchedule(
                 }
             }
 
-            console.log(`✅ Nettoyage terminé: ${expiredCount} expirés, ${resolvedCount} résolus`);
+            console.log(`Nettoyage terminé: ${expiredCount} expirés, ${resolvedCount} résolus`);
             return {
                 success: true,
                 expired: expiredCount,
                 resolved: resolvedCount
             };
         } catch (error) {
-            console.error('❌ Erreur nettoyage obstacles:', error);
+            console.error('Erreur nettoyage obstacles:', error);
             return null;
         }
     }
