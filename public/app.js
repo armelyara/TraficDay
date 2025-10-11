@@ -1427,6 +1427,40 @@ function attachEventListeners() {
     });
 }
 
+// CASE 3: Listen for admin notifications to change header color
+window.addEventListener('adminNotification', (event) => {
+    const { payload, isInArea } = event.detail;
+
+    console.log('🎨 Admin notification event received');
+    console.log('📍 User in area:', isInArea);
+
+    if (isInArea) {
+        // Change header to admin notification color (e.g., purple for admin)
+        const header = document.getElementById('header');
+        if (header) {
+            header.style.background = 'linear-gradient(to right, #9333ea, #7c3aed)'; // Purple gradient
+            header.style.transition = 'background 0.3s ease';
+
+            // Update danger status text
+            const dangerStatus = document.getElementById('danger-status');
+            if (dangerStatus) {
+                dangerStatus.textContent = '📢 ' + (payload.notification?.title || 'Message Admin');
+            }
+
+            console.log('✅ Header color changed for admin notification');
+
+            // Reset after 10 seconds
+            setTimeout(() => {
+                header.style.background = '';
+                if (dangerStatus) {
+                    calculateDangerLevel(); // Restore normal danger level
+                }
+                console.log('🔄 Header reset to normal');
+            }, 10000);
+        }
+    }
+});
+
 // Page visibilty change event
 // Prevent reload when returning to app (fix for Samsung Galaxy)
 document.addEventListener('visibilitychange', () => {

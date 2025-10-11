@@ -42,13 +42,20 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((payload) => {
     console.log('[SW] Message reçu en background:', payload);
 
+    // Detect notification type
+    const notificationType = payload.data?.type || 'obstacle';
+    console.log('[SW] Type de notification:', notificationType);
+
     const notificationTitle = payload.notification?.title || 'TraficDay';
     const notificationOptions = {
         body: payload.notification?.body || 'Nouvelle alerte',
         icon: '/icons/icon-192.png',
         badge: '/icons/icon-72.png',
-        tag: payload.data?.obstacleId || 'traficday-notification',
-        data: payload.data,
+        tag: payload.data?.obstacleId || `traficday-${notificationType}`,
+        data: {
+            ...payload.data,
+            type: notificationType
+        },
         requireInteraction: true,
         vibrate: [200, 100, 200],
         actions: [
@@ -63,6 +70,10 @@ messaging.onBackgroundMessage((payload) => {
             }
         ]
     };
+
+    // CASE 3: For admin notifications, always show push when app is closed
+    // (Both in-area and outside-area users get notification when app is closed)
+    console.log('[SW] Affichage notification push (app closed)');
 
     return self.registration.showNotification(notificationTitle, notificationOptions);
 });
