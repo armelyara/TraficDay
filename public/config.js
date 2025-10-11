@@ -44,15 +44,15 @@ export async function getGoogleMapsApiKey() {
         const apiKey = getString(remoteConfig, 'google_maps_api_key');
 
         if (!apiKey) {
-            console.error('❌ Google Maps API key not configured in Firebase Remote Config');
+            console.error('Google Maps API key not configured in Firebase Remote Config');
             throw new Error('Google Maps API key missing');
         }
 
         return apiKey;
     } catch (error) {
-        console.error('❌ Error fetching Google Maps API key:', error);
+        console.error('Error fetching Google Maps API key:', error);
         throw error;
     }
 }
 
-console.log('✅ Config module loaded');
+console.log('Config module loaded');
