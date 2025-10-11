@@ -179,21 +179,21 @@ async function loadGoogleMapsAPI() {
 
         // Add error handler
         script.onerror = () => {
-            console.error('❌ Failed to load Google Maps API');
+            console.error('Failed to load Google Maps API');
             alert('Erreur: Impossible de charger Google Maps');
         };
 
         document.head.appendChild(script);
-        console.log('✅ Google Maps API script injected');
+        console.log('Google Maps API script injected');
     } catch (error) {
-        console.error('❌ Error loading Google Maps:', error);
+        console.error('Error loading Google Maps:', error);
         alert('Erreur: Clé API Google Maps non configurée');
     }
 }
 
 // Google Maps callback (called when API loads)
 window.initGoogleMapsCallback = function() {
-    console.log('✅ Google Maps API loaded');
+    console.log('Google Maps API loaded');
     // Trigger map initialization if DOM is ready
     if (document.readyState === 'complete') {
         initMap();
@@ -230,18 +230,18 @@ function initMap() {
     app.trafficLayer = new google.maps.TrafficLayer();
     app.trafficLayer.setMap(app.map);
 
-    console.log('✅ Google Map initialisée');
-    console.log('✅ Google Maps traffic layer ajouté');
+    console.log('Google Map initialisée');
+    console.log('Google Maps traffic layer ajouté');
 
     // Render obstacles if they were already loaded before map was ready
     if (app.obstacles && app.obstacles.length > 0) {
-        console.log('✅ Rendering pending obstacles:', app.obstacles.length);
+        console.log('Rendering pending obstacles:', app.obstacles.length);
         renderObstacles();
     }
 
     // Apply pending user position if available
     if (app.pendingUserPosition) {
-        console.log('✅ Applying pending user position:', app.pendingUserPosition);
+        console.log('Applying pending user position:', app.pendingUserPosition);
         updateUserMarker(app.pendingUserPosition.lat, app.pendingUserPosition.lng);
         app.pendingUserPosition = null; // Clear pending position
     }
@@ -258,7 +258,7 @@ function initMap() {
 function updateUserMarker(lat, lng) {
     // Guard check: Don't execute if Google Maps not loaded yet
     if (typeof google === 'undefined' || !google.maps || !app.map) {
-        console.log('⏳ Waiting for Google Maps to load before updating user marker...');
+        console.log('Waiting for Google Maps to load before updating user marker...');
         // Store position for later
         app.pendingUserPosition = { lat, lng };
         return;
@@ -583,7 +583,7 @@ function calculateObstacleTotalCount(obstacle) {
     // Total = alerts + manual confirmations
     const totalCount = alertCount + manualConfirmations;
 
-    console.log(`📊 Obstacle ${obstacle.id}: ${alertCount} alerts + ${manualConfirmations} manual = ${totalCount} total`);
+    console.log(`Obstacle ${obstacle.id}: ${alertCount} alerts + ${manualConfirmations} manual = ${totalCount} total`);
 
     return totalCount;
 }
@@ -601,7 +601,7 @@ function createObstacleMarker(obstacle, totalCount) {
     const icon = getObstacleIcon(obstacle.type);
     const displayCount = totalCount || obstacle.reports || 1;
 
-    // ✅ Add danger circle for point obstacles (not for traffic jams)
+    // Add danger circle for point obstacles (not for traffic jams)
     if (obstacle.type !== 'traffic') {
         // Determine circle radius based on current danger distance
         const CRITICAL_RADIUS = 0.5; // 500m - same as calculateDangerLevel
@@ -930,7 +930,7 @@ async function sendProximityNotification(obstacle, severity, distance) {
     const NOTIFICATION_COOLDOWN = 30000; // 30 seconds
 
     if (now - app.lastProximityNotification < NOTIFICATION_COOLDOWN) {
-        console.log('⏭️ Proximity notification rate limited');
+        console.log('Proximity notification rate limited');
         return;
     }
 
@@ -941,15 +941,15 @@ async function sendProximityNotification(obstacle, severity, distance) {
         : `${distance.toFixed(1)}km`;
 
     const severityLabels = {
-        critical: '🔴 DANGER CRITIQUE',
-        high: '🟠 DANGER ÉLEVÉ'
+        critical: '🔴 Danger',
+        high: '🟠 Vigilance accrue'
     };
 
     const title = severityLabels[severity] || '⚠️ ALERTE';
     const obstacleLabel = getObstacleLabel(obstacle.type);
     const body = `${obstacleLabel} à ${distanceText} de votre position`;
 
-    console.log(`🚨 Sending proximity notification: ${title} - ${body}`);
+    console.log(`Sending proximity notification: ${title} - ${body}`);
 
     // Check if app is in foreground
     const isAppInForeground = !document.hidden && document.visibilityState === 'visible';
@@ -983,7 +983,7 @@ async function sendProximityNotification(obstacle, severity, distance) {
                 notification.close();
             };
 
-            console.log('✅ Browser notification shown (foreground)');
+            console.log('Browser notification shown (foreground)');
         }
     } else {
         // App is in background - Send FCM push notification via Cloud Function
@@ -999,9 +999,9 @@ async function sendProximityNotification(obstacle, severity, distance) {
                     distance: distance,
                     timestamp: Date.now()
                 });
-                console.log('✅ Proximity alert created in database for FCM push');
+                console.log('Proximity alert created in database for FCM push');
             } catch (error) {
-                console.error('❌ Error creating proximity alert:', error);
+                console.error('Error creating proximity alert:', error);
             }
         }
     }
@@ -1095,7 +1095,7 @@ function adjustBrightness(color, percent) {
 async function requestNotificationPermission() {
     // Step 1: Check browser support
     if (!('Notification' in window)) {
-        console.log('❌ Notifications non supportées');
+        console.log('Notifications non supportées');
         alert('Votre navigateur ne supporte pas les notifications');
         return;
     }
@@ -1111,24 +1111,24 @@ async function requestNotificationPermission() {
     app.notificationsEnabled = permission === 'granted';
 
     if (permission === 'granted') {
-        console.log('✅ Permission accordée');
+        console.log('Permission accordée');
 
         try {
             // Step 4: Wait for Service Worker to be ready
             let registration = null;
             if ('serviceWorker' in navigator) {
                 registration = await navigator.serviceWorker.ready;
-                console.log('✅ Service Worker prêt:', registration.active?.scriptURL);
+                console.log('Service Worker prêt:', registration.active?.scriptURL);
             }
 
             // Step 5: Get FCM token from Firebase
             const token = await getToken(messaging, {
                 vapidKey: 'BIL4dNbV90yM_ulonvJibpWlbV7IOOHyeE2JFgHJnf48Qqzr3kUaai0MxoR2byoO5n4Wpy6I4sd5SuezQ3eTrbU',
-                serviceWorkerRegistration: registration  // ✅ Use our custom service-worker.js
+                serviceWorkerRegistration: registration  // Use our custom service-worker.js
             });
 
             if (token) {
-                console.log('✅ Token FCM obtenu:', token.substring(0, 20) + '...');
+                console.log('Token FCM obtenu:', token.substring(0, 20) + '...');
 
                 // Step 6: Save token to database
                 await saveNotificationToken(app.user.uid, token);
@@ -1138,27 +1138,27 @@ async function requestNotificationPermission() {
                 if (!localStorage.getItem(suppressForegroundKey)) {
                     // Default to true (suppress foreground notifications)
                     localStorage.setItem(suppressForegroundKey, 'true');
-                    console.log('✅ Paramètre par défaut: Masquer notifications foreground = true');
+                    console.log('Paramètre par défaut: Masquer notifications foreground = true');
                 }
 
                 // Step 7: Update UI
                 document.getElementById('btn-notifications').classList.add('active');
-                alert('✅ Notifications activées! Vous recevrez des alertes pour les obstacles dans un rayon de 1,6 km.');
+                alert('Notifications activées! Vous recevrez des alertes pour les obstacles dans un rayon de 1,6 km.');
 
             } else {
-                console.error('❌ Impossible d\'obtenir le token FCM');
+                console.error('Impossible d\'obtenir le token FCM');
                 alert('Erreur: Impossible d\'activer les notifications');
                 document.getElementById('btn-notifications').classList.remove('active');
             }
 
         } catch (error) {
-            console.error('❌ Erreur FCM:', error);
+            console.error('Erreur FCM:', error);
             alert('Erreur: ' + error.message);
             document.getElementById('btn-notifications').classList.remove('active');
         }
 
     } else if (permission === 'denied') {
-        console.log('❌ Permission refusée');
+        console.log('Permission refusée');
         document.getElementById('btn-notifications').classList.remove('active');
         alert('Vous avez refusé les notifications. Pour les activer, modifiez les paramètres de votre navigateur.');
     }
@@ -1398,7 +1398,7 @@ function attachEventListeners() {
         toggleBtn.textContent = newValue ? 'Activé' : 'Désactivé';
         toggleBtn.classList.toggle('active', newValue);
 
-        console.log(`✅ Paramètre mis à jour: Masquer notifications foreground = ${newValue}`);
+        console.log(`Paramètre mis à jour: Masquer notifications foreground = ${newValue}`);
     });
 
     // Settings - "All" topic subscription toggle
@@ -1420,8 +1420,8 @@ function attachEventListeners() {
                 if (result.success) {
                     toggleBtn.textContent = 'Activé';
                     toggleBtn.classList.add('active');
-                    alert('✅ Vous êtes maintenant abonné aux alertes nationales. Vous recevrez des notifications pour toute la Côte d\'Ivoire.');
-                    console.log('✅ Abonné au topic "all"');
+                    alert('Vous êtes maintenant abonné aux alertes nationales. Vous recevrez des notifications pour toute la Côte d\'Ivoire.');
+                    console.log('Abonné au topic "all"');
                 } else {
                     alert('Erreur lors de l\'abonnement: ' + result.error);
                 }
@@ -1431,8 +1431,8 @@ function attachEventListeners() {
                 if (result.success) {
                     toggleBtn.textContent = 'Désactivé';
                     toggleBtn.classList.remove('active');
-                    alert('✅ Vous ne recevrez plus que les alertes de votre zone.');
-                    console.log('✅ Désabonné du topic "all"');
+                    alert('Vous ne recevrez plus que les alertes de votre zone.');
+                    console.log('Désabonné du topic "all"');
                 } else {
                     alert('Erreur lors du désabonnement: ' + result.error);
                 }
@@ -1448,8 +1448,8 @@ function attachEventListeners() {
 window.addEventListener('adminNotification', (event) => {
     const { payload, isInArea } = event.detail;
 
-    console.log('🎨 Admin notification event received');
-    console.log('📍 User in area:', isInArea);
+    console.log('Admin notification event received');
+    console.log('User in area:', isInArea);
 
     if (isInArea) {
         // Change header to admin notification color (e.g., purple for admin)
@@ -1472,7 +1472,7 @@ window.addEventListener('adminNotification', (event) => {
                 if (dangerStatus) {
                     calculateDangerLevel(); // Restore normal danger level
                 }
-                console.log('🔄 Header reset to normal');
+                console.log('Header reset to normal');
             }, 10000);
         }
     }
@@ -1481,22 +1481,22 @@ window.addEventListener('adminNotification', (event) => {
 // Listen for Service Worker messages (notification clicks)
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.addEventListener('message', (event) => {
-        console.log('📩 Message from Service Worker:', event.data);
+        console.log('Message from Service Worker:', event.data);
 
         if (event.data && event.data.type === 'notificationClick') {
             const { notificationType, obstacleId } = event.data;
 
-            console.log(`🖱️ Notification clicked: ${notificationType}`);
+            console.log(`Notification clicked: ${notificationType}`);
 
             // Handle different notification types
             if (notificationType === 'admin') {
                 // Admin notification clicked - just focus the app
-                console.log('📢 Admin notification clicked');
+                console.log('Admin notification clicked');
                 // App is already focused by Service Worker
             } else if (notificationType === 'obstacle' || notificationType === 'proximity') {
                 // Obstacle/Proximity notification - zoom to obstacle
                 if (obstacleId && window.zoomToObstacle) {
-                    console.log('🗺️ Zooming to obstacle:', obstacleId);
+                    console.log('Zooming to obstacle:', obstacleId);
                     window.zoomToObstacle(obstacleId);
                 }
             }
@@ -1555,7 +1555,7 @@ let deferredPrompt = null;
 
 // Capture the beforeinstallprompt event
 window.addEventListener('beforeinstallprompt', (e) => {
-    console.log('💾 PWA Install prompt available');
+    console.log('PWA Install prompt available');
 
     // Prevent the default browser install prompt
     e.preventDefault();
@@ -1722,7 +1722,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Fonction globale pour zoomer sur un obstacle depuis une notification
 window.zoomToObstacle = function (obstacleId) {
-    console.log('🔍 Recherche obstacle:', obstacleId);
+    console.log('Recherche obstacle:', obstacleId);
 
     const obstacle = app.obstacles.find(o => o.id === obstacleId);
 
@@ -1734,9 +1734,9 @@ window.zoomToObstacle = function (obstacleId) {
         // Afficher les détails
         showObstacleDetails(obstacle);
 
-        console.log('✅ Obstacle affiché:', obstacleId);
+        console.log('Obstacle affiché:', obstacleId);
     } else {
-        console.warn('⚠️ Obstacle introuvable:', obstacleId);
+        console.warn('Obstacle introuvable:', obstacleId);
     }
 };
 
