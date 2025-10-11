@@ -8,7 +8,7 @@ TraficDay est une application web progressive (PWA) qui permet aux usagers de la
 
 ## Fonctionnalités
 
-- **📍 Carte interactive en temps réel** - Visualisez tous les obstacles signalés sur une carte Leaflet
+- **📍 Carte interactive en temps réel** - Visualisez tous les obstacles signalés sur une carte. 
 - **🚨 Signalement d'obstacles** - Signalez rapidement :
   - Inondations
   - Manifestations
@@ -18,22 +18,22 @@ TraficDay est une application web progressive (PWA) qui permet aux usagers de la
 - **Système de confirmation** - Les alertes sont vérifiées par la communauté
 - **Notifications push** - Recevez des alertes pour les obstacles dans votre zone (rayon de 1,6 km)
 - **Interface adaptive** - Les couleurs changent selon le niveau de danger dans votre zone
-- **PWA** - Installez l'app sur votre téléphone comme une app native
+- **PWA** - Installez l'app sur votre téléphone comme une app native à partir de votre navigateur Chrome, firefox ou Edge. 
 - **Authentification Google** - Connexion sécurisée avec votre compte Google
 - **Géolocalisation** - Votre position est suivie pour vous alerter des dangers à proximité
 
 ## Niveaux de Danger
 
-- **Zone sûre** 🟢 - Aucun danger signalé (Teal)
-- **Vigilance normale** 🟢 - Obstacles mineurs à 5km (Vert)
-- **Attention requise** 🟡 - Obstacles modérés à 2km (Jaune)
-- **Danger élevé** 🟠 - Vigilance accrue à 2km (Orange)
-- **Danger critique** 🔴 - Zone dangereuse à 500m (Rouge)
+- **Zone sûre** 🟢 - Aucun danger signalé (Green)
+- **Attention requise** ⚠️ - Obstacles mineurs à 5km (Triangle jaune)
+- **Vigilance absolue** 🟡 - Obstacles modérés à 2km (Jaune)
+- **Zone critique** 🟠 - Vigilance accrue à 1km (Orange)
+- **Zone de danger** 🔴 - Zone dangereuse (Rouge)
 
 ## Technologies Utilisées
 
 - **Frontend**: HTML5, CSS3, JavaScript (ES6 modules)
-- **Carte**: Leaflet.js avec OpenStreetMap
+- **Carte**: Maps JavaScript API
 - **Backend**: Firebase
   - Firebase Authentication
   - Firebase Realtime Database
@@ -181,10 +181,7 @@ Pour toute question ou problème :
 
 ## Remerciements
 
-- OpenStreetMap pour les données cartographiques
-- Leaflet.js pour la bibliothèque de cartes
-- Firebase pour l'infrastructure backend
-- La communauté open source
+La communauté open source
 
 ## Statistiques
 
