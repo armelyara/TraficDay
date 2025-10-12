@@ -2,6 +2,8 @@
 // Import Firebase functions
 import {
     signInWithGoogle,
+    signInWithEmail,
+    signUpWithEmail,
     signOutUser,
     onAuthChange,
     createObstacle,
@@ -364,13 +366,82 @@ async function login(provider) {
         if (result.success) {
             closeModal('auth-modal');
             alert('Connexion réussie !');
-            
+
         } else {
             alert('Erreur de connexion : ' + result.error);
         }
     } else {
         // Config Email/Phone login
         alert('Connexion Email/Phone bientôt disponible');
+    }
+}
+
+async function handleEmailAuth(isSignup) {
+    const email = document.getElementById('email-input').value.trim();
+    const password = document.getElementById('password-input').value;
+    const errorMessage = document.getElementById('auth-error-message');
+
+    // Hide previous error
+    errorMessage.style.display = 'none';
+
+    // Basic validation
+    if (!email || !password) {
+        errorMessage.textContent = 'Veuillez remplir tous les champs';
+        errorMessage.style.display = 'block';
+        return;
+    }
+
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        errorMessage.textContent = 'Format d\'email invalide';
+        errorMessage.style.display = 'block';
+        return;
+    }
+
+    // Password length validation
+    if (password.length < 6) {
+        errorMessage.textContent = 'Le mot de passe doit contenir au moins 6 caractères';
+        errorMessage.style.display = 'block';
+        return;
+    }
+
+    // Disable submit button during processing
+    const submitBtn = document.getElementById('btn-email-submit');
+    submitBtn.disabled = true;
+    submitBtn.textContent = isSignup ? 'Inscription...' : 'Connexion...';
+
+    try {
+        let result;
+        if (isSignup) {
+            console.log('Attempting signup with email:', email);
+            result = await signUpWithEmail(email, password);
+        } else {
+            console.log('Attempting login with email:', email);
+            result = await signInWithEmail(email, password);
+        }
+
+        if (result.success) {
+            closeModal('auth-modal');
+            // Reset form
+            document.getElementById('email-input').value = '';
+            document.getElementById('password-input').value = '';
+            document.getElementById('email-auth-form').style.display = 'none';
+            document.getElementById('auth-selection').style.display = 'flex';
+
+            alert(isSignup ? 'Inscription réussie !' : 'Connexion réussie !');
+        } else {
+            errorMessage.textContent = result.error;
+            errorMessage.style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Error during email auth:', error);
+        errorMessage.textContent = 'Une erreur est survenue. Veuillez réessayer.';
+        errorMessage.style.display = 'block';
+    } finally {
+        // Re-enable submit button
+        submitBtn.disabled = false;
+        submitBtn.textContent = isSignup ? 'S\'inscrire' : 'Se connecter';
     }
 }
 
@@ -1370,7 +1441,15 @@ function attachEventListeners() {
     });
 
     // Modals - Close buttons
-    document.getElementById('close-auth-modal').addEventListener('click', () => closeModal('auth-modal'));
+    document.getElementById('close-auth-modal').addEventListener('click', () => {
+        closeModal('auth-modal');
+        // Reset auth modal to initial state
+        document.getElementById('email-auth-form').style.display = 'none';
+        document.getElementById('auth-selection').style.display = 'flex';
+        document.getElementById('email-input').value = '';
+        document.getElementById('password-input').value = '';
+        document.getElementById('auth-error-message').style.display = 'none';
+    });
     document.getElementById('close-report-modal').addEventListener('click', () => {
         closeModal('report-modal');
         // Reset report modal to first step
@@ -1380,7 +1459,47 @@ function attachEventListeners() {
 
     // Modals - Authentification
     document.getElementById('btn-google-auth').addEventListener('click', () => login('google'));
-    document.getElementById('btn-email-auth').addEventListener('click', () => login('email'));
+
+    // Email auth - Show email form
+    document.getElementById('btn-show-email-auth')?.addEventListener('click', () => {
+        document.getElementById('auth-selection').style.display = 'none';
+        document.getElementById('email-auth-form').style.display = 'block';
+    });
+
+    // Email auth - Back to selection
+    document.getElementById('btn-back-to-auth-selection')?.addEventListener('click', () => {
+        document.getElementById('email-auth-form').style.display = 'none';
+        document.getElementById('auth-selection').style.display = 'flex';
+        // Reset form
+        document.getElementById('email-input').value = '';
+        document.getElementById('password-input').value = '';
+        document.getElementById('auth-error-message').style.display = 'none';
+    });
+
+    // Email auth - Toggle between login and signup
+    let isSignupMode = false;
+    document.getElementById('btn-toggle-signup')?.addEventListener('click', () => {
+        isSignupMode = !isSignupMode;
+        const formTitle = document.getElementById('email-form-title');
+        const submitBtn = document.getElementById('btn-email-submit');
+        const toggleBtn = document.getElementById('btn-toggle-signup');
+
+        if (isSignupMode) {
+            formTitle.textContent = 'Inscription';
+            submitBtn.textContent = 'S\'inscrire';
+            toggleBtn.innerHTML = 'Déjà un compte ? <strong>Se connecter</strong>';
+        } else {
+            formTitle.textContent = 'Connexion';
+            submitBtn.textContent = 'Se connecter';
+            toggleBtn.innerHTML = 'Pas de compte ? <strong>S\'inscrire</strong>';
+        }
+    });
+
+    // Email auth - Form submission
+    document.getElementById('email-auth-form-fields')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await handleEmailAuth(isSignupMode);
+    });
 
     // Modals - reporting with two-step flow
     // STATE: Track selected obstacle type

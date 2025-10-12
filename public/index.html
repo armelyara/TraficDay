@@ -220,12 +220,14 @@
             <div class="modal-header">
                 <div class="modal-icon" style="background: linear-gradient(to right, #ffff, #ffff);">
                     <img  src="logo.png" alt="TraficDay Logo" style="width: 40px; height: 40px; border-radius: 8px;">
-                        
+
                 </div>
                 <h2 class="modal-title">TraficDay</h2>
                 <p class="modal-description">Connectez-vous pour signaler et recevoir des alertes</p>
             </div>
-            <div class="modal-buttons">
+
+            <!-- Auth method selection (default view) -->
+            <div id="auth-selection" class="modal-buttons">
                 <button class="modal-button primary" id="btn-google-auth">
                     <svg width="24" height="24" viewBox="0 0 24 24">
                         <path fill="#4285F4"
@@ -239,7 +241,7 @@
                     </svg>
                     Continuer avec Google
                 </button>
-                <button class="modal-button primary" id="btn-email-auth"
+                <button class="modal-button primary" id="btn-show-email-auth"
                     style="background: linear-gradient(to right, #10b981, #059669);">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
@@ -247,6 +249,50 @@
                     </svg>
                     Continuer avec Email
                 </button>
+            </div>
+
+            <!-- Email/Password form (hidden by default) -->
+            <div id="email-auth-form" style="display: none; padding: 20px;">
+                <h3 id="email-form-title" style="text-align: center; margin-bottom: 20px; color: #1f2937; font-size: 18px;">Connexion</h3>
+
+                <form id="email-auth-form-fields" style="display: flex; flex-direction: column; gap: 16px;">
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <label for="email-input" style="font-size: 14px; color: #374151; font-weight: 500;">Email</label>
+                        <input
+                            type="email"
+                            id="email-input"
+                            placeholder="votre@email.com"
+                            required
+                            style="padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 16px; outline: none; transition: border-color 0.3s;"
+                        />
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <label for="password-input" style="font-size: 14px; color: #374151; font-weight: 500;">Mot de passe</label>
+                        <input
+                            type="password"
+                            id="password-input"
+                            placeholder="••••••••"
+                            required
+                            minlength="6"
+                            style="padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 16px; outline: none; transition: border-color 0.3s;"
+                        />
+                    </div>
+
+                    <div id="auth-error-message" style="display: none; padding: 12px; background: #fee2e2; border: 1px solid #fca5a5; border-radius: 8px; color: #991b1b; font-size: 14px;"></div>
+
+                    <button type="submit" id="btn-email-submit" class="modal-button primary" style="background: linear-gradient(to right, #10b981, #059669); margin-top: 8px;">
+                        Se connecter
+                    </button>
+
+                    <button type="button" id="btn-toggle-signup" style="background: transparent; border: none; color: #43938A; cursor: pointer; font-size: 14px; padding: 8px;">
+                        Pas de compte ? <strong>S'inscrire</strong>
+                    </button>
+
+                    <button type="button" id="btn-back-to-auth-selection" style="width: 100%; padding: 12px; background: #e5e7eb; border: none; border-radius: 8px; cursor: pointer; font-size: 14px;">
+                        ← Retour
+                    </button>
+                </form>
             </div>
         </div>
     </div>

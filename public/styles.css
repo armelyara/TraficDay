@@ -1058,3 +1058,25 @@ body {
     transform: scale(1.02);
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
+
+/* Email authentication form */
+#email-input:focus,
+#password-input:focus {
+    border-color: var(--green-500);
+    box-shadow: 0 0 0 3px rgba(67, 147, 138, 0.1);
+}
+
+#email-input,
+#password-input {
+    font-family: inherit;
+}
+
+#auth-error-message {
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
