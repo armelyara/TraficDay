@@ -2,7 +2,7 @@
 const CACHE_VERSION = 'v3.1.6';
 const CACHE_NAME = `traficday-cache-${CACHE_VERSION}`;
 
-// Fichiers à mettre en cache
+// Files to cache
 const CACHE_FILES = [
     '/',
     '/index.html',
@@ -19,13 +19,13 @@ const CACHE_FILES = [
     '/logo.ico'
 ];
 
-// ============================================
-// FIREBASE CLOUD MESSAGING
-// ============================================
+
+// Firebase cloud messaging setup
+
 importScripts('https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-compat.js');
 
-// Configuration Firebase
+// Firebase configuration
 firebase.initializeApp({
     apiKey: "AIzaSyB7DwtpC_RggBLkW0w2yHOOGxrXHpyWPfE",
     authDomain: "traficday-91045.firebaseapp.com",
@@ -38,7 +38,7 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-// Gérer les notifications en background
+// Manage background messages
 messaging.onBackgroundMessage((payload) => {
     console.log('[SW] Message reçu en background:', payload);
 
@@ -71,16 +71,15 @@ messaging.onBackgroundMessage((payload) => {
         ]
     };
 
-    // CASE 3: For admin notifications, always show push when app is closed
-    // (Both in-area and outside-area users get notification when app is closed)
+    // Show notification (when app is closed)
     console.log('[SW] Affichage notification push (app closed)');
 
     return self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-// ============================================
-// INSTALLATION DU SERVICE WORKER
-// ============================================
+
+// Service Worker Installation
+
 self.addEventListener('install', (event) => {
     console.log('[SW] Installation...');
 
@@ -94,9 +93,9 @@ self.addEventListener('install', (event) => {
     );
 });
 
-// ============================================
-// ACTIVATION DU SERVICE WORKER
-// ============================================
+
+// Service Worker Activation
+
 self.addEventListener('activate', (event) => {
     console.log('[SW] Activation...');
 
@@ -114,19 +113,19 @@ self.addEventListener('activate', (event) => {
     );
 });
 
-// ============================================
-// INTERCEPTION DES REQUÊTES
-// ============================================
+
+// Requestes fetch
+
 self.addEventListener('fetch', (event) => {
-    // Ignorer les requêtes Firebase
+    // Ignore requests to Firebase services
     if (event.request.url.includes('firebasestorage.googleapis.com') ||
         event.request.url.includes('firebaseinstallations.googleapis.com') ||
         event.request.url.includes('firebaseio.com') ||
         event.request.url.includes('googleapis.com')||
-        event.request.url.includes('apis.google.com') || // ✅ AJOUTER CETTE LIGNE
-        event.request.url.includes('accounts.google.com') || // ✅ AJOUTER CETTE LIGNE
-        event.request.url.includes('securetoken.googleapis.com') || // ✅ AJOUTER CETTE LIGNE
-        event.request.url.includes('identitytoolkit.googleapis.com')) { // ✅ AJOUTER CETTE LIGNE
+        event.request.url.includes('apis.google.com') || 
+        event.request.url.includes('accounts.google.com') || 
+        event.request.url.includes('securetoken.googleapis.com') || 
+        event.request.url.includes('identitytoolkit.googleapis.com')) { // 
         
         return;
     }
@@ -147,9 +146,9 @@ self.addEventListener('fetch', (event) => {
     );
 });
 
-// ============================================
-// GESTION DES CLICS SUR NOTIFICATIONS
-// ============================================
+
+// Manage notification clicks
+
 self.addEventListener('notificationclick', (event) => {
     console.log('[SW] Notification cliquée:', event);
     console.log('[SW] Notification data:', event.notification.data);
@@ -192,9 +191,9 @@ self.addEventListener('notificationclick', (event) => {
     );
 });
 
-// ============================================
-// MESSAGES DE L'APPLICATION
-// ============================================
+
+// App messages
+
 self.addEventListener('message', (event) => {
     console.log('[SW] Message reçu:', event.data);
 
