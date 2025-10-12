@@ -1,13 +1,14 @@
 {
-    "name": "TraficDay",
+    "name": "TraficDay - Alertes Routières en Temps Réel",
     "short_name": "TraficDay",
-    "description": "Alertes routières en temps réel pour éviter les obstacles. Contribuez à la sécurité de tous les conducteurs.",
+    "description": "Alertes routières en temps réel pour éviter les obstacles. Contribuez à la sécurité de tous les conducteurs en Côte d'Ivoire.",
     "start_url": "/",
     "scope": "/",
     "display": "standalone",
-    "orientation": "portrait",
+    "display_override": "window-controls-overlay, standalone, minimal-ui",
+    "orientation": "portrait-primary",
     "background_color": "#ffffff",
-    "theme_color": "#5f9491",
+    "theme_color": "#43938A",
     "icons": [
         {
             "src": "/icons/android/icon-48.png",
@@ -49,14 +50,16 @@
     "screenshots": [
         {
             "src": "/screenshots/screenshot1.png",
-            "sizes": "540x720",
+            "sizes": "1170x2532",
             "type": "image/png",
+            "form_factor": "narrow",
             "label": "Carte interactive avec obstacles en temps réel"
         },
         {
             "src": "/screenshots/screenshot2.png",
-            "sizes": "540x720",
+            "sizes": "1170x2532",
             "type": "image/png",
+            "form_factor": "narrow",
             "label": "Signalement rapide d'obstacles"
         }
     ],
@@ -69,7 +72,18 @@
     "lang": "fr",
     "dir": "ltr",
     "prefer_related_applications": false,
-    "related_applications": [],
+   "related_applications": [
+    {
+        "platform": "windows",
+        "url": "https://traficday-91045.web.app/",
+        "id": "9NBLGGH4R315"
+        
+    },
+    {
+        "platform": "play",
+        "url": "https://traficday-91045.firebaseapp.com/"
+    }
+],
     "shortcuts": [
         {
             "name": "Signaler un obstacle",
@@ -97,13 +111,21 @@
         }
     ],
     "share_target": {
-        "action": "/share",
-        "method": "POST",
-        "enctype": "multipart/form-data",
+        "action": "/",
+        "method": "GET",
         "params": {
             "title": "title",
             "text": "text",
             "url": "url"
         }
-    }
+    },
+    "protocol_handlers": [
+        {
+            "protocol": "web+traficday",
+            "url": "/?action=%s"
+        }
+    ],
+    "gcm_sender_id": "103953800507",
+    "id": "/",
+    "iarc_rating_id": "e58c174a-81d2-5c3c-32cc-34b8de4a52e9"
 }
