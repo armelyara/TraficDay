@@ -672,8 +672,10 @@ function createObstacleMarker(obstacle, totalCount) {
         title: getObstacleLabel(obstacle.type)
     });
 
-    // Add click listener
-    markerDiv.addEventListener('click', () => showObstacleDetails(obstacle));
+    // Add click listener using Google Maps API (recommended for accessibility)
+    marker.addListener('click', () => {
+        showObstacleDetails(obstacle);
+    });
 
     app.obstacleMarkers[obstacle.id] = marker;
     return marker;
