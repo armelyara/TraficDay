@@ -467,7 +467,7 @@ function loadObstacles() {
     });
 }
 
-async function handleReport(type) {
+async function handleReport(type, userSelectedDangerLevel) {
     // Validation 1: Check location
     if (!app.userLocation) {
         alert('Veuillez activer la géolocalisation');
@@ -501,21 +501,24 @@ async function handleReport(type) {
         return;
     }
 
-    const severities = {
-        flood: 'high',
-        protest: 'critical',
-        closure: 'medium',
-        traffic: 'medium',
-        police: 'low'
+    // Use user-selected danger level
+    const severity = userSelectedDangerLevel; // 'low', 'medium', or 'high'
+
+    // Danger level descriptions
+    const dangerDescriptions = {
+        low: 'Prudence - Circulation autorisée',
+        medium: 'Vérifier avant - Vérifier les conditions',
+        high: 'Danger - Circulation interdite'
     };
 
     const newObstacle = {
         type: type,
         lat: Math.round(app.userLocation.lat * 1000) / 1000, // Round to ~111m for privacy
         lng: Math.round(app.userLocation.lng * 1000) / 1000,
-        description: `${getObstacleLabel(type)} signalé(e)`,
+        description: `${getObstacleLabel(type)} - ${dangerDescriptions[severity]}`,
         reports: 1,
-        severity: severities[type],
+        severity: severity, // Store user-selected danger level
+        dangerLevel: severity, // Also store as dangerLevel for clarity
         zone: 'Ma zone',
         userId: app.user.uid,
         confirmedBy: [app.user.uid]
@@ -526,7 +529,12 @@ async function handleReport(type) {
 
     if (result.success) {
         closeModal('report-modal');
-        alert(`${getObstacleLabel(type)} signalé(e) avec succès !`);
+
+        // Reset report modal to first step
+        document.querySelector('.report-grid').style.display = 'grid';
+        document.getElementById('danger-level-selection').style.display = 'none';
+
+        alert(`${getObstacleLabel(type)} signalé avec niveau: ${dangerDescriptions[severity]}`);
     } else {
         alert('Erreur lors du signalement : ' + result.error);
     }
@@ -940,14 +948,20 @@ async function sendProximityNotification(obstacle, severity, distance) {
         ? `${Math.round(distance * 1000)}m`
         : `${distance.toFixed(1)}km`;
 
-    const severityLabels = {
-        critical: '🔴 Danger',
-        high: '🟠 Vigilance accrue'
+    // Get danger level from obstacle
+    const dangerLevel = obstacle.severity || obstacle.dangerLevel || 'medium';
+
+    const dangerLabels = {
+        low: { icon: '⚠️', label: 'Prudence', desc: 'Circulation autorisée' },
+        medium: { icon: '🟠', label: 'Vérifier avant', desc: 'Vérifier les conditions' },
+        high: { icon: '🔴', label: 'Danger', desc: 'Circulation interdite' }
     };
 
-    const title = severityLabels[severity] || '⚠️ ALERTE';
+    const info = dangerLabels[dangerLevel] || dangerLabels.medium;
+
+    const title = `${info.icon} ${info.label}`;
     const obstacleLabel = getObstacleLabel(obstacle.type);
-    const body = `${obstacleLabel} à ${distanceText} de votre position`;
+    const body = `${obstacleLabel} à ${distanceText} - ${info.desc}`;
 
     console.log(`Sending proximity notification: ${title} - ${body}`);
 
@@ -1355,18 +1369,56 @@ function attachEventListeners() {
 
     // Modals - Close buttons
     document.getElementById('close-auth-modal').addEventListener('click', () => closeModal('auth-modal'));
-    document.getElementById('close-report-modal').addEventListener('click', () => closeModal('report-modal'));
+    document.getElementById('close-report-modal').addEventListener('click', () => {
+        closeModal('report-modal');
+        // Reset report modal to first step
+        document.querySelector('.report-grid').style.display = 'grid';
+        document.getElementById('danger-level-selection').style.display = 'none';
+    });
 
     // Modals - Authentification
     document.getElementById('btn-google-auth').addEventListener('click', () => login('google'));
     document.getElementById('btn-email-auth').addEventListener('click', () => login('email'));
 
-    // Modals - reporting
+    // Modals - reporting with two-step flow
+    // STATE: Track selected obstacle type
+    let selectedObstacleType = null;
+
+    // STEP 1: User clicks obstacle type
     document.querySelectorAll('.report-card').forEach(card => {
         card.addEventListener('click', () => {
-            const type = card.getAttribute('data-type');
-            handleReport(type);
+            selectedObstacleType = card.getAttribute('data-type');
+
+            // Get obstacle label
+            const labels = {
+                flood: 'Inondation',
+                protest: 'Manifestation',
+                closure: 'Route fermée',
+                traffic: 'Embouteillage',
+                police: 'Contrôle police'
+            };
+
+            // Show danger level selection
+            document.querySelector('.report-grid').style.display = 'none';
+            document.getElementById('danger-level-selection').style.display = 'block';
+            document.getElementById('selected-obstacle-title').textContent =
+                `Niveau de danger: ${labels[selectedObstacleType]}`;
         });
+    });
+
+    // STEP 2: User selects danger level
+    document.querySelectorAll('.danger-level-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const dangerLevel = btn.getAttribute('data-level');
+            handleReport(selectedObstacleType, dangerLevel);
+        });
+    });
+
+    // Back button
+    document.getElementById('back-to-type-selection')?.addEventListener('click', () => {
+        document.querySelector('.report-grid').style.display = 'grid';
+        document.getElementById('danger-level-selection').style.display = 'none';
+        selectedObstacleType = null;
     });
 
     // Close

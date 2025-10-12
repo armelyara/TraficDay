@@ -300,6 +300,41 @@
                     <span>Police routière</span>
                 </button>
             </div>
+
+            <!-- Step 2: Danger Level Selection (Hidden by default) -->
+            <div id="danger-level-selection" style="display: none; padding: 20px;">
+                <h3 id="selected-obstacle-title" style="text-align: center; margin-bottom: 20px; color: #1f2937;"></h3>
+
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <button class="danger-level-btn" data-level="low" style="padding: 16px; border: 2px solid #fbbf24; border-radius: 12px; background: white; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: all 0.3s;">
+                        <span style="font-size: 32px;">⚠️</span>
+                        <div style="text-align: left; flex: 1;">
+                            <div style="font-weight: bold; font-size: 16px; color: #1f2937;">Prudence</div>
+                            <div style="font-size: 14px; color: #6b7280;">Circulation autorisée</div>
+                        </div>
+                    </button>
+
+                    <button class="danger-level-btn" data-level="medium" style="padding: 16px; border: 2px solid #f97316; border-radius: 12px; background: white; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: all 0.3s;">
+                        <span style="font-size: 32px;">🟠</span>
+                        <div style="text-align: left; flex: 1;">
+                            <div style="font-weight: bold; font-size: 16px; color: #1f2937;">Vérifier avant</div>
+                            <div style="font-size: 14px; color: #6b7280;">Vérifier les conditions avant de circuler</div>
+                        </div>
+                    </button>
+
+                    <button class="danger-level-btn" data-level="high" style="padding: 16px; border: 2px solid #dc2626; border-radius: 12px; background: white; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: all 0.3s;">
+                        <span style="font-size: 32px;">🔴</span>
+                        <div style="text-align: left; flex: 1;">
+                            <div style="font-weight: bold; font-size: 16px; color: #1f2937;">Danger</div>
+                            <div style="font-size: 14px; color: #6b7280;">Circulation interdite</div>
+                        </div>
+                    </button>
+                </div>
+
+                <button id="back-to-type-selection" style="width: 100%; padding: 12px; margin-top: 16px; background: #e5e7eb; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
+                    ← Retour
+                </button>
+            </div>
         </div>
     </div>
 

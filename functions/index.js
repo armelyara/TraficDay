@@ -66,18 +66,23 @@ exports.sendObstacleNotification = onValueCreated(
             const tokens = [];
             const radiusKm = 1.6; // 1 mile
 
-            // Find users within radius
+            // Find users: in radius OR subscribed to "all" topic
             Object.keys(users).forEach(uid => {
                 const user = users[uid];
 
                 // Skip users who confirmed the obstacle
                 if (confirmedByUsers.includes(uid)) {
-                    console.log('⏭User skip (confirmé):', uid);
+                    console.log('⏭️ User skip (confirmé):', uid);
                     return;
                 }
 
-                // Check if user has location and token
-                if (user.location && user.notificationToken) {
+                // Check if user has token
+                if (!user.notificationToken) {
+                    return;
+                }
+
+                // CASE 1: Users within radius (inside area)
+                if (user.location) {
                     const distance = calculateDistance(
                         lat,
                         lng,
@@ -87,13 +92,20 @@ exports.sendObstacleNotification = onValueCreated(
 
                     if (distance <= radiusKm) {
                         tokens.push(user.notificationToken);
-                        console.log('User dans rayon:', uid, `(${distance.toFixed(2)}km)`);
+                        console.log('✅ User dans rayon:', uid, `(${distance.toFixed(2)}km)`);
+                        return; // Don't check "all" topic if already in radius
                     }
+                }
+
+                // CASE 2: Users outside area but subscribed to "all" topic
+                if (user.subscribedToAll === true) {
+                    tokens.push(user.notificationToken);
+                    console.log('✅ User "all" topic (outside):', uid);
                 }
             });
 
             if (tokens.length === 0) {
-                console.log('Aucun utilisateur à proximité avec token');
+                console.log('⚠️ Aucun utilisateur à proximité ou abonné au topic "all"');
                 return null;
             }
 
@@ -301,13 +313,18 @@ exports.sendProximityNotification = onValueCreated(
                 ? `${Math.round(distance * 1000)}m`
                 : `${distance.toFixed(1)}km`;
 
-            const severityLabels = {
-                critical: '🔴 Danger',
-                high: '🟠 Vigilance Accrue'
+            // Map severity to danger level labels
+            const dangerLabels = {
+                low: { icon: '⚠️', label: 'Prudence', desc: 'Circulation autorisée' },
+                medium: { icon: '🟠', label: 'Vérifier avant', desc: 'Vérifier les conditions' },
+                high: { icon: '🔴', label: 'Danger', desc: 'Circulation interdite' },
+                critical: { icon: '🔴', label: 'Danger', desc: 'Circulation interdite' }
             };
 
-            const title = severityLabels[severity] || '⚠️ ALERTE';
-            const body = `${obstacleLabels[obstacleType]} à ${distanceText} de votre position`;
+            const info = dangerLabels[severity] || dangerLabels.medium;
+
+            const title = `${info.icon} ${info.label}`;
+            const body = `${obstacleLabels[obstacleType]} à ${distanceText} - ${info.desc}`;
 
             // Send FCM notification
             const message = {
