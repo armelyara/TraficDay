@@ -16,7 +16,7 @@ import {
     saveNotificationToken,
     subscribeToAllTopic,
     unsubscribeFromAllTopic,
-    togglePasswordVisibility,
+    
     database,
     messaging
 } from './firebase-config.js';
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     registerServiceWorker();
 
     // Passord visibility toggle
-    togglePasswordVisibility
+    togglePasswordVisibility();
 
     // Hide loading screen after a delay
     setTimeout(() => {
