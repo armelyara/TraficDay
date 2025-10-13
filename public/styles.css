@@ -1080,3 +1080,29 @@ body {
     25% { transform: translateX(-10px); }
     75% { transform: translateX(10px); }
 }
+ .password-wrapper {
+     position: relative;
+     /* Point d'ancrage pour l'icône */
+     /* Assurez-vous d'avoir une largeur définie pour le conteneur si vous utilisez ces styles en ligne */
+     width: 300px;
+ }
+
+ .toggle-password {
+     position: absolute;
+     /* Positionne l'icône à l'intérieur du champ */
+     right: 12px;
+     top: 50%;
+     transform: translateY(50%);
+     cursor: pointer;
+     font-size: 18px;
+     /* Rend l'icône bien visible */
+     color: #6b7280;
+     /* Couleur grise */
+ }
+
+ /* Style pour le conteneur principal si vous le conservez */
+ .form-group {
+     display: flex;
+     flex-direction: column;
+     gap: 8px;
+ }
