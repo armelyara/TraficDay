@@ -1924,7 +1924,7 @@ window.zoomToObstacle = function (obstacleId) {
     if (passwordField.type === 'password') {
         passwordField.type = 'text';
     // OPTIONNEL : Changer l'icône en œil barré pour indiquer que le mot de passe est affiché
-    toggleIcon.innerHTML = '🙈'; 
+    toggleIcon.innerHTML = '👁️'; 
         } else {
         passwordField.type = 'password';
     // Revenir à l'icône œil normal pour indiquer que le mot de passe est masqué
