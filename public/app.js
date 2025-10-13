@@ -16,7 +16,6 @@ import {
     saveNotificationToken,
     subscribeToAllTopic,
     unsubscribeFromAllTopic,
-    
     database,
     messaging
 } from './firebase-config.js';
@@ -150,9 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Register Service Worker
     registerServiceWorker();
-
-    // Passord visibility toggle
-    togglePasswordVisibility();
 
     // Hide loading screen after a delay
     setTimeout(() => {
@@ -1917,19 +1913,5 @@ window.zoomToObstacle = function (obstacleId) {
     }
 };
 
-function togglePasswordVisibility() {
-    const passwordField = document.getElementById('password-input');
-    const toggleIcon = document.getElementById('togglePassword');
-
-    if (passwordField.type === 'password') {
-        passwordField.type = 'text';
-        // OPTIONNEL : Changer l'icône en œil barré pour indiquer que le mot de passe est affiché
-        toggleIcon.innerHTML = '🙈';
-    } else {
-        passwordField.type = 'password';
-        // Revenir à l'icône œil normal pour indiquer que le mot de passe est masqué
-        toggleIcon.innerHTML = '👁️';
-    }
-}
 
 console.log('app.js chargé');
