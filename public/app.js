@@ -1917,19 +1917,19 @@ window.zoomToObstacle = function (obstacleId) {
     }
 };
 
-    function togglePasswordVisibility() {
-        const passwordField = document.getElementById('password-input');
+function togglePasswordVisibility() {
+    const passwordField = document.getElementById('password-input');
     const toggleIcon = document.getElementById('togglePassword');
 
     if (passwordField.type === 'password') {
         passwordField.type = 'text';
-    // OPTIONNEL : Changer l'icône en œil barré pour indiquer que le mot de passe est affiché
-    toggleIcon.innerHTML = '👁️'; 
-        } else {
+        // OPTIONNEL : Changer l'icône en œil barré pour indiquer que le mot de passe est affiché
+        toggleIcon.innerHTML = '🙈';
+    } else {
         passwordField.type = 'password';
-    // Revenir à l'icône œil normal pour indiquer que le mot de passe est masqué
-    toggleIcon.innerHTML = '👁️'; 
-        }
+        // Revenir à l'icône œil normal pour indiquer que le mot de passe est masqué
+        toggleIcon.innerHTML = '👁️';
     }
+}
 
 console.log('app.js chargé');

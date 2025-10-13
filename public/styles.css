@@ -1080,6 +1080,7 @@ body {
     25% { transform: translateX(-10px); }
     75% { transform: translateX(10px); }
 }
+ /* CSS pour la fonctionnalité de bascule */
  .password-wrapper {
      position: relative;
      /* Point d'ancrage pour l'icône */
