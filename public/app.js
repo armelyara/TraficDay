@@ -54,7 +54,7 @@ function validateCoordinates(lat, lng) {
 }
 
 function validateObstacleType(type) {
-    const validTypes = ['flood', 'protest', 'closure', 'traffic', 'police'];
+    const validTypes = ['flood', 'accident', 'protest', 'closure', 'traffic', 'police'];
     return validTypes.includes(type);
 }
 
@@ -670,6 +670,7 @@ function calculateObstacleTotalCount(obstacle) {
 function createObstacleMarker(obstacle, totalCount) {
     const colors = {
         flood: '#3b82f6',
+        accident: '#ef4444',
         protest: '#f97316',
         closure: '#dc2626',
         traffic: '#fbbf24',
@@ -757,6 +758,11 @@ function getObstacleIcon(type) {
         flood: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
     </svg>`,
+        accident: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+      <line x1="12" y1="9" x2="12" y2="13"></line>
+      <line x1="12" y1="17" x2="12.01" y2="17"></line>
+    </svg>`,
         protest: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
       <circle cx="9" cy="7" r="4"></circle>
@@ -781,6 +787,7 @@ function getObstacleIcon(type) {
 function getObstacleLabel(type) {
     const labels = {
         flood: 'Inondation',
+        accident: 'Accident',
         protest: 'Manifestation',
         closure: 'Route fermée',
         traffic: 'Embouteillage',
@@ -1101,6 +1108,7 @@ function updateDangerLevel(level, obstacleType = null) {
     // Couleurs basées sur le type d'obstacle ET le niveau
     const obstacleColors = {
         flood: '#3b82f6',      // Bleu
+        accident: '#ef4444',   // Rouge vif
         protest: '#f97316',    // Orange
         closure: '#dc2626',    // Rouge
         traffic: '#fbbf24',    // Jaune
@@ -1389,6 +1397,7 @@ async function updateSettingsView() {
 function getObstacleColor(type) {
     const colors = {
         flood: '#3b82f6',
+        accident: '#ef4444',
         protest: '#f97316',
         closure: '#dc2626',
         traffic: '#fbbf24',
@@ -1530,6 +1539,7 @@ function attachEventListeners() {
             // Get obstacle label
             const labels = {
                 flood: 'Inondation',
+                accident: 'Accident',
                 protest: 'Manifestation',
                 closure: 'Route fermée',
                 traffic: 'Embouteillage',

@@ -21,6 +21,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 // Labels for obstacle types
 const obstacleLabels = {
     flood: 'Inondation',
+    accident: 'Accident',
     protest: 'Manifestation',
     closure: 'Route fermée',
     traffic: 'Embouteillage',
