@@ -25,7 +25,7 @@ const obstacleLabels = {
     protest: 'Manifestation',
     closure: 'Route fermée',
     traffic: 'Embouteillage',
-    police: 'Police routière'
+    police: 'Contrôle police'
 };
 
 

@@ -669,17 +669,20 @@ function calculateObstacleTotalCount(obstacle) {
 
 function createObstacleMarker(obstacle, totalCount) {
     const colors = {
-        flood: '#3b82f6',
-        accident: '#ef4444',
-        protest: '#f97316',
-        closure: '#dc2626',
-        traffic: '#fbbf24',
-        police: '#8b5cf6'
+        flood: '#EBF4FA',
+        accident: '#8B4513',
+        protest: '#800080',
+        closure: '#333333',
+        traffic: '#00FF00',
+        police: '#00FFFF'
     };
 
     const color = colors[obstacle.type] || colors.traffic;
     const icon = getObstacleIcon(obstacle.type);
     const displayCount = totalCount || obstacle.reports || 1;
+
+    // Use dark text for light-colored markers (flood)
+    const textColor = obstacle.type === 'flood' ? '#1f2937' : 'white';
 
     // Add danger circle for point obstacles (not for traffic jams)
     if (obstacle.type !== 'traffic') {
@@ -716,7 +719,7 @@ function createObstacleMarker(obstacle, totalCount) {
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: ${textColor};
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
             border: 3px solid white;
             position: relative;
@@ -791,7 +794,7 @@ function getObstacleLabel(type) {
         protest: 'Manifestation',
         closure: 'Route fermée',
         traffic: 'Embouteillage',
-        police: 'Police routière'
+        police: 'Contrôle police'
     };
     return labels[type] || 'Obstacle';
 }
@@ -1107,12 +1110,12 @@ function updateDangerLevel(level, obstacleType = null) {
 
     // Couleurs basées sur le type d'obstacle ET le niveau
     const obstacleColors = {
-        flood: '#3b82f6',      // Bleu
-        accident: '#ef4444',   // Rouge vif
-        protest: '#f97316',    // Orange
-        closure: '#dc2626',    // Rouge
-        traffic: '#fbbf24',    // Jaune
-        police: '#8b5cf6'      // Violet
+        flood: '#EBF4FA',      // Light blue
+        accident: '#8B4513',   // Brown
+        protest: '#800080',    // Purple
+        closure: '#333333',    // Black
+        traffic: '#00FF00',    // Bright green
+        police: '#00FFFF'      // Cyan
     };
 
     // Color by level if no specific obstacle type
@@ -1396,12 +1399,12 @@ async function updateSettingsView() {
 
 function getObstacleColor(type) {
     const colors = {
-        flood: '#3b82f6',
-        accident: '#ef4444',
-        protest: '#f97316',
-        closure: '#dc2626',
-        traffic: '#fbbf24',
-        police: '#8b5cf6'
+        flood: '#EBF4FA',
+        accident: '#8B4513',
+        protest: '#800080',
+        closure: '#333333',
+        traffic: '#00FF00',
+        police: '#00FFFF'
     };
     return colors[type] || colors.traffic;
 }
@@ -1545,6 +1548,18 @@ function attachEventListeners() {
                 traffic: 'Embouteillage',
                 police: 'Contrôle police'
             };
+
+            // Hide/show "low" danger level based on obstacle type
+            const lowDangerBtn = document.querySelector('.danger-level-btn[data-level="low"]');
+            if (lowDangerBtn) {
+                if (selectedObstacleType === 'accident') {
+                    // Hide "low" level for accidents
+                    lowDangerBtn.style.display = 'none';
+                } else {
+                    // Show "low" level for other obstacle types
+                    lowDangerBtn.style.display = 'flex';
+                }
+            }
 
             // Show danger level selection
             document.querySelector('.report-grid').style.display = 'none';
