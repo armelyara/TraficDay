@@ -1,5 +1,5 @@
 // TraficDay Service Worker - Cache + Notifications FCM
-const CACHE_VERSION = 'v3.1.6';
+const CACHE_VERSION = 'v3.2.0';
 const CACHE_NAME = `traficday-cache-${CACHE_VERSION}`;
 
 // Files to cache
@@ -9,14 +9,16 @@ const CACHE_FILES = [
     '/styles.css',
     '/app.js',
     '/firebase-config.js',
+    '/config.js',
     '/manifest.json',
-    '/icons/icon-72.png',
-    '/icons/icon-96.png',
-    '/icons/icon-128.png',
-    '/icons/icon-192.png',
-    '/icons/icon-384.png',
-    '/icons/icon-512.png',
-    '/logo.ico'
+    '/logo.png',
+    '/logo.ico',
+    '/icons/android/icon-48.png',
+    '/icons/android/icon-72.png',
+    '/icons/android/icon-96.png',
+    '/icons/android/icon-144.png',
+    '/icons/android/icon-192.png',
+    '/icons/android/icon-512.png'
 ];
 
 
@@ -117,28 +119,45 @@ self.addEventListener('activate', (event) => {
 // Requestes fetch
 
 self.addEventListener('fetch', (event) => {
-    // Ignore requests to Firebase services
-    if (event.request.url.includes('firebasestorage.googleapis.com') ||
-        event.request.url.includes('firebaseinstallations.googleapis.com') ||
-        event.request.url.includes('firebaseio.com') ||
-        event.request.url.includes('googleapis.com')||
-        event.request.url.includes('apis.google.com') || 
-        event.request.url.includes('accounts.google.com') || 
-        event.request.url.includes('securetoken.googleapis.com') || 
-        event.request.url.includes('identitytoolkit.googleapis.com')) { // 
-        
+    // Ignore requests to external services (Firebase, Google APIs, etc.)
+    const url = event.request.url;
+
+    if (url.includes('firebasestorage.googleapis.com') ||
+        url.includes('firebaseinstallations.googleapis.com') ||
+        url.includes('firebaseio.com') ||
+        url.includes('googleapis.com') ||
+        url.includes('apis.google.com') ||
+        url.includes('accounts.google.com') ||
+        url.includes('securetoken.googleapis.com') ||
+        url.includes('identitytoolkit.googleapis.com') ||
+        url.includes('gstatic.com') ||
+        url.includes('maps.googleapis.com')) {
         return;
     }
 
+    // Cache-first strategy for app shell files
     event.respondWith(
         caches.match(event.request)
             .then((response) => {
+                // Return cached version if available
                 if (response) {
                     return response;
                 }
-                return fetch(event.request);
+
+                // Otherwise fetch from network
+                return fetch(event.request).then((networkResponse) => {
+                    // Cache successful responses for future use
+                    if (networkResponse && networkResponse.status === 200) {
+                        const responseToCache = networkResponse.clone();
+                        caches.open(CACHE_NAME).then((cache) => {
+                            cache.put(event.request, responseToCache);
+                        });
+                    }
+                    return networkResponse;
+                });
             })
             .catch(() => {
+                // Offline fallback: return index.html for navigation requests
                 if (event.request.destination === 'document') {
                     return caches.match('/index.html');
                 }
