@@ -1071,6 +1071,14 @@ body {
     font-family: inherit;
 }
 
+#toggle-password:hover {
+    color: var(--green-500);
+}
+
+#toggle-password:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
 #auth-error-message {
     animation: shake 0.3s ease;
 }

@@ -1501,6 +1501,23 @@ function attachEventListeners() {
         await handleEmailAuth(isSignupMode);
     });
 
+    // Password visibility toggle
+    document.getElementById('toggle-password')?.addEventListener('click', () => {
+        const passwordInput = document.getElementById('password-input');
+        const eyeIconClosed = document.getElementById('eye-icon-closed');
+        const eyeIconOpen = document.getElementById('eye-icon-open');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            eyeIconClosed.style.display = 'none';
+            eyeIconOpen.style.display = 'block';
+        } else {
+            passwordInput.type = 'password';
+            eyeIconClosed.style.display = 'block';
+            eyeIconOpen.style.display = 'none';
+        }
+    });
+
     // Modals - reporting with two-step flow
     // STATE: Track selected obstacle type
     let selectedObstacleType = null;
