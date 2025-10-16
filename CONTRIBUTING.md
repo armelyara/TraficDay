@@ -385,7 +385,7 @@ update(ref(database, `obstacles/${obstacleId}`), { active: false });
 
 ## Questions et support
 
-- **Email** : armelyara@thedayinfo.com
+- **Email** : support@traficday.com
 - **Issues GitHub** : Pour les bugs et features
 - **Discussions** : Pour les questions générales
 
