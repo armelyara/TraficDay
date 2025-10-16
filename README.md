@@ -177,7 +177,7 @@ Consultez notre [Politique de Confidentialité](PRIVACY.md) pour savoir comment 
 
 Pour toute question ou problème :
 - Ouvrez une issue sur GitHub
-- Contactez-nous à armelyara@thedayinfo.com
+- Contactez-nous à support@traficday.com
 
 ## Remerciements
 
