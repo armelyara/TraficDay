@@ -669,7 +669,7 @@ function calculateObstacleTotalCount(obstacle) {
 
 function createObstacleMarker(obstacle, totalCount) {
     const colors = {
-        flood: '#6C3BAA',
+        flood: '#0096FF',
         accident: '#8B4513',
         protest: '#6C3BAA',
         closure: '#333333',
@@ -1110,7 +1110,7 @@ function updateDangerLevel(level, obstacleType = null) {
 
     // Couleurs basées sur le type d'obstacle ET le niveau
     const obstacleColors = {
-        flood: '#6C3BAA',      // Purple
+        flood: '#0096FF',      // Bright blue
         accident: '#8B4513',   // Brown
         protest: '#6C3BAA',    // Purple
         closure: '#333333',    // Black
@@ -1399,7 +1399,7 @@ async function updateSettingsView() {
 
 function getObstacleColor(type) {
     const colors = {
-        flood: '#6C3BAA',
+        flood: '#0096FF',
         accident: '#8B4513',
         protest: '#6C3BAA',
         closure: '#333333',
