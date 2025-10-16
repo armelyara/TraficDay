@@ -669,20 +669,20 @@ function calculateObstacleTotalCount(obstacle) {
 
 function createObstacleMarker(obstacle, totalCount) {
     const colors = {
-        flood: '#EBF4FA',
+        flood: '#6C3BAA',
         accident: '#8B4513',
-        protest: '#800080',
+        protest: '#6C3BAA',
         closure: '#333333',
-        traffic: '#00FF00',
-        police: '#00FFFF'
+        traffic: '#FFBF00',
+        police: '#004700'
     };
 
     const color = colors[obstacle.type] || colors.traffic;
     const icon = getObstacleIcon(obstacle.type);
     const displayCount = totalCount || obstacle.reports || 1;
 
-    // Use dark text for light-colored markers (flood)
-    const textColor = obstacle.type === 'flood' ? '#1f2937' : 'white';
+    // All markers use white text now (no light backgrounds)
+    const textColor = 'white';
 
     // Add danger circle for point obstacles (not for traffic jams)
     if (obstacle.type !== 'traffic') {
@@ -1110,12 +1110,12 @@ function updateDangerLevel(level, obstacleType = null) {
 
     // Couleurs basées sur le type d'obstacle ET le niveau
     const obstacleColors = {
-        flood: '#EBF4FA',      // Light blue
+        flood: '#6C3BAA',      // Purple
         accident: '#8B4513',   // Brown
-        protest: '#800080',    // Purple
+        protest: '#6C3BAA',    // Purple
         closure: '#333333',    // Black
-        traffic: '#00FF00',    // Bright green
-        police: '#00FFFF'      // Cyan
+        traffic: '#FFBF00',    // Amber
+        police: '#004700'      // Dark green
     };
 
     // Color by level if no specific obstacle type
@@ -1399,12 +1399,12 @@ async function updateSettingsView() {
 
 function getObstacleColor(type) {
     const colors = {
-        flood: '#EBF4FA',
+        flood: '#6C3BAA',
         accident: '#8B4513',
-        protest: '#800080',
+        protest: '#6C3BAA',
         closure: '#333333',
-        traffic: '#00FF00',
-        police: '#00FFFF'
+        traffic: '#FFBF00',
+        police: '#004700'
     };
     return colors[type] || colors.traffic;
 }
