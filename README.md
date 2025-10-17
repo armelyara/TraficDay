@@ -2,7 +2,7 @@
 
 **Sécurité routière en temps réel pour la Côte d'Ivoire**
 
-TraficDay est une application web progressive (PWA) qui permet aux usagers de la route de signaler et consulter en temps réel les obstacles routiers tels que les inondations, manifestations, embouteillages, routes fermées et contrôles de police.
+TraficDay est une application web progressive (PWA) qui permet aux usagers de la route de signaler et consulter en temps réel les obstacles routiers tels que les inondations, manifestations, embouteillages, routes fermées, les accidents et contrôles de police.
 
 ![TraficDay Logo](./public/logo.png)
 
